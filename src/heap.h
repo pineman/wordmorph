@@ -4,12 +4,12 @@
 #include "bool.h"
 #include "item.h"
 
-void FixUp(int Idx);
-void FixDown(int Idx, int N);
+void fixup(int Idx);
+void fixdown(int Idx, int N);
 void h_init();
 bool h_empty();
 void h_insert(Item);
-/*Item h_delmax();*/
+Item h_delmax();
 
 
 

@@ -1,5 +1,5 @@
+#include <string.h>
 #include "item.h"
-#include "bool.h"
 
 void exch(Item *i1, Item *i2) 
 {
@@ -12,5 +12,5 @@ void exch(Item *i1, Item *i2)
 
 bool less_pri(Item i1, Item i2)
 {
-    return *i1 < *i2;
+    return i1 > i2;
 }
