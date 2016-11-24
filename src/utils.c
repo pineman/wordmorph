@@ -1,9 +1,23 @@
+/* Utils.c
+ * Authors: João Pinheiro e João Freitas
+ * Description:
+ * 	Tools for error checking:	
+ *  	emalloc, ecalloc, efopen 
+ *  String manipulation:
+ *   	change_file_ext
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "utils.h"
 
+/**
+ * @brief malloc wrapper with error checking
+ * @param  size of memory to alloc  
+ * @return  return pointer to unitialized memory
+ */
 void *emalloc(const size_t size)
 {
 	void *p = malloc(size);
@@ -14,6 +28,12 @@ void *emalloc(const size_t size)
 	return p;
 }
 
+/**
+ * @brief ecalloc wrapper with error checking
+ * @param  nmemb number of elements to alloc
+ * @param  size  size of each element
+ * @return       pointer to 0 initialized memory
+ */
 void *ecalloc(const size_t nmemb, const size_t size)
 {
 	void *p = calloc(nmemb, size);
@@ -24,6 +44,12 @@ void *ecalloc(const size_t nmemb, const size_t size)
 	return p;
 }
 
+/**
+ * @brief fopen wrapper with erro checking
+ * @param  filename string with the path of the file
+ * @param  mode of interacting with the file    
+ * @return   pointer to the file
+ */
 FILE *efopen(const char *filename, const char *mode)
 {
 	FILE *fp = fopen(filename, mode);
@@ -34,6 +60,13 @@ FILE *efopen(const char *filename, const char *mode)
 	return fp;
 }
 
+/**
+ * @brief change file name extension
+ * @param  orig_file_name string with the original name with extension
+ * @param  new_ext        string with the new extension
+ * @param  ext_size       size of the new extension
+ * @return                return string with the new file name
+ */
 char *change_file_ext(const char *orig_file_name, const char *new_ext, const size_t ext_size)
 {
 	char *new_file_name;
