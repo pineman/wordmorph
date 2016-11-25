@@ -8,9 +8,10 @@ typedef struct _Link Link;
 typedef struct _Graph Graph;
 
 Graph *g_init(unsigned int);
-void g_insert(Graph, Item);
-void g_free(Graph);
+void g_insert(Graph *, Item);
+void g_free(Graph *);
+void free_link(Link *);
 
-
-
+/*Funções privadas*/
+Node *_init_node(Item);
 #endif
