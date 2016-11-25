@@ -1,7 +1,7 @@
-#ifndef HEAD_H
-#define HEAD_H
+#ifndef _HEAP_H
+#define _HEAP_H
 
-#include "bool.h"
+#include "const.h"
 #include "item.h"
 
 void fixup(int Idx);

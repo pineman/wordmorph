@@ -1,8 +1,8 @@
 /* Utils.c
  * Authors: João Pinheiro e João Freitas
  * Description:
- *  Tools for error checking:   
- *      emalloc, ecalloc, efopen 
+ *  Tools for error checking:
+ *      emalloc, ecalloc, efopen
  *  String manipulation:
  *      change_file_ext
  */
