@@ -11,6 +11,7 @@ Graph *g_init(unsigned int);
 void g_insert(Graph *, Item);
 void g_free(Graph *);
 void free_link(Link *);
+bool g_cmp_links(Link *l1, Link *l2);
 
 /*Funções privadas*/
 Node *_init_node(Item);

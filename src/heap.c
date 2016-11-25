@@ -1,16 +1,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "heap.h"
+#include "graph.h"
 
-/*O array é de vertex ou seja de ints*/
-static int *heap;
+static Item *heap;
 static int avail; 
 static int hsize;
 
 void fixup(int Idx)
 {
-    while (Idx > 0  &&  less_pri(heap[(Idx-1)/2], heap[Idx])) {
-        exch(&heap[Idx], &heap[(Idx-1)/2]);
+    while (Idx > 0  &&  less_pri(heap[(Idx-1)/2], heap[Idx], g_cmp_links)) {
+        exch(heap[Idx], heap[(Idx-1)/2]);
         Idx = (Idx-1)/2;
     }
 }
@@ -20,11 +20,11 @@ void fixdown(int Idx, int N)
     int child;
     while(2*Idx < N - 1) {
         child = 2*Idx + 1;
-        if (child < (N - 1) && less_pri(heap[child], heap[child + 1])) 
+        if (child < (N - 1) && less_pri(heap[child], heap[child + 1], g_cmp_links)) 
 			child++;
-        if (!less_pri(heap[Idx], heap[child])) 
+        if (!less_pri(heap[Idx], heap[child], g_cmp_links)) 
 			break;
-        exch(&heap[Idx], &heap[child]);
+        exch(heap[Idx], heap[child]);
         Idx = child;
         }
 }
@@ -51,7 +51,7 @@ void h_insert(Item I)
 
 Item h_delmax() 
 {
-	exch(&heap[0], &heap[avail-1]);
+	exch(heap[0], heap[avail-1]);
 	fixdown(0, avail-1); 
 	return heap[--avail]; 
 }

@@ -1,5 +1,6 @@
 #include "graph.h"
 #include "utils.h"
+#include "bool.h"
 
 
 struct _Node {
@@ -31,6 +32,7 @@ void g_insert(Graph *graph, Item item)
 {
     Node *new_node = _init_node(item);
     graph->nodes[graph->free] = new_node; 
+    (graph->free)--;
 }
 
 void g_free(Graph *graph)
@@ -49,6 +51,11 @@ void g_free(Graph *graph)
     return;
 }
 
+bool g_cmp_links(Link *l1, Link *l2)
+{
+    return (l1->weight > l2->weight);
+}
+
 Node *_init_node(Item item)
 {
     Node *new_node = (Node *) ecalloc(1, sizeof(Node));
@@ -57,3 +64,4 @@ Node *_init_node(Item item)
 
     return new_node;
 }
+
