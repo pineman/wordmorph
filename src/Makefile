@@ -1,8 +1,8 @@
 #CFLAGS=-O3 -Wall -ansi # Entrega
 #CFLAGS=-O3 -Wall -Wextra -pedantic -ansi
-CFLAGS=-Wall -Wextra -pedantic -ansi
+#CFLAGS=-Wall -Wextra -pedantic -ansi
 #CFLAGS=-g -pg -Wall -Wextra -pedantic -ansi
-#CFLAGS=-g -Wall -Wextra -pedantic -ansi
+CFLAGS=-g -Wall -Wextra -pedantic -ansi
 CPPFLAGS=-MP -MMD
 LDFLAGS=
 CC=gcc
