@@ -9,6 +9,7 @@ struct _List {
 
 /**
  * @brief Initialize empty list
+ *
  * @return Pointer to list
  */
 List *l_init(void)
@@ -17,12 +18,12 @@ List *l_init(void)
 }
 
 
- /**
-  * @brief Insert new node on the list's head
-  * 
-  * @param head address of pointer to list's head
-  * @param item new node's payload
-  */
+/**
+ * @brief Insert new node on the list's head
+ *
+ * @param head Pointer to list's head
+ * @param item new node's payload
+ */
 void l_insert(List **head, Item item)
 {
     List *new_node = (List *) emalloc(sizeof(List));
@@ -34,9 +35,10 @@ void l_insert(List **head, Item item)
 }
 
 /**
- * @brief Free all the list nodes
- * @param head List pointer
- * @param free_im Payload of new node
+ * @brief Free the list
+ *
+ * @param head Pointer to list's head
+ * @param free_item Pointer to function that frees Item
  */
 void l_free(List *head, void (*free_item)(Item))
 {
@@ -54,10 +56,11 @@ void l_free(List *head, void (*free_item)(Item))
 }
 
 /**
- * @brief get next element in the list
- * 
- * @param l list node
- * @return next node
+ * @brief Get next element in the list
+ *
+ * @param l List node
+ *
+ * @return next Next node
  */
 List *l_get_next(List *l)
 {
@@ -65,10 +68,11 @@ List *l_get_next(List *l)
 }
 
 /**
- * @brief get the node's payload
- * 
- * @param l list node
- * @return payload
+ * @brief Get the node's payload
+ *
+ * @param l List node
+ *
+ * @return node's payload
  */
 Item l_get_item(List *l)
 {
@@ -76,10 +80,10 @@ Item l_get_item(List *l)
 }
 
 /**
- * @brief define the next node in the list
- * 
- * @param l list node
- * @param next new next node
+ * @brief Set a node's next node
+ *
+ * @param l List node
+ * @param next New next node
  */
 void l_set_next(List *l, List *next)
 {
