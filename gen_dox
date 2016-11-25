@@ -1,4 +1,0 @@
-#!/bin/bash
-
-var=$(pwd)
-cat DoxyTemplate | sed "s|MY_PATH|$var|g" > Doxyfile

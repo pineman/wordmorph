@@ -22,6 +22,7 @@ $(EXEC): $(SRC:%.c=%.o)
 
 clean:
 	rm -rf *.o *.d *.out* $(EXEC)
+	rm -rf doc
 
 # This rebuilds everything if the Makefile was modified
 # http://stackoverflow.com/questions/3871444/making-all-rules-depend-on-the-makefile-itself/3892826#3892826
@@ -29,5 +30,8 @@ clean:
 .dummy: Makefile
 	touch $@
 	$(MAKE) -s clean
+
+doc: Doxyfile *.c *.h
+	doxygen
 
 # TODO: criar make test: automatizar memcheck, massif e gprof
