@@ -23,7 +23,7 @@ struct _Graph {
 Graph *g_init(unsigned int size, unsigned int max_weight)
 {
     Graph *g = (Graph *) emalloc(sizeof(Graph));
-    g->nodes = (Node **) malloc(sizeof(Node *) * size);
+    g->nodes = (Node **) emalloc(sizeof(Node *) * size);
     g->free = 0;
     g->size = size;
     g->max_weight = max_weight;
@@ -130,7 +130,7 @@ void _make_link (Graph *g, unsigned int i1, unsigned int i2,
 
 Link *_init_link(unsigned int index, unsigned int weight)
 {
-    Link *new_link = (Link *) malloc(sizeof(Link));
+    Link *new_link = (Link *) emalloc(sizeof(Link));
     new_link->index = index;
     new_link->weight = weight;
 
@@ -151,3 +151,7 @@ Node *_init_node(Item i)
     return new_node;
 }
 
+
+/*
+ * Node getters and setters
+ */
