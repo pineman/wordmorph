@@ -86,5 +86,15 @@ Graph *read_dic(FILE *fdic, int *max_perms)
 
 void solve_pal(FILE *fpal, FILE *fpath, Graph *graphs)
 {
+	char buffer[MAX_WORD_SIZE];
+	char word1[MAX_WORD_SIZE], word2[MAX_WORD_SIZE];
+	int perm;
 
+	while (fscanf(fpal, "%s %s %d", word1, word2, &perm) == 3) {
+		/* TODO:
+		 * path = g_shortest_path(graphs[strlen(word1)], perm, ...);
+		 * fprintf(fpath, "%s %d\n", word1, path->total_weight);
+		 * for node in path: fprintf(fpath, "%s\n", node);
+		 * fprintf(fpath, "\n"); */
+	}
 }
