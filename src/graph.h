@@ -5,22 +5,26 @@
 
 typedef struct _Vertex Vertex;
 typedef struct _Edge Edge;
-typedef struct _Graph Graph; 
+typedef struct _Graph Graph;
 
-Graph *g_init(unsigned int, unsigned int);
-void g_insert(Graph *, Item);
-void g_free(Graph *);
-void g_update_links(Graph *, unsigned int (*calc_weight)(Item, Item, unsigned int));
 
-Vertex *v_init(Item);
-Vertex *v_get(Graph *, unsigned int);
-Item v_get_item(Vertex *);
-List *v_get_adj(Vertex *);
+Graph *g_init(unsigned int size, unsigned int max_weight);
+void g_free(Graph *g, void (free_item)(Item item));
 
-void e_add (Graph *, unsigned int, unsigned int, unsigned int) ;
-Edge *e_init(unsigned int, unsigned int);
-unsigned int e_get_weight(Edge *);
-unsigned int e_get_index(Edge *);
-bool e_cmp_edges(Edge *, Edge *);
+void g_insert(Graph *g, Item i);
+void g_update_links(Graph *g, unsigned int (*calc_weight)(Item i1, Item i2, unsigned int max));
+
+
+Vertex *v_init(Item i);
+Vertex *v_get(Graph *g, unsigned int index);
+Item v_get_item(Vertex *v);
+List *v_get_adj(Vertex *v);
+
+
+Edge *e_init(unsigned int index, unsigned int weight);
+void e_add(Graph *g, unsigned int i1, unsigned int i2, unsigned int weight);
+unsigned int e_get_weight(Edge *e);
+unsigned int e_get_index(Edge *e);
+bool e_cmp_edges(Edge *e1, Edge *e2);
 
 #endif

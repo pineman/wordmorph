@@ -1,4 +1,5 @@
 #include <stdlib.h>
+
 #include "list.h"
 #include "utils.h"
 
@@ -19,7 +20,7 @@ List *l_init(void)
 
  /**
   * @brief Insert new node on the list's head
-  * 
+  *
   * @param head address of pointer to list's head
   * @param item new node's payload
   */
@@ -55,7 +56,7 @@ void l_free(List *head, void (*free_item)(Item))
 
 /**
  * @brief get next element in the list
- * 
+ *
  * @param l list node
  * @return next node
  */
@@ -66,7 +67,7 @@ List *l_get_next(List *l)
 
 /**
  * @brief get the node's payload
- * 
+ *
  * @param l list node
  * @return payload
  */
@@ -77,7 +78,7 @@ Item l_get_item(List *l)
 
 /**
  * @brief define the next node in the list
- * 
+ *
  * @param l list node
  * @param next new next node
  */

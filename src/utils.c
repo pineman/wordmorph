@@ -1,8 +1,8 @@
 /* Utils.c
  * Authors: João Pinheiro e João Freitas
  * Description:
- * 	Tools for error checking:	
- *  	emalloc, ecalloc, efopen 
+ * 	Tools for error checking:
+ *  	emalloc, ecalloc, efopen
  *  String manipulation:
  *   	change_file_ext
  */
@@ -15,7 +15,7 @@
 
 /**
  * @brief malloc wrapper with error checking
- * @param  size of memory to alloc  
+ * @param  size of memory to alloc
  * @return  return pointer to unitialized memory
  */
 void *emalloc(const size_t size)
@@ -47,7 +47,7 @@ void *ecalloc(const size_t nmemb, const size_t size)
 /**
  * @brief fopen wrapper with erro checking
  * @param  filename string with the path of the file
- * @param  mode of interacting with the file    
+ * @param  mode of interacting with the file
  * @return   pointer to the file
  */
 FILE *efopen(const char *filename, const char *mode)

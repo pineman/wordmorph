@@ -5,23 +5,23 @@
 #include "heap.h"
 #include "graph.h"
 
-int main(int argc, char **argv) 
+int main(int argc, char **argv)
 {
     unsigned int i;
     int **pointers = (int **) malloc(sizeof(int *) * 10);
     Graph *graph = g_init(10, 2);
-    
+
 
     for (i=0; i<10; i++) {
         pointers[i] = (int *) malloc(sizeof(int));
         *(pointers[i]) = i;
-    } 
+    }
 
     for (i=0; i<10; i++) {
         g_insert(graph, pointers[i]);
     }
 
-    
+
     printf("Nós:\n");
     for (i=0; i<10; i++) {
         printf("%d\n", *((int *) (v_get_item(v_get(graph, i)))));
@@ -39,6 +39,12 @@ int main(int argc, char **argv)
         }
 
     }
+
+    for (i=0; i<10; i++) {
+		free(pointers[i]);
+    }
+	free(pointers);
+    g_free(graph, free);
 
 	return EXIT_SUCCESS;
 }

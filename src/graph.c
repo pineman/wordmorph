@@ -2,12 +2,12 @@
 #include "utils.h"
 #include "bool.h"
 
-/* 
+/*
  * Um grafo é uma array de Vertices.
  * Cada Vertex guarda um Item de um tipo não especificado e uma lista
  * simplesmente ligada de Edges.
- * 
- * Os Edges definem uma ligação e têm informação sobre o Vertex de chegada, 
+ *
+ * Os Edges definem uma ligação e têm informação sobre o Vertex de chegada,
  * através do seu indice no array de Vertex, e sobre o peso da ligação.
  */
 
@@ -45,56 +45,55 @@ Graph *g_init(unsigned int size, unsigned int max_weight)
     return g;
 }
 
-void g_insert(Graph *g, Item i)
-{
-    Vertex *new_vertex;
-    
-    if (g->free == g->size) {
-        puts("Erro: grafo esta cheio");
-        exit(EXIT_FAILURE);
-    }
-
-    new_vertex = v_init(i);
-    g->vertices[g->free] = new_vertex; 
-    g->free++;
-}
-
-
-void g_free(Graph *g)
+void g_free(Graph *g, void (free_item)(Item item))
 {
     unsigned int i;
     Vertex *aux;
-    for (i=0; i<g->size; i++) {
+
+    for (i = 0; i < g->size; i++) {
         aux = g->vertices[i];
-        l_free(aux->adj, free);
+        l_free(aux->adj, free_item);
         free(aux);
     }
 
     free(g->vertices);
     free(g);
+}
 
-    return;
+void g_insert(Graph *g, Item i)
+{
+    Vertex *new_vertex;
+
+    if (g->free == g->size) {
+        puts("Erro: grafo está cheio.");
+        exit(EXIT_FAILURE);
+    }
+
+    new_vertex = v_init(i);
+    g->vertices[g->free] = new_vertex;
+    g->free++;
 }
 
 /* Creates links between Vertices in the Graph
  * Warning: O(v^2)
  */
-void g_update_links(Graph *g, unsigned int (*calc_weight)(Item i1, Item i2, 
-                                                          unsigned int max))
+void g_update_links(Graph *g, unsigned int (*calc_weight)(Item i1, Item i2, unsigned int max))
 {
     unsigned int i, j;
     unsigned int weight;
-    for (i=0; i<g->free; i++)
-        for (j=0; j<i; j++) {
-            if ((weight = calc_weight(g->vertices[i]->item, g->vertices[j]->item, g->max_weight)) <= g->max_weight)
-                e_add(g, i, j, weight);
-        }
 
+    for (i = 0; i < g->free; i++) {
+        for (j = 0; j < i; j++) {
+			weight = calc_weight(g->vertices[i]->item, g->vertices[j]->item, g->max_weight);
+            if (weight <= g->max_weight) {
+                e_add(g, i, j, weight);
+            }
+        }
+	}
 }
 
 
-/* Node functions */
-
+/* Vertex functions */
 Vertex *v_init(Item i)
 {
     Vertex *new_vertex = (Vertex *) ecalloc(1, sizeof(Vertex));
@@ -144,20 +143,8 @@ List *v_get_adj(Vertex *v)
 }
 
 
-/* Link functions */ 
-
-/* Adds edges in both vertices*/
-void e_add (Graph *g, unsigned int i1, unsigned int i2, 
-                    unsigned int weight) 
-{
-    Edge *l1 = e_init(i2, weight);
-    Edge *l2 = e_init(i1, weight);
-
-    l_insert(&(g->vertices[i1]->adj), l1);
-    l_insert(&(g->vertices[i2]->adj), l2);   
-}
-
-/* Initializes a single edge*/
+/* Link functions */
+/* Initializes a single edge */
 Edge *e_init(unsigned int index, unsigned int weight)
 {
     Edge *new_edge = (Edge *) emalloc(sizeof(Edge));
@@ -165,6 +152,16 @@ Edge *e_init(unsigned int index, unsigned int weight)
     new_edge->weight = weight;
 
     return new_edge;
+}
+
+/* Adds edges in both vertices */
+void e_add(Graph *g, unsigned int i1, unsigned int i2, unsigned int weight)
+{
+    Edge *l1 = e_init(i2, weight);
+    Edge *l2 = e_init(i1, weight);
+
+    l_insert(&(g->vertices[i1]->adj), l1);
+    l_insert(&(g->vertices[i2]->adj), l2);
 }
 
 unsigned int e_get_weight(Edge *e)
