@@ -144,7 +144,7 @@ List *v_get_adj(Vertex *v)
 }
 
 
-/* Link functions */
+/* Edge functions */
 /* Initializes a single edge */
 Edge *e_init(unsigned int index, unsigned int weight)
 {
