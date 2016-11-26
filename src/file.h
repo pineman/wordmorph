@@ -5,4 +5,6 @@
 
 int *find_max_perms(FILE *fpal);
 
+Graph *read_dic(FILE *fdic, int *max_perms);
+
 #endif

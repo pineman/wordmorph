@@ -12,8 +12,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-
 
 void *emalloc(const size_t size);
 void *ecalloc(const size_t nmemb, const size_t size);

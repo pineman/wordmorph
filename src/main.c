@@ -20,8 +20,11 @@ int main(int argc, char **argv)
 {
 	FILE *fdic, *fpal, *fpath;
 	char *fpath_name;
-	int *max_perms;
 	char *test;
+
+	int *max_perms;
+	/*Graph *graphs;*/
+
 	int i;
 
 	/* Verificação dos parâmetros de entrada*/
@@ -50,10 +53,26 @@ int main(int argc, char **argv)
 	max_perms = find_max_perms(fpal);
 	rewind(fpal);
 
-	free(max_perms);
+	/* Ler o dicionário para obter os nós dos grafos. */
+	graphs = read_dic(fdic, max_perms);
 	fclose(fdic);
+	free(max_perms);
+
+	/* TODO: Construir grafos?? */
+	/* build_graphs(graphs); */
+
+	/* TODO: Ler e resolver problemas. */
+	/*solve_pal(fpal, fstat, graphs)*/
 	fclose(fpal);
 	fclose(fpath);
+
+	/* Libertar memória. */
+	for (i = 0; i < MAX_WORD_SIZE; i++) {
+		if (graphs[i] != NULL) {
+			g_free(graphs);
+		}
+	}
+	free(graphs);
 
 	return EXIT_SUCCESS;
 }
