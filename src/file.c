@@ -52,7 +52,7 @@ Graph *read_dic(FILE *fdic, int *max_perms)
 	graphs = (Graph *) ecalloc(MAX_WORD_SIZE * sizeof(Graph));
 	for (i = 0; i < MAX_WORD_SIZE; i++) {
 		if (max_perms[i] != 0) {
-			graphs[i] = g_init(num_words[i]);
+			graphs[i] = g_init(num_words[i], max_perms[i]);
 		}
 		else {
 			graphs[i] = NULL;
