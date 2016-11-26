@@ -53,6 +53,7 @@ void g_free(Graph *g, void (free_item)(Item item))
     for (i = 0; i < g->size; i++) {
         aux = g->vertices[i];
         l_free(aux->adj, free_item);
+        free_item(aux->item);
         free(aux);
     }
 

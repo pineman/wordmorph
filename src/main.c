@@ -2,9 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "graph.h"
 #include "utils.h"
 #include "const.h"
 #include "file.h"
+#include "word.h"
 
 static const char *VALID_EXTS[] = {".dic", ".pal"};
 
@@ -23,7 +25,7 @@ int main(int argc, char **argv)
 	char *test;
 
 	int *max_perms;
-	/*Graph *graphs;*/
+	Graph **graphs;
 
 	int i;
 
@@ -69,12 +71,10 @@ int main(int argc, char **argv)
 	/* Libertar memória. */
 	for (i = 0; i < MAX_WORD_SIZE; i++) {
 		if (graphs[i] != NULL) {
-			g_free(graphs);
+			g_free(graphs[i], w_free);
 		}
 	}
 	free(graphs);
 
 	return EXIT_SUCCESS;
 }
-
-

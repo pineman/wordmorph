@@ -4,6 +4,8 @@
 #include "file.h"
 #include "utils.h"
 #include "const.h"
+#include "graph.h"
+#include "word.h"
 
 int *find_max_perms(FILE *fpal)
 {
@@ -30,11 +32,11 @@ int *find_max_perms(FILE *fpal)
 	return max_perms;
 }
 
-Graph *read_dic(FILE *fdic, int *max_perms)
+Graph **read_dic(FILE *fdic, int *max_perms)
 {
 	char buffer[MAX_WORD_SIZE];
-	int *num_words[MAX_WORD_SIZE] = {0};
-	Graph *graphs;
+	int num_words[MAX_WORD_SIZE] = {0};
+	Graph **graphs;
 	size_t size;
 	int i;
 
@@ -49,7 +51,7 @@ Graph *read_dic(FILE *fdic, int *max_perms)
 	/* Array de MAX_WORD_SIZE grafos, em que apenas alocamos
 	 * grafos cujos índices no array correspondem a tamanhos de palavra
 	 * que precisamos (os outros ficam a NULL) */
-	graphs = (Graph *) ecalloc(MAX_WORD_SIZE * sizeof(Graph));
+	graphs = (Graph **) ecalloc(MAX_WORD_SIZE, sizeof(Graph *));
 	for (i = 0; i < MAX_WORD_SIZE; i++) {
 		if (max_perms[i] != 0) {
 			graphs[i] = g_init(num_words[i], max_perms[i]);
@@ -77,14 +79,14 @@ Graph *read_dic(FILE *fdic, int *max_perms)
 			 * porque embora poupemos algumas comparações pelo break,
 			 * introduzimos sempre a comparação dos caracteres testados
 			 * com o número máximo de permutações, o que pode não valer a pena */
-			g_new_node(graphs[size], buffer, max_perms[size]);
+			g_insert(graphs[size], w_new(buffer));
 		}
 	}
 
 	return graphs;
 }
 
-void solve_pal(FILE *fpal, FILE *fpath, Graph *graphs)
+void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 {
 	char buffer[MAX_WORD_SIZE];
 	char word1[MAX_WORD_SIZE], word2[MAX_WORD_SIZE];
