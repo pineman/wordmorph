@@ -12,7 +12,7 @@ char *w_new(char *word);
 void w_free(Item word);
 bool w_less(Item a, Item b);
 
-unsigned int w_diff(char *w1, char *w2, unsigned int max_perm);
+unsigned int w_diff(Item w1, Item w2, unsigned int max_perm);
 
 int w_get_size(char *word);
 

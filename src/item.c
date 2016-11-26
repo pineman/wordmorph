@@ -27,9 +27,9 @@ bool less_pri(Item i1, Item i2, bool (cmp_item)(Item, Item))
     return !(cmp_item(i1, i2));
 }
 
-unsigned int calc_weight(Item i1, Item i2, unsigned int max)
+/*unsigned int calc_weight(Item i1, Item i2, unsigned int max)
 {
     int dif = *((int*)i1) - *((int*)i2);
 
     return (dif > 0) ? dif : -dif;
-}
+}*/

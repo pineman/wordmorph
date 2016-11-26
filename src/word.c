@@ -36,18 +36,30 @@ bool w_less(Item a, Item b)
 		return false;
 }
 
-unsigned int w_diff(char *w1, char *w2, unsigned int max_perm)
+unsigned int w_diff(Item v1, Item v2, unsigned int max_perm)
 {
-	unsigned int size, i, cnt = 0;
-	if ((size = strlen(w1)) != strlen(w2)) {
+	/*unsigned int size, i*/ 
+	unsigned int cnt = 0;
+	char *w1 = (char *) v1;
+	char *w2 = (char *) v2;
+	/*size = strlen(w1);*/
+	/*if ((size = strlen(w1)) != strlen(w2)) {
 		fprintf(stderr, "Erro: Tentativa de comparação de palavras de tamanos diferentes!");
 		exit(EXIT_FAILURE);
+	}*/
+
+	while (*w1 != '\0') {
+		if (*w1 != *w2)
+			cnt++;
+		if (cnt > max_perm)
+			break;
+		w1++;  w2++;
 	}
 
-	for (i=0; i<size && !(cnt > max_perm); i++) {
+	/*for (i=0; i<size && !(cnt > max_perm); i++) {
 		if (w1[i] != w2[i])
 			cnt++;
-	}
+	}*/
 
 	return cnt;
 }

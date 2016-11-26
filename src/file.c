@@ -12,7 +12,7 @@ int *find_max_perms(FILE *fpal)
 	int *max_perms;
 	char buffer[MAX_WORD_SIZE];
 	char word1[MAX_WORD_SIZE], word2[MAX_WORD_SIZE];
-	int perm=0, i;
+	int perm=0;
 	size_t size;
 
 	/* Array cujos índices são os tamanhos de palavra necessários e cujos
@@ -38,7 +38,7 @@ Graph **read_dic(FILE *fdic, int *max_perms)
 	int num_words[MAX_WORD_SIZE] = {0};
 	Graph **graphs;
 	size_t size;
-	int i, j;
+	int i;
 
 	/* Ler o dicionário uma primeira vez para saber quantos nós
 	 * de cada tamanho de palavra alocar, para construir os grafos. */
@@ -105,7 +105,6 @@ Graph **read_dic(FILE *fdic, int *max_perms)
 
 void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 {
-	char buffer[MAX_WORD_SIZE];
 	char word1[MAX_WORD_SIZE], word2[MAX_WORD_SIZE];
 	int perm;
 

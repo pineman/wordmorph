@@ -23,7 +23,7 @@ struct _Edge {
 
 /* free - posição livre do array de Vertices
  * size - tamanho total do Grafo
- * mas_weight - peso maximo de uma ligação no grafo
+ * max_weight - peso maximo de uma ligação no grafo
  */
 struct _Graph {
     Vertex **vertices;
@@ -87,7 +87,7 @@ void g_update_links(Graph *g, unsigned int (*calc_weight)(Item i1, Item i2, unsi
     for (i = 0; i < g->free; i++) {
         for (j = 0; j < i; j++) {
 			weight = calc_weight(g->vertices[i]->item, g->vertices[j]->item, g->max_weight);
-            if (weight <= g->max_weight) {
+            if (weight - g->max_weight <= 0) {
 				/*printf("vertice: %s, edge: %s\n", (char *) g->vertices[i]->item, (char *) g->vertices[j]->item);*/
                 e_add(g, i, j, weight);
             }
@@ -95,6 +95,32 @@ void g_update_links(Graph *g, unsigned int (*calc_weight)(Item i1, Item i2, unsi
 	}
 }
 
+
+/*Implementação do algoritmo de Djikstra*/
+/*g_find_path(Graph *g, int s, int *st, double *wt)
+{
+    int v, w;
+    h_init(g->free);
+
+     Indices dos vertices. Tudo bem aqui 
+    for (v=0; v < g->free; v++) {
+        st[v] = -1;
+        wt[v] = maxWT;
+        h_insert(v);
+    }
+
+    wt[s] = 0;
+    fixup(s);
+    while (!h_empty())
+        if (wt[v=h_delmax()] != maxWT)
+            for (t = g->adj[v]; t != NULL; t = t->next)
+                if (P < wt[w = t->v]) {
+                    wt[w] = P;
+                    fixdown(w);
+                    st[w] = v;
+                }
+}
+*/
 
 unsigned int g_get_size(Graph *g)
 {
