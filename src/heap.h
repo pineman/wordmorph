@@ -1,7 +1,7 @@
 #ifndef _HEAP_H
 #define _HEAP_H
 
-#include "const.h"
+#include "bool.h"
 #include "item.h"
 
 void fixup(int Idx);

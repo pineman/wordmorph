@@ -6,6 +6,4 @@
 #define OUT_EXT ".path"
 #define OUT_EXT_SIZE 5
 
-typedef enum {false, true} bool;
-
 #endif

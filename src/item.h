@@ -3,7 +3,7 @@
 
 #define Item int
 
-#include "const.h"
+#include "bool.h"
 
 void exch(Item *, Item *);
 bool less_pri(Item i1, Item i2);
