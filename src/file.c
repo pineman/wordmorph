@@ -90,9 +90,12 @@ Graph **read_dic(FILE *fdic, int *max_perms)
 			 * fazer algo estupido ou se por ser uma má forma de abordar o 
 			 * problema.
 			 */
-			g_update_links(graphs[size], w_diff);
 		}
 	}
+
+	for (i=0; i<MAX_WORD_SIZE; i++)
+		if (max_perms[i] != 0)
+			g_update_links(graphs[i], w_diff);
 
 	return graphs;
 }
