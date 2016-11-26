@@ -77,6 +77,7 @@ void g_insert(Graph *g, Item i)
 
 /* Creates links between Vertices in the Graph
  * Warning: O(v^2)
+ * TODO: É mesmo necessario criar duas edges sempre que se faz uma ligação?
  */
 void g_update_links(Graph *g, unsigned int (*calc_weight)(Item i1, Item i2, unsigned int max))
 {
@@ -159,10 +160,7 @@ Edge *e_init(unsigned int index, unsigned int weight)
 void e_add(Graph *g, unsigned int i1, unsigned int i2, unsigned int weight)
 {
     Edge *l1 = e_init(i2, weight);
-    Edge *l2 = e_init(i1, weight);
-
     l_insert(&(g->vertices[i1]->adj), l1);
-    l_insert(&(g->vertices[i2]->adj), l2);
 }
 
 unsigned int e_get_weight(Edge *e)

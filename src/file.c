@@ -12,7 +12,7 @@ int *find_max_perms(FILE *fpal)
 	int *max_perms;
 	char buffer[MAX_WORD_SIZE];
 	char word1[MAX_WORD_SIZE], word2[MAX_WORD_SIZE];
-	int perm;
+	int perm=0, i;
 	size_t size;
 
 	/* Array cujos índices são os tamanhos de palavra necessários e cujos
@@ -21,13 +21,18 @@ int *find_max_perms(FILE *fpal)
 
 	/* Ler a primeira palavra de cada linha do .pal */
 	while (fgets(buffer, MAX_WORD_SIZE, fpal) != NULL) {
-		sscanf(buffer, "%s %s %d\n", word1, word2, &perm);
+		sscanf(buffer, "%s %s %d", word1, word2, &perm);
 		size = strlen(word1);
 		/* Guardar número máximo de permutações */
 		if (max_perms[size] < perm) {
 			max_perms[size] = perm;
 		}
 	}
+
+	for (i=0; i<MAX_WORD_SIZE; i++)
+		printf("%d\n", max_perms[i]);
+
+	printf("butterfly\n");
 
 	return max_perms;
 }
@@ -80,6 +85,12 @@ Graph **read_dic(FILE *fdic, int *max_perms)
 			 * introduzimos sempre a comparação dos caracteres testados
 			 * com o número máximo de permutações, o que pode não valer a pena */
 			g_insert(graphs[size], w_new(buffer));
+
+			/*TODO: A criação de edges é demasiado lenta, não sei se por estar a
+			 * fazer algo estupido ou se por ser uma má forma de abordar o 
+			 * problema.
+			 */
+			g_update_links(graphs[size], w_diff);
 		}
 	}
 

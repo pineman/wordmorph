@@ -36,6 +36,22 @@ bool w_less(Item a, Item b)
 		return false;
 }
 
+unsigned int w_diff(char *w1, char *w2, unsigned int max_perm)
+{
+	unsigned int size, i, cnt = 0;
+	if ((size = strlen(w1)) != strlen(w2)) {
+		fprintf(stderr, "Erro: Tentativa de comparação de palavras de tamanos diferentes!");
+		exit(EXIT_FAILURE);
+	}
+
+	for (i=0; i<size && !(cnt > max_perm); i++) {
+		if (w1[i] != w2[i])
+			cnt++;
+	}
+
+	return cnt;
+}
+
 /* Funções acessoras */
 int w_get_size(char *word)
 {
