@@ -14,6 +14,8 @@ void g_free(Graph *g, void (free_item)(Item item));
 void g_insert(Graph *g, Item i);
 void g_update_links(Graph *g, unsigned int (*calc_weight)(Item i1, Item i2, unsigned int max));
 
+unsigned int g_get_size(Graph *g);
+unsigned int g_get_free(Graph *g);
 
 Vertex *v_init(Item i);
 Vertex *v_get(Graph *g, unsigned int index);
@@ -26,5 +28,7 @@ void e_add(Graph *g, unsigned int i1, unsigned int i2, unsigned int weight);
 unsigned int e_get_weight(Edge *e);
 unsigned int e_get_index(Edge *e);
 bool e_cmp_edges(Edge *e1, Edge *e2);
+
+void v_adj_print(Graph *g, Vertex *v);
 
 #endif

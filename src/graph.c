@@ -88,12 +88,33 @@ void g_update_links(Graph *g, unsigned int (*calc_weight)(Item i1, Item i2, unsi
         for (j = 0; j < i; j++) {
 			weight = calc_weight(g->vertices[i]->item, g->vertices[j]->item, g->max_weight);
             if (weight <= g->max_weight) {
+				/*printf("vertice: %s, edge: %s\n", (char *) g->vertices[i]->item, (char *) g->vertices[j]->item);*/
                 e_add(g, i, j, weight);
             }
         }
 	}
 }
 
+
+unsigned int g_get_size(Graph *g)
+{
+    if (g == NULL) {
+        fprintf(stderr, "Erro: grafo não existe!\n");
+        exit(EXIT_FAILURE);
+    }
+
+    return g->size;
+}
+
+unsigned int g_get_free(Graph *g)
+{
+    if (g == NULL) {
+        fprintf(stderr, "Erro: grafo não existe!\n");
+        /*exit(EXIT_FAILURE);*/
+    }
+
+    return g->free;
+}
 
 /* Vertex functions */
 Vertex *v_init(Item i)
@@ -108,11 +129,11 @@ Vertex *v_init(Item i)
 Vertex *v_get(Graph *g, unsigned int index)
 {
     if (g == NULL) {
-        fprintf(stderr, "Erro: grafo não existe!");
+        fprintf(stderr, "Erro: grafo não existe!\n");
         exit(EXIT_FAILURE);
     }
     else if (index > g->size) {
-        fprintf(stderr, "Erro: index está fora dos limites do grafo!");
+        fprintf(stderr, "Erro: index está fora dos limites do grafo!\n");
         exit(EXIT_FAILURE);
     }
 
@@ -123,11 +144,11 @@ Vertex *v_get(Graph *g, unsigned int index)
 Item v_get_item(Vertex *v)
 {
     if (v == NULL) {
-        fprintf(stderr, "Erro: nó não existe!");
+        fprintf(stderr, "Erro: nó não existe!\n");
         exit(EXIT_FAILURE);
     }
     else if (v->item == NULL) {
-        fprintf(stderr, "Erro: item não existe!");
+        fprintf(stderr, "Erro: item não existe!\n");
         exit(EXIT_FAILURE);
     }
 
@@ -137,7 +158,7 @@ Item v_get_item(Vertex *v)
 List *v_get_adj(Vertex *v)
 {
     if (v == NULL) {
-        fprintf(stderr, "Erro: lista não inicializada");
+        fprintf(stderr, "Erro: lista não inicializada\n");
         exit(EXIT_FAILURE);
     }
 
@@ -160,13 +181,16 @@ Edge *e_init(unsigned int index, unsigned int weight)
 void e_add(Graph *g, unsigned int i1, unsigned int i2, unsigned int weight)
 {
     Edge *l1 = e_init(i2, weight);
+    Edge *l2 = e_init(i1, weight);
+
     l_insert(&(g->vertices[i1]->adj), l1);
+    l_insert(&(g->vertices[i2]->adj), l2);
 }
 
 unsigned int e_get_weight(Edge *e)
 {
     if (e == NULL) {
-        fprintf(stderr, "Erro: ligação não existe!");
+        fprintf(stderr, "Erro: ligação não existe!\n");
         exit(EXIT_FAILURE);
     }
     return e->weight;
@@ -175,7 +199,7 @@ unsigned int e_get_weight(Edge *e)
 unsigned int e_get_index(Edge *e)
 {
     if (e == NULL) {
-        fprintf(stderr, "Erro: ligação não existe");
+        fprintf(stderr, "Erro: ligação não existe\n");
         exit(EXIT_FAILURE);
     }
     return e->index;
@@ -184,8 +208,17 @@ unsigned int e_get_index(Edge *e)
 bool e_cmp_edges(Edge *e1, Edge *e2)
 {
     if (e1 == NULL || e2 == NULL) {
-        fprintf(stderr, "Erro: ligação não existe");
+        fprintf(stderr, "Erro: ligação não existe\n");
         exit(EXIT_FAILURE);
     }
     return (e1->weight > e2->weight);
+}
+
+void v_adj_print(Graph *g, Vertex *v)
+{
+    List *aux = v->adj;
+    while (aux != NULL) {
+        printf("adj: %s\n", (char *) g->vertices[e_get_index((Edge *) l_get_item(aux))]->item);
+        aux = l_get_next(aux);
+    }
 }

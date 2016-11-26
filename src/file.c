@@ -29,11 +29,6 @@ int *find_max_perms(FILE *fpal)
 		}
 	}
 
-	for (i=0; i<MAX_WORD_SIZE; i++)
-		printf("%d\n", max_perms[i]);
-
-	printf("butterfly\n");
-
 	return max_perms;
 }
 
@@ -43,7 +38,7 @@ Graph **read_dic(FILE *fdic, int *max_perms)
 	int num_words[MAX_WORD_SIZE] = {0};
 	Graph **graphs;
 	size_t size;
-	int i;
+	int i, j;
 
 	/* Ler o dicionário uma primeira vez para saber quantos nós
 	 * de cada tamanho de palavra alocar, para construir os grafos. */
@@ -93,9 +88,17 @@ Graph **read_dic(FILE *fdic, int *max_perms)
 		}
 	}
 
-	for (i=0; i<MAX_WORD_SIZE; i++)
-		if (max_perms[i] != 0)
+	for (i=0; i<MAX_WORD_SIZE; i++) {
+		if (max_perms[i] != 0) {
 			g_update_links(graphs[i], w_diff);
+			/*printf("ola\n");
+			for (j=0; j < g_get_free(graphs[i]) - 1; j++) {
+				printf("%d:\n", j);
+				printf("%s\n", (char *) v_get_item(v_get(graphs[i], j)));
+				v_adj_print(graphs[i], v_get(graphs[i], j));
+			}*/
+		}
+	}
 
 	return graphs;
 }
