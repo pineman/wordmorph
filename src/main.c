@@ -1,50 +1,78 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-#include "list.h"
-#include "heap.h"
-#include "graph.h"
+#include "utils.h"
+#include "const.h"
+#include "file.h"
+
+static const char *VALID_EXTS[] = {".dic", ".pal"};
+
+void usage(char *prog_name);
+
+void usage(char *prog_name)
+{
+	fprintf(stderr, "Uso: %s [dicionário.dic] [problemas.pal]\n", prog_name);
+	exit(EXIT_FAILURE);
+}
 
 int main(int argc, char **argv)
 {
-    unsigned int i;
-    int **pointers = (int **) malloc(sizeof(int *) * 10);
-    Graph *graph = g_init(10, 2);
+	FILE *fdic, *fpal, *fpath;
+	char *fpath_name;
+	char *test;
 
+	int *max_perms;
+	/*Graph *graphs;*/
 
-    for (i=0; i<10; i++) {
-        pointers[i] = (int *) malloc(sizeof(int));
-        *(pointers[i]) = i;
-    }
+	int i;
 
-    for (i=0; i<10; i++) {
-        g_insert(graph, pointers[i]);
-    }
+	/* Verificação dos parâmetros de entrada*/
+	if (argc != 3) {
+		usage(argv[0]);
+	}
 
+	/* Verificar extensões dos ficheiros */
+	for (i = 0; i < 2; i++) {
+		test = strrchr(argv[i+1], '.');
 
-    printf("Nós:\n");
-    for (i=0; i<10; i++) {
-        printf("%d\n", *((int *) (v_get_item(v_get(graph, i)))));
-    }
+		if (!test || strcmp(test, VALID_EXTS[i]) != 0) {
+			usage(argv[1]);
+		}
+	}
 
-    g_update_links(graph, calc_weight);
+	/* Abrir ficheiros de entrada (efopen faz exit() em caso de erro) */
+	fdic = efopen(argv[1], "r");
+	fpal = efopen(argv[2], "r");
+	fpath_name = change_file_ext(argv[2], OUT_EXT, OUT_EXT_SIZE);
+	fpath = efopen(fpath_name, "w");
+	free(fpath_name);
 
-    printf("Adj:\n");
-    for (i=0; i<10; i++){
-        List *aux = v_get_adj(v_get(graph, i));
-        printf("Nó %d:\n", i);
-        while(aux != NULL) {
-            printf("Link: %d, %d\n", e_get_index(l_get_item(aux)), e_get_weight(l_get_item(aux)));
-            aux = l_get_next(aux);
-        }
+	/* Encontrar os tamanhos de palavras e o número máximo de permutações
+	 * para cada tamanho a partir do ficheiro de problemas. */
+	max_perms = find_max_perms(fpal);
+	rewind(fpal);
 
-    }
+	/* Ler o dicionário para obter os nós dos grafos. */
+	graphs = read_dic(fdic, max_perms);
+	fclose(fdic);
+	free(max_perms);
 
-    for (i=0; i<10; i++) {
-		free(pointers[i]);
-    }
-	free(pointers);
-    g_free(graph, free);
+	/* TODO: Construir grafos?? */
+	/* build_graphs(graphs); */
+
+	/* Ler e resolver problemas. */
+	solve_pal(fpal, fpath, graphs);
+	fclose(fpal);
+	fclose(fpath);
+
+	/* Libertar memória. */
+	for (i = 0; i < MAX_WORD_SIZE; i++) {
+		if (graphs[i] != NULL) {
+			g_free(graphs);
+		}
+	}
+	free(graphs);
 
 	return EXIT_SUCCESS;
 }

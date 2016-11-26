@@ -1,5 +1,5 @@
-#ifndef HEAD_H
-#define HEAD_H
+#ifndef _HEAP_H
+#define _HEAP_H
 
 #include "bool.h"
 #include "item.h"

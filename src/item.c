@@ -1,6 +1,7 @@
 #include <string.h>
 
 #include "item.h"
+#include "bool.h"
 
 void exch(Item *i1, Item *i2)
 {

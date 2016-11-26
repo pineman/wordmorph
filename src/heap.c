@@ -3,6 +3,7 @@
 
 #include "heap.h"
 #include "graph.h"
+#include "bool.h"
 
 static Item *heap;
 static int avail;
