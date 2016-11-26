@@ -1,9 +1,6 @@
-#ifndef BOOL_H
-#define BOOL_H
-
-#include <stdlib.h>
+#ifndef _BOOL_H
+#define _BOOL_H
 
 typedef enum {false, true} bool;
-
 
 #endif
