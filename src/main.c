@@ -24,17 +24,17 @@ int main(int argc, char **argv)
     
     printf("Nós:\n");
     for (i=0; i<10; i++) {
-        printf("%d\n", *((int *) (g_get_item(g_get_node(graph, i)))));
+        printf("%d\n", *((int *) (v_get_item(v_get(graph, i)))));
     }
 
     g_update_links(graph, calc_weight);
 
-    printf("Adj\n:");
+    printf("Adj:\n");
     for (i=0; i<10; i++){
-        List *aux = g_get_adj(g_get_node(graph, i));
+        List *aux = v_get_adj(v_get(graph, i));
         printf("Nó %d:\n", i);
         while(aux != NULL) {
-            printf("Link: %d, %d\n", g_get_index(l_get_item(aux)), g_get_weight(l_get_item(aux)));
+            printf("Link: %d, %d\n", e_get_index(l_get_item(aux)), e_get_weight(l_get_item(aux)));
             aux = l_get_next(aux);
         }
 

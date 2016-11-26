@@ -2,28 +2,42 @@
 #include "utils.h"
 #include "bool.h"
 
+/* 
+ * Um grafo é uma array de Vertices.
+ * Cada Vertex guarda um Item de um tipo não especificado e uma lista
+ * simplesmente ligada de Edges.
+ * 
+ * Os Edges definem uma ligação e têm informação sobre o Vertex de chegada, 
+ * através do seu indice no array de Vertex, e sobre o peso da ligação.
+ */
 
-struct _Node {
+struct _Vertex {
     Item item;
     List *adj;
 };
 
-struct _Link {
+struct _Edge {
     unsigned int weight;
     unsigned int index;
 };
 
+/* free - posição livre do array de Vertices
+ * size - tamanho total do Grafo
+ * mas_weight - peso maximo de uma ligação no grafo
+ */
 struct _Graph {
-    Node **nodes;
+    Vertex **vertices;
     unsigned int free;
     unsigned int size;
     unsigned int max_weight;
 };
 
+
+/* Graph functions */
 Graph *g_init(unsigned int size, unsigned int max_weight)
 {
     Graph *g = (Graph *) emalloc(sizeof(Graph));
-    g->nodes = (Node **) emalloc(sizeof(Node *) * size);
+    g->vertices = (Vertex **) emalloc(sizeof(Vertex *) * size);
     g->free = 0;
     g->size = size;
     g->max_weight = max_weight;
@@ -33,33 +47,64 @@ Graph *g_init(unsigned int size, unsigned int max_weight)
 
 void g_insert(Graph *g, Item i)
 {
-    Node *new_node;
+    Vertex *new_vertex;
+    
     if (g->free == g->size) {
         puts("Erro: grafo esta cheio");
         exit(EXIT_FAILURE);
     }
-    new_node = _init_node(i);
-    g->nodes[g->free] = new_node; 
+
+    new_vertex = v_init(i);
+    g->vertices[g->free] = new_vertex; 
     g->free++;
 }
+
 
 void g_free(Graph *g)
 {
     unsigned int i;
-    Node *aux;
+    Vertex *aux;
     for (i=0; i<g->size; i++) {
-        aux = g->nodes[i];
+        aux = g->vertices[i];
         l_free(aux->adj, free);
         free(aux);
     }
 
-    free(g->nodes);
+    free(g->vertices);
     free(g);
 
     return;
 }
 
-Node *g_get_node(Graph *g, unsigned int index)
+/* Creates links between Vertices in the Graph
+ * Warning: O(v^2)
+ */
+void g_update_links(Graph *g, unsigned int (*calc_weight)(Item i1, Item i2, 
+                                                          unsigned int max))
+{
+    unsigned int i, j;
+    unsigned int weight;
+    for (i=0; i<g->free; i++)
+        for (j=0; j<i; j++) {
+            if ((weight = calc_weight(g->vertices[i]->item, g->vertices[j]->item, g->max_weight)) <= g->max_weight)
+                e_add(g, i, j, weight);
+        }
+
+}
+
+
+/* Node functions */
+
+Vertex *v_init(Item i)
+{
+    Vertex *new_vertex = (Vertex *) ecalloc(1, sizeof(Vertex));
+    new_vertex->item = i;
+    new_vertex->adj = l_init();
+
+    return new_vertex;
+}
+
+Vertex *v_get(Graph *g, unsigned int index)
 {
     if (g == NULL) {
         fprintf(stderr, "Erro: grafo não existe!");
@@ -70,88 +115,81 @@ Node *g_get_node(Graph *g, unsigned int index)
         exit(EXIT_FAILURE);
     }
 
-    return g->nodes[index];
+    return g->vertices[index];
 }
 
-Item g_get_item(Node *n)
+
+Item v_get_item(Vertex *v)
 {
-    if (n == NULL) {
+    if (v == NULL) {
         fprintf(stderr, "Erro: nó não existe!");
         exit(EXIT_FAILURE);
     }
-    else if (n->item == NULL) {
+    else if (v->item == NULL) {
         fprintf(stderr, "Erro: item não existe!");
         exit(EXIT_FAILURE);
     }
 
-    return n->item;
+    return v->item;
 }
 
-List *g_get_adj(Node *n)
+List *v_get_adj(Vertex *v)
 {
-    if (n == NULL)
-        puts("Error: lista não inicializada");
+    if (v == NULL) {
+        fprintf(stderr, "Erro: lista não inicializada");
+        exit(EXIT_FAILURE);
+    }
 
-    return n->adj;
+    return v->adj;
 }
 
-unsigned int g_get_weight(Link *l)
-{
-    return l->weight;
-}
 
-unsigned int g_get_index(Link *l)
-{
-    return l->index;
-}
+/* Link functions */ 
 
-void g_update_links(Graph *g, unsigned int (*calc_weight)(Item i1, Item i2, 
-                                                          unsigned int max))
-{
-    unsigned int i, j;
-    unsigned int weight;
-    for (i=0; i<g->free; i++)
-        for (j=0; j<i; j++) {
-            if ((weight = calc_weight(g->nodes[i]->item, g->nodes[j]->item, g->max_weight)) <= g->max_weight)
-                _make_link(g, i, j, weight);
-        }
-
-}
-
-void _make_link (Graph *g, unsigned int i1, unsigned int i2, 
+/* Adds edges in both vertices*/
+void e_add (Graph *g, unsigned int i1, unsigned int i2, 
                     unsigned int weight) 
 {
-    Link *l1 = _init_link(i2, weight);
-    Link *l2 = _init_link(i1, weight);
+    Edge *l1 = e_init(i2, weight);
+    Edge *l2 = e_init(i1, weight);
 
-    l_insert(&(g->nodes[i1]->adj), l1);
-    l_insert(&(g->nodes[i2]->adj), l2);   
+    l_insert(&(g->vertices[i1]->adj), l1);
+    l_insert(&(g->vertices[i2]->adj), l2);   
 }
 
-Link *_init_link(unsigned int index, unsigned int weight)
+/* Initializes a single edge*/
+Edge *e_init(unsigned int index, unsigned int weight)
 {
-    Link *new_link = (Link *) emalloc(sizeof(Link));
-    new_link->index = index;
-    new_link->weight = weight;
+    Edge *new_edge = (Edge *) emalloc(sizeof(Edge));
+    new_edge->index = index;
+    new_edge->weight = weight;
 
-    return new_link;
+    return new_edge;
 }
 
-bool g_cmp_links(Link *l1, Link *l2)
+unsigned int e_get_weight(Edge *e)
 {
-    return (l1->weight > l2->weight);
+    if (e == NULL) {
+        fprintf(stderr, "Erro: ligação não existe!");
+        exit(EXIT_FAILURE);
+    }
+    return e->weight;
 }
 
-Node *_init_node(Item i)
+unsigned int e_get_index(Edge *e)
 {
-    Node *new_node = (Node *) ecalloc(1, sizeof(Node));
-    new_node->item = i;
-    new_node->adj = l_init();
-
-    return new_node;
+    if (e == NULL) {
+        fprintf(stderr, "Erro: ligação não existe");
+        exit(EXIT_FAILURE);
+    }
+    return e->index;
 }
 
-
-/*
- * Node getters and setters
- */
+bool e_cmp_edges(Edge *e1, Edge *e2)
+{
+    if (e1 == NULL || e2 == NULL) {
+        fprintf(stderr, "Erro: ligação não existe");
+        exit(EXIT_FAILURE);
+    }
+    return (e1->weight > e2->weight);
+}
