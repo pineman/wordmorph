@@ -17,8 +17,8 @@ struct _Vertex {
 };
 
 struct _Edge {
-    unsigned int weight;
-    unsigned int index;
+    unsigned short weight;
+    unsigned short index;
 };
 
 /* free - posição livre do array de Vertices
@@ -27,14 +27,14 @@ struct _Edge {
  */
 struct _Graph {
     Vertex **vertices;
-    unsigned int free;
-    unsigned int size;
-    unsigned int max_weight;
+    unsigned short free;
+    unsigned short size;
+    unsigned short max_weight;
 };
 
 
 /* Graph functions */
-Graph *g_init(unsigned int size, unsigned int max_weight)
+Graph *g_init(unsigned short size, unsigned short max_weight)
 {
     Graph *g = (Graph *) emalloc(sizeof(Graph));
     g->vertices = (Vertex **) emalloc(sizeof(Vertex *) * size);
@@ -79,10 +79,10 @@ void g_insert(Graph *g, Item i)
  * Warning: O(v^2)
  * TODO: É mesmo necessario criar duas edges sempre que se faz uma ligação?
  */
-void g_update_links(Graph *g, unsigned int (*calc_weight)(Item i1, Item i2, unsigned int max))
+void g_update_links(Graph *g, unsigned short (*calc_weight)(Item i1, Item i2, unsigned short max))
 {
-    unsigned int i, j;
-    unsigned int weight;
+    unsigned short i, j;
+    unsigned short weight;
 
     for (i = 0; i < g->free; i++) {
         for (j = 0; j < i; j++) {
@@ -122,7 +122,7 @@ void g_update_links(Graph *g, unsigned int (*calc_weight)(Item i1, Item i2, unsi
 }
 */
 
-unsigned int g_get_size(Graph *g)
+unsigned short g_get_size(Graph *g)
 {
     if (g == NULL) {
         fprintf(stderr, "Erro: grafo não existe!\n");
@@ -132,7 +132,7 @@ unsigned int g_get_size(Graph *g)
     return g->size;
 }
 
-unsigned int g_get_free(Graph *g)
+unsigned short g_get_free(Graph *g)
 {
     if (g == NULL) {
         fprintf(stderr, "Erro: grafo não existe!\n");
@@ -152,7 +152,7 @@ Vertex *v_init(Item i)
     return new_vertex;
 }
 
-Vertex *v_get(Graph *g, unsigned int index)
+Vertex *v_get(Graph *g, unsigned short index)
 {
     if (g == NULL) {
         fprintf(stderr, "Erro: grafo não existe!\n");
@@ -194,7 +194,7 @@ List *v_get_adj(Vertex *v)
 
 /* Edge functions */
 /* Initializes a single edge */
-Edge *e_init(unsigned int index, unsigned int weight)
+Edge *e_init(unsigned short index, unsigned short weight)
 {
     Edge *new_edge = (Edge *) emalloc(sizeof(Edge));
     new_edge->index = index;
@@ -204,7 +204,7 @@ Edge *e_init(unsigned int index, unsigned int weight)
 }
 
 /* Adds edges in both vertices */
-void e_add(Graph *g, unsigned int i1, unsigned int i2, unsigned int weight)
+void e_add(Graph *g, unsigned short i1, unsigned short i2, unsigned short weight)
 {
     Edge *l1 = e_init(i2, weight);
     Edge *l2 = e_init(i1, weight);
@@ -213,7 +213,7 @@ void e_add(Graph *g, unsigned int i1, unsigned int i2, unsigned int weight)
     l_insert(&(g->vertices[i2]->adj), l2);
 }
 
-unsigned int e_get_weight(Edge *e)
+unsigned short e_get_weight(Edge *e)
 {
     if (e == NULL) {
         fprintf(stderr, "Erro: ligação não existe!\n");
@@ -222,7 +222,7 @@ unsigned int e_get_weight(Edge *e)
     return e->weight;
 }
 
-unsigned int e_get_index(Edge *e)
+unsigned short e_get_index(Edge *e)
 {
     if (e == NULL) {
         fprintf(stderr, "Erro: ligação não existe\n");

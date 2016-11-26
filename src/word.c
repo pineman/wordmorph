@@ -36,7 +36,7 @@ bool w_less(Item a, Item b)
 		return false;
 }
 
-unsigned int w_diff(Item v1, Item v2, unsigned int max_perm)
+unsigned short w_diff(Item v1, Item v2, unsigned short max_perm)
 {
 	/*unsigned int size, i*/ 
 	unsigned int cnt = 0;
