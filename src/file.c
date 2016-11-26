@@ -54,6 +54,9 @@ Graph *read_dic(FILE *fdic, int *max_perms)
 		if (max_perms[i] != 0) {
 			graphs[i] = g_init(num_words[i]);
 		}
+		else {
+			graphs[i] = NULL;
+		}
 	}
 
 	/* Reler o dicionário para construir os grafos. */
@@ -71,7 +74,7 @@ Graph *read_dic(FILE *fdic, int *max_perms)
 			 * número máximo de permutações.
 			 *
 			 * Depende do número de caracteres em relação ao número de permutações
-			 * porque embora poupamos algumas comparações pelo break,
+			 * porque embora poupemos algumas comparações pelo break,
 			 * introduzimos sempre a comparação dos caracteres testados
 			 * com o número máximo de permutações, o que pode não valer a pena */
 			g_new_node(graphs[size], buffer, max_perms[size]);
@@ -79,4 +82,9 @@ Graph *read_dic(FILE *fdic, int *max_perms)
 	}
 
 	return graphs;
+}
+
+void solve_pal(FILE *fpal, FILE *fpath, Graph *graphs)
+{
+
 }

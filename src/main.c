@@ -61,8 +61,8 @@ int main(int argc, char **argv)
 	/* TODO: Construir grafos?? */
 	/* build_graphs(graphs); */
 
-	/* TODO: Ler e resolver problemas. */
-	/*solve_pal(fpal, fstat, graphs)*/
+	/* Ler e resolver problemas. */
+	solve_pal(fpal, fpath, graphs);
 	fclose(fpal);
 	fclose(fpath);
 
