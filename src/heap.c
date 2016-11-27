@@ -3,6 +3,7 @@
 
 #include "heap.h"
 #include "bool.h"
+#include "utils.h"
 
 #define CHILD1(i) ((2*(i))+1)
 #define CHILD2(i) ((2*(i))+2)
@@ -22,8 +23,8 @@ struct _Heap {
 
 Heap *h_init(unsigned short size)
 {
-    Heap *h = (Heap *) malloc(sizeof(Heap));
-    h->vector = (Secret **) malloc(size * sizeof(Secret *)); 
+    Heap *h = (Heap *) emalloc(sizeof(Heap));
+    h->vector = (Secret **) emalloc(size * sizeof(Secret *)); 
     h->size = size-1;
     h->free = 0;
 
@@ -53,23 +54,26 @@ void fixdown(Heap *h, int i, int l, bool (*cmp)(Secret, Secret))
 {
     int child;
 
-    /* Iterar até chegar ao penúltimo nível */
+    /* 
+     * Iterar até chegar ao penúltimo nível
+     * Escolher child para comparar com o pai
+     * Comparar com o pai
+     * Se o pai não tiver menos prioridade que o filho, está no sítio certo.
+     * Se não, temos de trocar o pai e o filho
+     * Seguir o pai antigo que agora ocupa a posição do filho antigo
+     */
+     
     while (2 * i < l - 1) {
         child = CHILD1(i);
-        /* Escolher child para comparar com o pai */
+
         if (child < l - 1 && cmp(h->vector[child], h->vector[child + 1]))
             child++;
-
-        /* Comparar com o pai */
-        if (!cmp(h->vector[i], h->vector[child])) {
-            /* Se o pai não tiver menos prioridade que o filho, está
-             * no sítio certo. */
+        
+        if (!cmp(h->vector[i], h->vector[child]))
             break;
-        }
-
-        /* Se não, temos de trocar o pai e o filho */
+   
         h_exch(h, i, child);
-        /* Seguir o pai antigo que agora ocupa a posição do filho antigo */
+        
         i = child;
     }
 }
@@ -77,10 +81,11 @@ void fixdown(Heap *h, int i, int l, bool (*cmp)(Secret, Secret))
 
 void h_insert(Heap *h, Secret I, bool (*cmp)(Secret, Secret))
 {
-    if ((h->free) < h->size)  {
+    if ((h->free) <= h->size)  {
         h->vector[h->free] = I;
         fixup(h, h->free, cmp);
         h->free++;
+        printf("free no insert: %d\n", h->free);
     }
     else {
         puts("Erro: A heap está cheia, impossivel inserir");
@@ -95,7 +100,10 @@ Secret h_delmax(Heap *h, bool (*cmp)(Secret, Secret))
 	h_exch(h, 0, h->free - 1);
 	fixdown(h, 0, h->free - 1, cmp);
 
-	return h->vector[--(h->free)];
+    --(h->free);
+    printf("free no delmax: %d\n", h->free);
+	return h->vector[h->free];
+
 }
 
 bool h_empty(Heap *h) 
@@ -106,9 +114,17 @@ bool h_empty(Heap *h)
 void h_exch(Heap *h, int i1, int i2)
 {
     if (h->vector[i1] == NULL || h->vector[i2] == NULL)
-        printf("Erro: estas a tentar trocar pointers para NULL(não vou crashar)!\n");
+        printf("Erro: estas a tentar trocar NULL pointers (não vou crashar)!\n");
     h->vector[i1] = h->vector[i2];
     h->vector[i2] = h->vector[i1]; 
 
     return;
+}
+
+void h_print(Heap *h)
+{
+    printf("free: %d\n", h->free);
+    int i=0;
+    for (i=0; i<h->free; i++)
+        printf("%d\n", *((int *)h->vector[i]));
 }
