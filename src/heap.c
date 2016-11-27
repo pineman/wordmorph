@@ -85,7 +85,6 @@ void h_insert(Heap *h, Secret I, bool (*cmp)(Secret, Secret))
         h->vector[h->free] = I;
         fixup(h, h->free, cmp);
         h->free++;
-        printf("free no insert: %d\n", h->free);
     }
     else {
         puts("Erro: A heap está cheia, impossivel inserir");
@@ -100,9 +99,7 @@ Secret h_delmax(Heap *h, bool (*cmp)(Secret, Secret))
 	h_exch(h, 0, h->free - 1);
 	fixdown(h, 0, h->free - 1, cmp);
 
-    --(h->free);
-    printf("free no delmax: %d\n", h->free);
-	return h->vector[h->free];
+	return h->vector[--(h->free)];
 
 }
 
@@ -115,8 +112,10 @@ void h_exch(Heap *h, int i1, int i2)
 {
     if (h->vector[i1] == NULL || h->vector[i2] == NULL)
         printf("Erro: estas a tentar trocar NULL pointers (não vou crashar)!\n");
-    h->vector[i1] = h->vector[i2];
-    h->vector[i2] = h->vector[i1]; 
+
+    Secret tmp = h->vector[i2];
+    h->vector[i2] = h->vector[i1];
+    h->vector[i1] = tmp;
 
     return;
 }
@@ -126,5 +125,7 @@ void h_print(Heap *h)
     printf("free: %d\n", h->free);
     int i=0;
     for (i=0; i<h->free; i++)
-        printf("%d\n", *((int *)h->vector[i]));
+        printf("%d ", *((int *)h->vector[i]));
+
+    /*putchar('\n');*/
 }

@@ -22,11 +22,11 @@ int main(int argc, char const *argv[])
     for (i=0; i<20; i++)
         h_insert(heap, array[i], cmp);
 
-    h_print(heap);
+    /*h_print(heap);*/
 
-    for (i=0; i<20; i++) {
-        printf("indice: %d \t", i);
-        printf("valor: %d\n", *((int *)h_delmax(heap, cmp)));
+    for (i=0; i<100 && !h_empty(heap); i++) { 
+        printf("%d\n", *((int *)h_delmax(heap, cmp)));
+        putchar('\n');
     }
 
     return 0;
