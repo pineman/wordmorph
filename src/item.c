@@ -3,14 +3,7 @@
 #include "item.h"
 #include "bool.h"
 
-void exch(Item *i1, Item *i2)
-{
-    Item tmp = *i1;
-    *i1 = *i2;
-    *i2 = tmp;
 
-    return;
-}
 
 /**
  * @brief Finds the Item with the smaller priority
@@ -22,10 +15,10 @@ void exch(Item *i1, Item *i2)
  * @param cmp_item Compare items function
  * @return True if i1 is more prioritary than i2, false if not
  */
-bool less_pri(Item i1, Item i2, bool (cmp_item)(Item, Item))
+/*bool less_pri(Item i1, Item i2, bool (cmp_item)(Item, Item))
 {
     return !(cmp_item(i1, i2));
-}
+}*/
 
 /*unsigned int calc_weight(Item i1, Item i2, unsigned int max)
 {

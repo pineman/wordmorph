@@ -96,41 +96,6 @@ void g_update_links(Graph *g, unsigned short (*calc_weight)(Item i1, Item i2, un
 	}
 }
 
-#define POT_DIST (wt[v] + edge->weight)
-#define MAX_WT 1 /* TODO */
-
-/*Implementação do algoritmo de Djikstra*/
-/* st: árvore de caminhos mais curtos de src para todos os outros vértices */
-void g_find_path(Graph *g, int src, int *st, int *wt, bool (*cmp)(Item i1, Item i2))
-{
-    int v; /* Index dum vértice */
-	int v_adj; /* Index dum vértice adjacente a v */
-    Edge *edge; /* Aresta de v para v_adj */
-
-    h_init(g->free);
-
-	/* Encher a Heap com todos os vértices */
-    for (v = 0; v < g->free; v++) {
-        st[v] = -1;
-        wt[v] = MAX_WT;
-        h_insert(&v, cmp);
-    }
-
-    wt[src] = 0;
-    fixup(src, cmp);
-    while (!h_empty()) {
-        if (wt[v = *((int *) h_delmax())] != MAX_WT) {
-            for (edge = (Edge *) g->vertices[v]->adj; edge != NULL; edge = (Edge *) l_get_next(g->vertices[v]->adj)) {
-                if (POT_DIST < wt[v_adj = edge->index]) {
-                    wt[v_adj] = POT_DIST;
-                    fixup(v_adj, cmp);
-                    st[v_adj] = v;
-                }
-            }
-        }
-    }
-}
-
 unsigned short g_get_size(Graph *g)
 {
     if (g == NULL) {
@@ -192,11 +157,6 @@ Item v_get_item(Vertex *v)
 
 List *v_get_adj(Vertex *v)
 {
-    if (v == NULL) {
-        fprintf(stderr, "Erro: lista não inicializada\n");
-        exit(EXIT_FAILURE);
-    }
-
     return v->adj;
 }
 

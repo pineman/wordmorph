@@ -18,15 +18,29 @@ static int hsize;
 /* TODO: A heap tem de saber da array wt para saber
  * comparar distâncias (prioridades) */
 
-void fixup(int i, bool (*cmp)(Item i1, Item i2))
+void exch(Item *i1, Item *i2)
 {
-    while (i > 0 && less_pri(heap[PARENT(i)], heap[i], cmp)) {
+    Item tmp = *i1;
+    *i1 = *i2;
+    *i2 = tmp;
+
+    return;
+}
+
+bool less_pri(Item i1, Item i2, int *wt)
+{
+    return (wt[*((int *) i1)]) < wt[*((int *) i2)];
+}
+
+void fixup(int i, int *wt)
+{
+    while (i > 0 && less_pri(heap[PARENT(i)], heap[i], wt)) {
         exch(heap[i], heap[PARENT(i)]);
         i = PARENT(i);
     }
 }
 
-void fixdown(int i, int l, bool (*cmp)(Item i1, Item i2))
+void fixdown(int i, int l, int *wt)
 {
     int child;
 
@@ -34,11 +48,11 @@ void fixdown(int i, int l, bool (*cmp)(Item i1, Item i2))
     while (2 * i < l - 1) {
         child = CHILD1(i);
 		/* Escolher child para comparar com o pai */
-        if (child < l - 1 && less_pri(heap[child], heap[child + 1], cmp))
+        if (child < l - 1 && less_pri(heap[child], heap[child + 1], wt))
 			child++;
 
 		/* Comparar com o pai */
-        if (!less_pri(heap[i], heap[child], cmp)) {
+        if (!less_pri(heap[i], heap[child], wt)) {
 			/* Se o pai não tiver menos prioridade que o filho, está
 			 * no sítio certo. */
 			break;
@@ -62,11 +76,11 @@ void h_free() {
 	free(heap);
 }
 
-void h_insert(Item I, bool (*cmp)(Item i1, Item i2))
+void h_insert(Item I, int *wt)
 {
     if ((avail) < hsize)  {
         heap[avail] = I;
-        fixup(avail, cmp);
+        fixup(avail, wt);
         avail++;
     }
     else {
@@ -75,11 +89,11 @@ void h_insert(Item I, bool (*cmp)(Item i1, Item i2))
     }
 }
 
-Item h_delmax(bool (*cmp) (Item i1, Item i2))
+Item h_delmax(int *wt)
 {
 	/* Swap the first and last nodes */
 	exch(heap[0], heap[avail-1]);
-	fixdown(0, avail - 1, cmp);
+	fixdown(0, avail - 1, wt);
 
 	return heap[--avail];
 }

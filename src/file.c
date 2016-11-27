@@ -6,6 +6,7 @@
 #include "const.h"
 #include "graph.h"
 #include "word.h"
+#include "djikstra.h"
 
 int *find_max_perms(FILE *fpal)
 {
@@ -106,11 +107,22 @@ Graph **read_dic(FILE *fdic, int *max_perms)
 void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 {
 	char word1[MAX_WORD_SIZE], word2[MAX_WORD_SIZE];
-	int perm;
+	int perm, i, size;
+	int *st = NULL, *wt = NULL;
 
 	while (fscanf(fpal, "%s %s %d", word1, word2, &perm) == 3) {
+		size = strlen(word1);
+		for (i=0; i<g_get_free(graphs[size]) && 
+			 strcmp(word1, (char *) v_get_item(v_get(graphs[size], i))); i++) ;
+
+		st = realloc(st, g_get_free(graphs[size]) * sizeof(int));
+		wt = realloc(wt, g_get_free(graphs[size]) * sizeof(int));
+		shortest_path(graphs[size], i, st, wt);
+		for (i=0; i<g_get_free(graphs[size]); i++)
+			printf("%i\n", st[i]);
 		/* TODO:
 		 * path = g_shortest_path(graphs[strlen(word1)], ...);
+		 * walk tree
 		 * fprintf(fpath, "%s %d\n", word1, path->total_weight);
 		 * for node in path: fprintf(fpath, "%s\n", node);
 		 * fprintf(fpath, "\n"); */
