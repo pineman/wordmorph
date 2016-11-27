@@ -8,12 +8,12 @@
  /*TODO: ugly global var*/
 static int *wt;
 
-int *shortest_path(Graph *g, int src, int *st)
+int *shortest_path(Graph *g, int src, int *st, int max_perm)
 {
     int v; /* Index de um vértice */
 	int v_adj; /* Index dum vértice adjacente a v */
-    int *n;
     List *l; /* Aresta de v para v_adj */
+    int *n;
 
     Heap *heap = h_init(g_get_free(g));
     wt = realloc(wt, g_get_free(g) * sizeof(int));
@@ -29,6 +29,7 @@ int *shortest_path(Graph *g, int src, int *st)
 
     wt[src] = 0;
     fixup(heap, src, cmp);
+    /* TODO: ignorar pesos não necessários */
     while (!h_empty(heap)) {
         if (wt[v = *((int *) h_delmax(heap, cmp))] != MAX_WT) {
             for (l = v_get_adj(v_get(g, v));
@@ -44,6 +45,7 @@ int *shortest_path(Graph *g, int src, int *st)
             }
         }
     }
+
     h_free(heap, free);
 
 	return wt;

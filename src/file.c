@@ -13,14 +13,14 @@ int *find_max_perms(FILE *fpal)
 	int *max_perms;
 	char buffer[MAX_WORD_SIZE];
 	char word1[MAX_WORD_SIZE], word2[MAX_WORD_SIZE];
-	int perm=0;
+	int perm = 0;
 	size_t size;
 
 	/* Array cujos índices são os tamanhos de palavra necessários e cujos
 	 * valores são o número máximo de permutações para esse tamanho. */
 	max_perms = (int *) ecalloc(MAX_WORD_SIZE, sizeof(int));
 
-	/* Ler a primeira palavra de cada linha do .pal */
+	/* Ler cada linha do .pal */
 	while (fgets(buffer, MAX_WORD_SIZE, fpal) != NULL) {
 		sscanf(buffer, "%s %s %d", word1, word2, &perm);
 		size = strlen(word1);
@@ -41,7 +41,7 @@ Graph **read_dic(FILE *fdic, int *max_perms)
 	size_t size;
 	int i;
 
-	/* Ler o dicionário uma primeira vez para saber quantos nós
+	/* Ler o dicionário uma primeira vez para saber quantos vértices
 	 * de cada tamanho de palavra alocar, para construir os grafos. */
 	while (fscanf(fdic, "%s", buffer) == 1) {
 		num_words[strlen(buffer)]++;
@@ -52,7 +52,7 @@ Graph **read_dic(FILE *fdic, int *max_perms)
 	/* Array de MAX_WORD_SIZE grafos, em que apenas alocamos
 	 * grafos cujos índices no array correspondem a tamanhos de palavra
 	 * que precisamos (os outros ficam a NULL) */
-	graphs = (Graph **) ecalloc(MAX_WORD_SIZE, sizeof(Graph *));
+	graphs = (Graph **) emalloc(MAX_WORD_SIZE * sizeof(Graph *));
 	for (i = 0; i < MAX_WORD_SIZE; i++) {
 		if (max_perms[i] != 0) {
 			graphs[i] = g_init(num_words[i], max_perms[i]);
@@ -67,21 +67,7 @@ Graph **read_dic(FILE *fdic, int *max_perms)
 		size = strlen(buffer);
 		/* Ignorar palavras cujos tamanhos já sabemos que não precisamos. */
 		if (max_perms[size] != 0) {
-			/* TODO: Atualizar logo as listas de adjacências dos outros nós
-			 * ou construi-las todas depois?
-			 *
-			 * Fazer isso na função new_node ou noutra função?
-			 *
-			 * Uma possível otimização para a construção das adjacências
-			 * é fazer break quando já se testou mais chars do que o
-			 * número máximo de permutações.
-			 *
-			 * Depende do número de caracteres em relação ao número de permutações
-			 * porque embora poupemos algumas comparações pelo break,
-			 * introduzimos sempre a comparação dos caracteres testados
-			 * com o número máximo de permutações, o que pode não valer a pena */
 			g_insert(graphs[size], w_new(buffer));
-
 			/*TODO: A criação de edges é demasiado lenta, não sei se por estar a
 			 * fazer algo estupido ou se por ser uma má forma de abordar o
 			 * problema.
@@ -89,9 +75,11 @@ Graph **read_dic(FILE *fdic, int *max_perms)
 		}
 	}
 
-	for (i=0; i<MAX_WORD_SIZE; i++)
+	/* Construir as arestas entre cada palavra, com pesos até o quadrado
+	 * do número máximo de permutações para cada tamanho. */
+	for (i = 0; i < MAX_WORD_SIZE; i++)
 		if (max_perms[i] != 0)
-			g_update_links(graphs[i], w_diff);
+			g_make_edges(graphs[i], w_diff);
 
 	return graphs;
 }
@@ -99,20 +87,23 @@ Graph **read_dic(FILE *fdic, int *max_perms)
 void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 {
 	char word1[MAX_WORD_SIZE], word2[MAX_WORD_SIZE];
-	int perm, i, size;
-	int *st = NULL, *wt=NULL;
+	int max_perm;
+	int i; /* indíce do vértice de origem do grafo. */
+	size_t size;
+	int *st = NULL, *wt = NULL;
 
-	while (fscanf(fpal, "%s %s %d", word1, word2, &perm) == 3) {
+	while (fscanf(fpal, "%s %s %d", word1, word2, &max_perm) == 3) {
 		size = strlen(word1);
-		for (i=0; i<g_get_free(graphs[size]) &&
-			 strcmp(word1, (char *) v_get_item(v_get(graphs[size], i))); i++) ;
+		/* Encontrar indice do vértice de origem no grafo. */
+		for (i = 0; i < g_get_free(graphs[size]) &&
+			 strcmp(word1, (char *) v_get_item(v_get(graphs[size], i))); i++);
 
+		/* Árvore do caminho. */
 		st = realloc(st, g_get_free(graphs[size]) * sizeof(int));
-		wt = shortest_path(graphs[size], i, st);
-		for (i=0; i<g_get_free(graphs[size]); i++)
+		wt = shortest_path(graphs[size], i, st, max_perm);
+		for (i = 0; i < g_get_free(graphs[size]); i++)
 			printf("%i\n", st[i]);
 
-		putchar('\n');
 		/* TODO:
 		 * path = g_shortest_path(graphs[strlen(word1)], ...);
 		 * walk tree

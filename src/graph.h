@@ -11,9 +11,10 @@ typedef struct _Graph Graph;
 Graph *g_init(unsigned short size, unsigned short max_weight);
 void g_free(Graph *g, void (free_item)(Item item));
 void g_insert(Graph *g, Item i);
-void g_update_links(Graph *g, unsigned short (*calc_weight)(Item i1, Item i2, unsigned short max));
+void g_make_edges(Graph *g, unsigned short (*calc_weight)(Item i1, Item i2, unsigned short max));
 unsigned short g_get_size(Graph *g);
 unsigned short g_get_free(Graph *g);
+unsigned short g_get_max_weight(Graph *g);
 
 Vertex *v_init(Item i);
 Vertex *v_get(Graph *g, unsigned short index);

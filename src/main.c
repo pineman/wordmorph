@@ -25,6 +25,7 @@ int main(int argc, char **argv)
 	char *test;
 
 	int *max_perms;
+	/* Array de grafos por tamanhos de palavras que contêm. */
 	Graph **graphs;
 
 	int i;

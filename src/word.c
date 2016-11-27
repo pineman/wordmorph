@@ -38,15 +38,11 @@ bool w_less(Item a, Item b)
 
 unsigned short w_diff(Item v1, Item v2, unsigned short max_perm)
 {
+	/* TODO: lento como nós sabemos */
 	/*unsigned int size, i*/ 
 	unsigned int cnt = 0;
 	char *w1 = (char *) v1;
 	char *w2 = (char *) v2;
-	/*size = strlen(w1);*/
-	/*if ((size = strlen(w1)) != strlen(w2)) {
-		fprintf(stderr, "Erro: Tentativa de comparação de palavras de tamanos diferentes!");
-		exit(EXIT_FAILURE);
-	}*/
 
 	while (*w1 != '\0') {
 		if (*w1 != *w2)

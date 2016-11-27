@@ -19,8 +19,6 @@ struct _Heap {
     unsigned short size;
 };
 
-
-
 Heap *h_init(unsigned short size)
 {
     Heap *h = (Heap *) emalloc(sizeof(Heap));
@@ -83,17 +81,10 @@ void fixdown(Heap *h, int i, int l, bool (*cmp)(Item, Item))
 
 void h_insert(Heap *h, Item I, bool (*cmp)(Item, Item))
 {
-    if ((h->free) <= h->size)  {
         h->vector[h->free] = I;
-        fixup(h, h->free, cmp);
+		fixup(h, h->free, cmp);
         h->free++;
-    }
-    else {
-        puts("Erro: A heap está cheia, impossivel inserir");
-        exit(EXIT_FAILURE);
-    }
 }
-
 
 Item h_delmax(Heap *h, bool (*cmp)(Item, Item))
 {
@@ -114,15 +105,9 @@ void h_exch(Heap *h, int i1, int i2)
 {
 	Item tmp;
 
-    if (h->vector[i1] == NULL || h->vector[i2] == NULL) {
-        printf("Erro: estas a tentar trocar NULL pointers (não vou crashar)!\n");
-    }
-
 	tmp = h->vector[i2];
     h->vector[i2] = h->vector[i1];
     h->vector[i1] = tmp;
-
-    return;
 }
 
 void h_print(Heap *h)

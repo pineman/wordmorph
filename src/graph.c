@@ -24,7 +24,7 @@ struct _Edge {
 
 /* free - posição livre do array de Vertices
  * size - tamanho total do Grafo
- * max_weight - peso maximo de uma ligação no grafo
+ * max_weight - peso máximo de uma aresta no grafo
  */
 struct _Graph {
     Vertex **vertices;
@@ -66,11 +66,6 @@ void g_insert(Graph *g, Item i)
 {
     Vertex *new_vertex;
 
-    if (g->free == g->size) {
-        puts("Erro: grafo está cheio.");
-        exit(EXIT_FAILURE);
-    }
-
     new_vertex = v_init(i);
     g->vertices[g->free] = new_vertex;
     g->free++;
@@ -80,15 +75,15 @@ void g_insert(Graph *g, Item i)
  * Warning: O(v^2)
  * TODO: É mesmo necessario criar duas edges sempre que se faz uma ligação?
  */
-void g_update_links(Graph *g, unsigned short (*calc_weight)(Item i1, Item i2, unsigned short max))
+void g_make_edges(Graph *g, unsigned short (*calc_weight)(Item i1, Item i2, unsigned short max))
 {
     unsigned short i, j;
     unsigned short weight;
 
     for (i = 0; i < g->free; i++) {
-        for (j = 0; j < i; j++) {
+        for (j = 0; j < g->free; j++) {
 			weight = calc_weight(g->vertices[i]->item, g->vertices[j]->item, g->max_weight);
-            if (weight - g->max_weight <= 0) {
+            if (weight <= g->max_weight) {
 				/*printf("vertice: %s, edge: %s\n", (char *) g->vertices[i]->item, (char *) g->vertices[j]->item);*/
                 e_add(g, i, j, weight);
             }
@@ -98,22 +93,17 @@ void g_update_links(Graph *g, unsigned short (*calc_weight)(Item i1, Item i2, un
 
 unsigned short g_get_size(Graph *g)
 {
-    if (g == NULL) {
-        fprintf(stderr, "Erro: grafo não existe!\n");
-        exit(EXIT_FAILURE);
-    }
-
     return g->size;
 }
 
 unsigned short g_get_free(Graph *g)
 {
-    if (g == NULL) {
-        fprintf(stderr, "Erro: grafo não existe!\n");
-        /*exit(EXIT_FAILURE);*/
-    }
-
     return g->free;
+}
+
+unsigned short g_get_max_weight(Graph *g)
+{
+    return g->max_weight;
 }
 
 /* Vertex functions */
@@ -128,30 +118,12 @@ Vertex *v_init(Item i)
 
 Vertex *v_get(Graph *g, unsigned short index)
 {
-    if (g == NULL) {
-        fprintf(stderr, "Erro: grafo não existe!\n");
-        exit(EXIT_FAILURE);
-    }
-    else if (index > g->size) {
-        fprintf(stderr, "Erro: index está fora dos limites do grafo!\n");
-        exit(EXIT_FAILURE);
-    }
-
     return g->vertices[index];
 }
 
 
 Item v_get_item(Vertex *v)
 {
-    if (v == NULL) {
-        fprintf(stderr, "Erro: nó não existe!\n");
-        exit(EXIT_FAILURE);
-    }
-    else if (v->item == NULL) {
-        fprintf(stderr, "Erro: item não existe!\n");
-        exit(EXIT_FAILURE);
-    }
-
     return v->item;
 }
 
@@ -184,28 +156,16 @@ void e_add(Graph *g, unsigned short i1, unsigned short i2, unsigned short weight
 
 unsigned short e_get_weight(Edge *e)
 {
-    if (e == NULL) {
-        fprintf(stderr, "Erro: ligação não existe!\n");
-        exit(EXIT_FAILURE);
-    }
     return e->weight;
 }
 
 unsigned short e_get_index(Edge *e)
 {
-    if (e == NULL) {
-        fprintf(stderr, "Erro: ligação não existe\n");
-        exit(EXIT_FAILURE);
-    }
     return e->index;
 }
 
 bool e_cmp_edges(Edge *e1, Edge *e2)
 {
-    if (e1 == NULL || e2 == NULL) {
-        fprintf(stderr, "Erro: ligação não existe\n");
-        exit(EXIT_FAILURE);
-    }
     return (e1->weight > e2->weight);
 }
 
