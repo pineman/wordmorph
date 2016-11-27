@@ -112,10 +112,13 @@ bool h_empty(Heap *h)
 
 void h_exch(Heap *h, int i1, int i2)
 {
-    if (h->vector[i1] == NULL || h->vector[i2] == NULL)
-        printf("Erro: estas a tentar trocar NULL pointers (não vou crashar)!\n");
+	Item tmp;
 
-    Item tmp = h->vector[i2];
+    if (h->vector[i1] == NULL || h->vector[i2] == NULL) {
+        printf("Erro: estas a tentar trocar NULL pointers (não vou crashar)!\n");
+    }
+
+	tmp = h->vector[i2];
     h->vector[i2] = h->vector[i1];
     h->vector[i1] = tmp;
 
@@ -124,8 +127,10 @@ void h_exch(Heap *h, int i1, int i2)
 
 void h_print(Heap *h)
 {
+    int i;
+
     printf("free: %d\n", h->free);
-    int i=0;
+
     for (i=0; i<h->free; i++)
         printf("%d ", *((int *)h->vector[i]));
 
