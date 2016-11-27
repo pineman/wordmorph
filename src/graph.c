@@ -1,6 +1,7 @@
 #include "graph.h"
 #include "utils.h"
 #include "bool.h"
+#include "heap.h"
 
 /*
  * Um grafo é uma array de Vertices.
@@ -95,32 +96,40 @@ void g_update_links(Graph *g, unsigned short (*calc_weight)(Item i1, Item i2, un
 	}
 }
 
+#define POT_DIST (wt[v] + edge->weight)
+#define MAX_WT 1 /* TODO */
 
 /*Implementação do algoritmo de Djikstra*/
-/*g_find_path(Graph *g, int s, int *st, double *wt)
+/* st: árvore de caminhos mais curtos de src para todos os outros vértices */
+void g_find_path(Graph *g, int src, int *st, int *wt, bool (*cmp)(Item i1, Item i2))
 {
-    int v, w;
+    int v; /* Index dum vértice */
+	int v_adj; /* Index dum vértice adjacente a v */
+    Edge *edge; /* Aresta de v para v_adj */
+
     h_init(g->free);
 
-     Indices dos vertices. Tudo bem aqui 
-    for (v=0; v < g->free; v++) {
+	/* Encher a Heap com todos os vértices */
+    for (v = 0; v < g->free; v++) {
         st[v] = -1;
-        wt[v] = maxWT;
-        h_insert(v);
+        wt[v] = MAX_WT;
+        h_insert(&v, cmp);
     }
 
-    wt[s] = 0;
-    fixup(s);
-    while (!h_empty())
-        if (wt[v=h_delmax()] != maxWT)
-            for (t = g->adj[v]; t != NULL; t = t->next)
-                if (P < wt[w = t->v]) {
-                    wt[w] = P;
-                    fixdown(w);
-                    st[w] = v;
+    wt[src] = 0;
+    fixup(src, cmp);
+    while (!h_empty()) {
+        if (wt[v = *((int *) h_delmax())] != MAX_WT) {
+            for (edge = (Edge *) g->vertices[v]->adj; edge != NULL; edge = (Edge *) l_get_next(g->vertices[v]->adj)) {
+                if (POT_DIST < wt[v_adj = edge->index]) {
+                    wt[v_adj] = POT_DIST;
+                    fixup(v_adj, cmp);
+                    st[v_adj] = v;
                 }
+            }
+        }
+    }
 }
-*/
 
 unsigned short g_get_size(Graph *g)
 {
