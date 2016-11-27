@@ -82,7 +82,7 @@ Graph **read_dic(FILE *fdic, int *max_perms)
 			g_insert(graphs[size], w_new(buffer));
 
 			/*TODO: A criação de edges é demasiado lenta, não sei se por estar a
-			 * fazer algo estupido ou se por ser uma má forma de abordar o 
+			 * fazer algo estupido ou se por ser uma má forma de abordar o
 			 * problema.
 			 */
 		}
@@ -110,7 +110,7 @@ void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 
 	while (fscanf(fpal, "%s %s %d", word1, word2, &perm) == 3) {
 		/* TODO:
-		 * path = g_shortest_path(graphs[strlen(word1)], perm, ...);
+		 * path = g_shortest_path(graphs[strlen(word1)], ...);
 		 * fprintf(fpath, "%s %d\n", word1, path->total_weight);
 		 * for node in path: fprintf(fpath, "%s\n", node);
 		 * fprintf(fpath, "\n"); */
