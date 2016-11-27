@@ -2,19 +2,23 @@
 #define _HEAP_H
 
 #include "bool.h"
-#include "item.h"
+#include "secret.h"
 
-void exch(Item *i1, Item *i2);
-bool less_pri(Item i1, Item i2, int *wt);
+typedef struct _Heap Heap;
 
-void fixup(int i, int *wt);
-void fixdown(int i, int l, int *wt);
+Heap *h_init(unsigned short size);
+void h_free(Heap *h, void (*free_item)(Secret)); 
 
-void h_init(unsigned int size);
-void h_free();
+void fixup(Heap *h, int i, bool (*cmp)(Secret, Secret));
+void fixdown(Heap *h, int i, int l, bool (*cmp)(Secret, Secret));
 
-void h_insert(Item I, int *wt);
-Item h_delmax(int *wt);
-bool h_empty();
+void h_insert(Heap *h, Secret I, bool (*cmp)(Secret, Secret));
+Secret h_delmax(Heap *h, bool (*cmp)(Secret, Secret));
+
+bool h_empty(Heap *h);
+
+void h_exch(Heap *h, int i1, int i2);
+
+void h_print(Heap *h);
 
 #endif

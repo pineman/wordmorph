@@ -2,91 +2,91 @@
 #include <stdio.h>
 
 #include "heap.h"
-#include "graph.h"
 #include "bool.h"
+#include "utils.h"
 
 #define CHILD1(i) ((2*(i))+1)
 #define CHILD2(i) ((2*(i))+2)
 #define PARENT(i) (((i)-1)/2)
 
-static Item *heap;
-static int avail;
-static int hsize;
+/*
+ * Interface das heaps
+ */
 
-/* TODO: ITEM É INT!!! */
+struct _Heap {
+    Secret **vector;
+    unsigned short free;
+    unsigned short size;
+};
 
-/* TODO: A heap tem de saber da array wt para saber
- * comparar distâncias (prioridades) */
 
-void exch(Item *i1, Item *i2)
+
+Heap *h_init(unsigned short size)
 {
-    Item tmp = *i1;
-    *i1 = *i2;
-    *i2 = tmp;
+    Heap *h = (Heap *) emalloc(sizeof(Heap));
+    h->vector = (Secret **) emalloc(size * sizeof(Secret *)); 
+    h->size = size-1;
+    h->free = 0;
 
-    return;
+    return h;
 }
 
-bool less_pri(Item i1, Item i2, int *wt)
+
+void h_free(Heap *h, void (*free_item)(Secret)) 
 {
-    return (wt[*((int *) i1)]) < wt[*((int *) i2)];
+    int i;
+    for (i=0; i<h->size; i++) {
+        free_item(h->vector[i]);
+	}
+
+	free(h->vector);
+    free(h);
 }
 
-void fixup(int i, int *wt)
+
+
+void fixup(Heap *h, int i, bool (*cmp)(Secret, Secret))
 {
-    while (i > 0 && less_pri(heap[PARENT(i)], heap[i], wt)) {
-        exch(heap[i], heap[PARENT(i)]);
+    while (i > 0 && cmp(h->vector[PARENT(i)], h->vector[i])) {
+        h_exch(h, i, PARENT(i));
         i = PARENT(i);
     }
 }
 
-void fixdown(int i, int l, int *wt)
+void fixdown(Heap *h, int i, int l, bool (*cmp)(Secret, Secret))
 {
     int child;
 
-	/* Iterar até chegar ao penúltimo nível */
+    /* 
+     * Iterar até chegar ao penúltimo nível
+     * Escolher child para comparar com o pai
+     * Comparar com o pai
+     * Se o pai não tiver menos prioridade que o filho, está no sítio certo.
+     * Se não, temos de trocar o pai e o filho
+     * Seguir o pai antigo que agora ocupa a posição do filho antigo
+     */
+     
     while (2 * i < l - 1) {
         child = CHILD1(i);
-		/* Escolher child para comparar com o pai */
-        if (child < l - 1 && less_pri(heap[child], heap[child + 1], wt))
-			child++;
 
-		/* Comparar com o pai */
-        if (!less_pri(heap[i], heap[child], wt)) {
-			/* Se o pai não tiver menos prioridade que o filho, está
-			 * no sítio certo. */
-			break;
-		}
-
-		/* Se não, temos de trocar o pai e o filho */
-        exch(heap[i], heap[child]);
-        /* Seguir o pai antigo que agora ocupa a posição do filho antigo */
+        if (child < l - 1 && cmp(h->vector[child], h->vector[child + 1]))
+            child++;
+        
+        if (!cmp(h->vector[i], h->vector[child]))
+            break;
+   
+        h_exch(h, i, child);
+        
         i = child;
     }
 }
 
-void h_init(unsigned int size)
+void h_insert(Heap *h, Secret I, bool (*cmp)(Secret, Secret))
 {
-    heap = (Item *) malloc(size * sizeof(Item));
-    hsize = size;
-    avail = 0;
-}
-
-void h_free(void (free_item)(Item item))
-{
-	int a;
-	for (a = 0; a < hsize; a++ ) {
-		free_item(heap[a]);
-	}
-	free(heap);
-}
-
-void h_insert(Item I, int *wt)
-{
-    if ((avail) < hsize)  {
-        heap[avail] = I;
-        fixup(avail, wt);
-        avail++;
+    if ((h->free) <= h->size)  {
+        h->vector[h->free] = I;
+        fixup(h, h->free, cmp);
+        h->free++;
     }
     else {
         puts("Erro: A heap está cheia, impossivel inserir");
@@ -94,16 +94,40 @@ void h_insert(Item I, int *wt)
     }
 }
 
-Item h_delmax(int *wt)
+
+Secret h_delmax(Heap *h, bool (*cmp)(Secret, Secret))
 {
 	/* Swap the first and last nodes */
-	exch(heap[0], heap[avail-1]);
-	fixdown(0, avail - 1, wt);
+	h_exch(h, 0, h->free - 1);
+	fixdown(h, 0, h->free - 1, cmp);
 
-	return heap[--avail];
+	return h->vector[--(h->free)];
+
 }
 
-bool h_empty()
+bool h_empty(Heap *h) 
 {
-    return !avail;
+    return !(h->free);
+}
+
+void h_exch(Heap *h, int i1, int i2)
+{
+    if (h->vector[i1] == NULL || h->vector[i2] == NULL)
+        printf("Erro: estas a tentar trocar NULL pointers (não vou crashar)!\n");
+
+    Secret tmp = h->vector[i2];
+    h->vector[i2] = h->vector[i1];
+    h->vector[i1] = tmp;
+
+    return;
+}
+
+void h_print(Heap *h)
+{
+    printf("free: %d\n", h->free);
+    int i=0;
+    for (i=0; i<h->free; i++)
+        printf("%d ", *((int *)h->vector[i]));
+
+    /*putchar('\n');*/
 }
