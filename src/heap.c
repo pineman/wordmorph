@@ -72,8 +72,12 @@ void h_init(unsigned int size)
     avail = 0;
 }
 
-void h_free()
+void h_free(void (free_item)(Item item))
 {
+	int a;
+	for (a = 0; a < hsize; a++ ) {
+		free_item(heap[a]);
+	}
 	free(heap);
 }
 

@@ -127,4 +127,6 @@ void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 		 * for node in path: fprintf(fpath, "%s\n", node);
 		 * fprintf(fpath, "\n"); */
 	}
+	free(st);
+	free(wt);
 }

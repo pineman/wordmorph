@@ -1,6 +1,7 @@
 #include <stdlib.h>
 
 #include "dijkstra.h"
+#include "utils.h"
 #include "graph.h"
 #include "heap.h"
 
@@ -16,6 +17,7 @@ void shortest_path(Graph *g, int src, int *st, int *wt)
 {
     int v; /* Index de um vértice */
 	int v_adj; /* Index dum vértice adjacente a v */
+	int *n;
     List *l; /* Aresta de v para v_adj */
 
     h_init(g_get_free(g));
@@ -24,7 +26,9 @@ void shortest_path(Graph *g, int src, int *st, int *wt)
     for (v = 0; v < g_get_free(g); v++) {
         st[v] = -1;
         wt[v] = MAX_WT;
-        h_insert(&v, wt);
+        n = (int *) emalloc(sizeof(int));
+        *n = v;
+        h_insert(n, wt);
     }
 
     wt[src] = 0;
@@ -44,4 +48,6 @@ void shortest_path(Graph *g, int src, int *st, int *wt)
             }
         }
     }
+
+    h_free(free);
 }
