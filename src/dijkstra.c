@@ -5,7 +5,7 @@
 #include "graph.h"
 #include "heap.h"
 
- /*TODO: ugly global var*/ 
+ /*TODO: ugly global var*/
 static int *wt;
 
 int *shortest_path(Graph *g, int src, int *st)
@@ -17,7 +17,7 @@ int *shortest_path(Graph *g, int src, int *st)
 
     Heap *heap = h_init(g_get_free(g));
     wt = realloc(wt, g_get_free(g) * sizeof(int));
-    
+
 	/* Encher a Heap com todos os vértices */
     for (v = 0; v < g_get_free(g); v++) {
         st[v] = -1;
@@ -31,9 +31,9 @@ int *shortest_path(Graph *g, int src, int *st)
     fixup(heap, src, cmp);
     while (!h_empty(heap)) {
         if (wt[v = *((int *) h_delmax(heap, cmp))] != MAX_WT) {
-            for (l = v_get_adj(v_get(g, v)); 
-                 l != NULL; 
-                 l = l_get_next(l)) 
+            for (l = v_get_adj(v_get(g, v));
+                 l != NULL;
+                 l = l_get_next(l))
             {
                 v_adj = e_get_index(l_get_item(l));
                 if (POT_DIST < wt[v_adj]) {
@@ -49,7 +49,7 @@ int *shortest_path(Graph *g, int src, int *st)
 	return wt;
 }
 
-bool cmp(Secret s1, Secret s2)
+bool cmp(Item s1, Item s2)
 {
     return wt[*((int *) s1)] < wt[*((int *) s2)];
 }
