@@ -65,14 +65,15 @@ void fixdown(int i, int l, int *wt)
     }
 }
 
-void h_init(unsigned Size)
+void h_init(unsigned int size)
 {
-    heap = (Item *) malloc(Size * sizeof(Item));
-    hsize = Size;
+    heap = (Item *) malloc(size * sizeof(Item));
+    hsize = size;
     avail = 0;
 }
 
-void h_free() {
+void h_free()
+{
 	free(heap);
 }
 
@@ -98,6 +99,7 @@ Item h_delmax(int *wt)
 	return heap[--avail];
 }
 
-bool h_empty() {
+bool h_empty()
+{
     return !avail;
 }

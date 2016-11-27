@@ -1,13 +1,16 @@
-#include "djikstra.h"
+#include <stdlib.h>
 
+#include "dijkstra.h"
+#include "graph.h"
+#include "heap.h"
 
-/*Implementação do algoritmo de Djikstra*/
+/*Implementação do algoritmo de Dijkstra*/
 /* st: árvore de caminhos mais curtos de src para todos os outros vértices */
 
 /*
  * TODO: DOES NO WORK
- * 
- * 
+ *
+ *
  */
 void shortest_path(Graph *g, int src, int *st, int *wt)
 {
@@ -28,9 +31,9 @@ void shortest_path(Graph *g, int src, int *st, int *wt)
     fixup(src, wt);
     while (!h_empty()) {
         if (wt[v = *((int *) h_delmax(wt))] != MAX_WT) {
-            for (l = v_get_adj(v_get(g, v)); 
-                 l != NULL; 
-                 l = l_get_next(l)) 
+            for (l = v_get_adj(v_get(g, v));
+                 l != NULL;
+                 l = l_get_next(l))
             {
                 v_adj = e_get_index(l_get_item(l));
                 if (POT_DIST < wt[v_adj]) {

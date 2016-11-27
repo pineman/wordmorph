@@ -6,7 +6,7 @@
 #include "const.h"
 #include "graph.h"
 #include "word.h"
-#include "djikstra.h"
+#include "dijkstra.h"
 
 int *find_max_perms(FILE *fpal)
 {
@@ -112,7 +112,7 @@ void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 
 	while (fscanf(fpal, "%s %s %d", word1, word2, &perm) == 3) {
 		size = strlen(word1);
-		for (i=0; i<g_get_free(graphs[size]) && 
+		for (i=0; i<g_get_free(graphs[size]) &&
 			 strcmp(word1, (char *) v_get_item(v_get(graphs[size], i))); i++) ;
 
 		st = realloc(st, g_get_free(graphs[size]) * sizeof(int));

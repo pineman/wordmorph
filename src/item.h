@@ -3,7 +3,4 @@
 
 #define Item void*
 
-#include "bool.h"
-
-
 #endif
