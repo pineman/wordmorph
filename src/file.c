@@ -89,17 +89,9 @@ Graph **read_dic(FILE *fdic, int *max_perms)
 		}
 	}
 
-	for (i=0; i<MAX_WORD_SIZE; i++) {
-		if (max_perms[i] != 0) {
+	for (i=0; i<MAX_WORD_SIZE; i++)
+		if (max_perms[i] != 0)
 			g_update_links(graphs[i], w_diff);
-			/*printf("ola\n");
-			for (j=0; j < g_get_free(graphs[i]) - 1; j++) {
-				printf("%d:\n", j);
-				printf("%s\n", (char *) v_get_item(v_get(graphs[i], j)));
-				v_adj_print(graphs[i], v_get(graphs[i], j));
-			}*/
-		}
-	}
 
 	return graphs;
 }
@@ -108,7 +100,7 @@ void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 {
 	char word1[MAX_WORD_SIZE], word2[MAX_WORD_SIZE];
 	int perm, i, size;
-	int *st = NULL, *wt = NULL;
+	int *st = NULL;
 
 	while (fscanf(fpal, "%s %s %d", word1, word2, &perm) == 3) {
 		size = strlen(word1);
@@ -116,10 +108,11 @@ void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 			 strcmp(word1, (char *) v_get_item(v_get(graphs[size], i))); i++) ;
 
 		st = realloc(st, g_get_free(graphs[size]) * sizeof(int));
-		wt = realloc(wt, g_get_free(graphs[size]) * sizeof(int));
-		shortest_path(graphs[size], i, st, wt);
+		shortest_path(graphs[size], i, st);
 		for (i=0; i<g_get_free(graphs[size]); i++)
 			printf("%i\n", st[i]);
+
+		putchar('\n');
 		/* TODO:
 		 * path = g_shortest_path(graphs[strlen(word1)], ...);
 		 * walk tree
