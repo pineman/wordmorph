@@ -98,28 +98,41 @@ Graph **read_dic(FILE *fdic, int *max_perms)
 
 void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 {
+	Graph *g;
 	char word1[MAX_WORD_SIZE], word2[MAX_WORD_SIZE];
-	int perm, i, size;
+	int perm, i, j;
 	int *st = NULL, *wt=NULL;
+	int v;
 
 	while (fscanf(fpal, "%s %s %d", word1, word2, &perm) == 3) {
-		size = strlen(word1);
-		for (i=0; i<g_get_free(graphs[size]) &&
-			 strcmp(word1, (char *) v_get_item(v_get(graphs[size], i))); i++) ;
+		g = graphs[strlen(word1)];
+		for (i=0; i<g_get_free(g) &&
+			 strcmp(word1, (char *) v_get_item(v_get(g, i))); i++) ;
 
-		st = realloc(st, g_get_free(graphs[size]) * sizeof(int));
-		wt = shortest_path(graphs[size], i, st);
-		for (i=0; i<g_get_free(graphs[size]); i++)
-			printf("%i\n", st[i]);
+		st = realloc(st, g_get_free(g) * sizeof(int));
+		wt = shortest_path(g, i, st);
 
-		putchar('\n');
-		/* TODO:
-		 * path = g_shortest_path(graphs[strlen(word1)], ...);
-		 * walk tree
-		 * fprintf(fpath, "%s %d\n", word1, path->total_weight);
-		 * for node in path: fprintf(fpath, "%s\n", node);
-		 * fprintf(fpath, "\n"); */
+		/*for (j=0; j<g_get_free(g); j++)
+			printf("%d: %d %d\n", j, st[j], wt[j]);*/
+		v = v_find(g, word2, w_cmp);
+		if (st[v] == -1)
+			printf("%s %d\n%s\n", word1, -1, word2);
+		else {
+			printf("%s %d\n", (char *) v_get_item(v_get(g, i)), wt[v]);
+			walk_tree(g, st, wt, st[v]);
+			
+			printf("%s\n", (char *) v_get_item(v_get(g, v)));
+		}
 	}
 	free(wt);
 	free(st);
+}
+
+void walk_tree(Graph *g, int *st, int *wt, int dst)
+{
+	if (st[dst] != -1) {
+		walk_tree(g, st, wt, st[dst]);
+		printf("%s\n", (char *) v_get_item(v_get(g, dst)));
+	}
+	return;
 }

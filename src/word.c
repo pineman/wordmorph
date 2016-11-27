@@ -69,3 +69,8 @@ int w_get_size(char *word)
 {
 	return (int) strlen(word);
 }
+
+int w_cmp(Item c1, Item c2)
+{
+	return strcmp((const char *) c1, (const char *) c2);
+}
