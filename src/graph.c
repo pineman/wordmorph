@@ -121,6 +121,15 @@ Vertex *v_get(Graph *g, unsigned short index)
     return g->vertices[index];
 }
 
+int v_find(Graph *g, Item i1, int (*cmp_item)(Item c1, Item c2))
+{
+    int i;
+    for (i=0; i<g_get_free(g); i++)
+        if (!cmp_item(g->vertices[i]->item, i1))
+            return i;
+
+    return -1;
+}
 
 Item v_get_item(Vertex *v)
 {

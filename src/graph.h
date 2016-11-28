@@ -18,6 +18,7 @@ unsigned short g_get_max_weight(Graph *g);
 
 Vertex *v_init(Item i);
 Vertex *v_get(Graph *g, unsigned short index);
+int v_find(Graph *g, Item i1, int (*cmp_item)(Item c1, Item c2));
 Item v_get_item(Vertex *v);
 List *v_get_adj(Vertex *v);
 

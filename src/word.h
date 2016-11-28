@@ -15,5 +15,5 @@ bool w_less(Item a, Item b);
 unsigned short w_diff(Item w1, Item w2, unsigned short max_perm);
 
 int w_get_size(char *word);
-
+int w_cmp(Item c1, Item c2);
 #endif
