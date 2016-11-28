@@ -19,6 +19,8 @@ bool h_empty(Heap *h);
 
 void h_exch(Heap *h, int i1, int i2);
 
+bool h_exists(Heap *h, Item I, bool (*is_equal)(Item, Item));
+
 void h_print(Heap *h);
 
 #endif

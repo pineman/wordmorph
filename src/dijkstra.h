@@ -9,5 +9,6 @@
 
 int *shortest_path(Graph *g, int src, int *st, int max_perm);
 bool cmp(Item s1, Item s2);
+bool is_equal(Item s1, Item s2);
 
 #endif
