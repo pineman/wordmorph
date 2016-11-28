@@ -80,8 +80,8 @@ void g_make_edges(Graph *g, unsigned short (*calc_weight)(Item i1, Item i2, unsi
     unsigned short i, j;
     unsigned short weight;
 
-    for (i = 0; i < g->free; i++) {
-        for (j = 0; j < i; j++) {
+    for (i = 0; i < g->size; i++) {
+        for (j = 0; j <= i; j++) {
 			weight = calc_weight(g->vertices[i]->item, g->vertices[j]->item, g->max_weight);
             if (weight <= g->max_weight) {
 				/*printf("vertice: %s, edge: %s\n", (char *) g->vertices[i]->item, (char *) g->vertices[j]->item);*/

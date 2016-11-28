@@ -44,9 +44,9 @@ int *shortest_path(Graph *g, int src, int *st, int max_perm)
                     st[v_adj] = v;
 					n = (int *) emalloc(sizeof(int));
 					*n = v_adj;
-					if(!h_exists(heap, n, is_equal)) {
+					if (st[v_adj] != -1)
 						h_insert(heap, n, cmp);
-					}
+					
                 }
             }
         }

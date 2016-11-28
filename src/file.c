@@ -78,8 +78,9 @@ Graph **read_dic(FILE *fdic, int *max_perms)
 	/* Construir as arestas entre cada palavra, com pesos até o quadrado
 	 * do número máximo de permutações para cada tamanho. */
 	for (i = 0; i < MAX_WORD_SIZE; i++)
-		if (max_perms[i] != 0)
+		if (max_perms[i] != 0) {
 			g_make_edges(graphs[i], w_diff);
+		}
 
 	return graphs;
 }
