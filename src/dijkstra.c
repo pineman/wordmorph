@@ -8,7 +8,7 @@
  /*TODO: ugly global var*/
 static int *wt;
 
-int *shortest_path(Graph *g, int src, int *st, int max_perm)
+int *shortest_path(Graph *g, int src, int dst, int *st, int max_perm)
 {
     int v; /* Index de um vértice */
 	int v_adj; /* Index dum vértice adjacente a v */
@@ -27,8 +27,9 @@ int *shortest_path(Graph *g, int src, int *st, int max_perm)
 
 	/*Inicializar a heap apenas com o vertice src*/
     array = (int *) ecalloc(g_get_free(g), sizeof(int));
-    for (i = 0; i < g_get_free(g); i++)
+    for (i = 0; i < g_get_free(g); i++) {
         array[i] = i;
+	}
 
 	h_insert(heap, &array[src], cmp);
 
@@ -42,7 +43,7 @@ int *shortest_path(Graph *g, int src, int *st, int max_perm)
                 if (POT_DIST < wt[v_adj]) {
                     wt[v_adj] = POT_DIST;
                     st[v_adj] = v;
-					if (st[v_adj] != -1)
+					if (st[v_adj] != -1 && e_get_weight(l_get_item(l)) <= max_perm)
 						h_insert(heap, &(array[v_adj]), cmp);
                 }
             }
@@ -51,7 +52,6 @@ int *shortest_path(Graph *g, int src, int *st, int max_perm)
 
     h_free(heap, free);
     free(array);
-	printf("did the dijkstra\n");
 
 	return wt;
 }

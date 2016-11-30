@@ -38,11 +38,6 @@ Heap *h_init(unsigned short size)
 
 void h_free(Heap *h, void (*free_item)(Item))
 {
-    int i;
-    /*for (i = 0; i <= h->free; i++) {
-        free_item(h->vector[i]);
-	}*/
-
 	free(h->vector);
     free(h);
 }

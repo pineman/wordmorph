@@ -41,21 +41,16 @@ unsigned short w_diff(Item v1, Item v2, unsigned short max_perm)
 	/* TODO: lento como nós sabemos */
 	/*unsigned int size, i*/ 
 	unsigned int cnt = 0;
+	int i;
 	char *w1 = (char *) v1;
 	char *w2 = (char *) v2;
 
-	while (*w1 != '\0') {
-		if (*w1 != *w2)
+	for (i=0; w1[i] != '\0'; i++) {
+		if (w1[i] != w2[i])
 			cnt++;
 		if (cnt > max_perm)
 			break;
-		w1++;  w2++;
 	}
-
-	/*for (i=0; i<size && !(cnt > max_perm); i++) {
-		if (w1[i] != w2[i])
-			cnt++;
-	}*/
 
 	return cnt;
 }

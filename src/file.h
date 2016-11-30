@@ -10,6 +10,6 @@ int *find_max_perms(FILE *fpal);
 Graph **read_dic(FILE *fdic, int *max_perms);
 
 void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs);
-void walk_tree(Graph *g, int *st, int *wt, int dst);
+void walk_tree(Graph *g, int *st, int *wt, int dst, FILE *);
 
 #endif

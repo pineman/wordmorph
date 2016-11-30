@@ -156,8 +156,8 @@ Edge *e_init(unsigned short index, unsigned short weight)
 /* Adds edges in both vertices */
 void e_add(Graph *g, unsigned short i1, unsigned short i2, unsigned short weight)
 {
-    Edge *l1 = e_init(i2, weight);
-    Edge *l2 = e_init(i1, weight);
+    Edge *l1 = e_init(i2, weight*weight);
+    Edge *l2 = e_init(i1, weight*weight);
 
     l_insert(&(g->vertices[i1]->adj), l1);
     l_insert(&(g->vertices[i2]->adj), l2);

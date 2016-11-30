@@ -80,12 +80,8 @@ Graph **read_dic(FILE *fdic, int *max_perms)
 
 	for (i = 0; i < MAX_WORD_SIZE; i++)
 		if (max_perms[i] != 0) {
-			printf("making edges %d\n", i);
 			g_make_edges(graphs[i], w_diff);
 		}
-
-	printf("done\n");
-
 	return graphs;
 }
 
@@ -94,8 +90,7 @@ void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 	Graph *g;
 	char word1[MAX_WORD_SIZE], word2[MAX_WORD_SIZE];
 	int max_perm;
-	int i; /* indíce do vértice de origem do grafo. */
-	size_t size;
+	int i, j; /* indíce do vértice de origem do grafo. */
 	int *st = NULL, *wt = NULL;
 	int v;
 
@@ -104,31 +99,33 @@ void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 		for (i=0; i<g_get_free(g) &&
 			 strcmp(word1, (char *) v_get_item(v_get(g, i))); i++) ;
 
+		for (j=0; j<g_get_free(g) &&
+			 strcmp(word2, (char *) v_get_item(v_get(g, j))); j++) ;
 		st = realloc(st, g_get_free(g) * sizeof(int));
-		printf("do the dijkstra\n");
-		wt = shortest_path(g, i, st, max_perm);
+		wt = shortest_path(g, i, j, st, max_perm);
 
 		/*for (j=0; j<g_get_free(g); j++)
 			printf("%d: %d %d\n", j, st[j], wt[j]);*/
 		v = v_find(g, word2, w_cmp);
 		if (st[v] == -1)
-			printf("%s %d\n%s\n", word1, -1, word2);
+			fprintf(fpath, "%s %d\n%s\n", word1, -1, word2);
 		else {
-			printf("%s %d\n", (char *) v_get_item(v_get(g, i)), wt[v]);
-			walk_tree(g, st, wt, st[v]);
+			fprintf(fpath, "%s %d\n", (char *) v_get_item(v_get(g, i)), wt[v]);
+			walk_tree(g, st, wt, st[v], fpath);
 			
-			printf("%s\n", (char *) v_get_item(v_get(g, v)));
+			fprintf(fpath, "%s\n", (char *) v_get_item(v_get(g, v)));
 		}
+		fprintf(fpath, "\n");
 	}
 	free(wt);
 	free(st);
 }
 
-void walk_tree(Graph *g, int *st, int *wt, int dst)
+void walk_tree(Graph *g, int *st, int *wt, int dst, FILE *path)
 {
 	if (st[dst] != -1) {
-		walk_tree(g, st, wt, st[dst]);
-		printf("%s\n", (char *) v_get_item(v_get(g, dst)));
+		walk_tree(g, st, wt, st[dst], path);
+		fprintf(path, "%s\n", (char *) v_get_item(v_get(g, dst)));
 	}
 	return;
 }
