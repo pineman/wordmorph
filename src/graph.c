@@ -81,7 +81,7 @@ void g_make_edges(Graph *g, unsigned short (*calc_weight)(Item i1, Item i2, unsi
     unsigned short weight;
 
     for (i = 0; i < g->size; i++) {
-        for (j = 0; j <= i; j++) {
+        for (j = 0; j < i; j++) {
 			weight = calc_weight(g->vertices[i]->item, g->vertices[j]->item, g->max_weight);
             if (weight <= g->max_weight) {
 				/*printf("vertice: %s, edge: %s\n", (char *) g->vertices[i]->item, (char *) g->vertices[j]->item);*/
@@ -156,8 +156,8 @@ Edge *e_init(unsigned short index, unsigned short weight)
 /* Adds edges in both vertices */
 void e_add(Graph *g, unsigned short i1, unsigned short i2, unsigned short weight)
 {
-    Edge *l1 = e_init(i2, weight*weight);
-    Edge *l2 = e_init(i1, weight*weight);
+    Edge *l1 = e_init(i2, weight);
+    Edge *l2 = e_init(i1, weight);
 
     l_insert(&(g->vertices[i1]->adj), l1);
     l_insert(&(g->vertices[i2]->adj), l2);

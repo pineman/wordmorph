@@ -14,6 +14,7 @@ int *shortest_path(Graph *g, int src, int *st, int max_perm)
 	int v_adj; /* Index dum vértice adjacente a v */
     List *l; /* Aresta de v para v_adj */
     int *n;
+	Item V;
 
     Heap *heap = h_init(g_get_free(g));
     wt = realloc(wt, g_get_free(g) * sizeof(int));
@@ -33,7 +34,10 @@ int *shortest_path(Graph *g, int src, int *st, int max_perm)
 
 	/* Colocar adjacentes hà medida que vao aparecendo*/
     while (!h_empty(heap)) {
-        if (wt[v = *((int *) h_delmax(heap, cmp))] != MAX_WT) {
+		V = h_delmax(heap, cmp);
+		v = *((int *) V);
+		free(V);
+        if (wt[v] != MAX_WT) {
             for (l = v_get_adj(v_get(g, v));
                  l != NULL;
                  l = l_get_next(l))
@@ -46,13 +50,14 @@ int *shortest_path(Graph *g, int src, int *st, int max_perm)
 					*n = v_adj;
 					if (st[v_adj] != -1)
 						h_insert(heap, n, cmp);
-					
                 }
             }
+			
         }
     }
 
     h_free(heap, free);
+	printf("did the dijkstra\n");
 
 	return wt;
 }

@@ -14,10 +14,16 @@
  */
 
 struct _Heap {
-    Item **vector;
+	Item **vector;
     unsigned short free;
     unsigned short size;
 };
+
+unsigned short h_get_free(Heap *heap)
+{
+	return heap->free;
+}
+
 
 Heap *h_init(unsigned short size)
 {

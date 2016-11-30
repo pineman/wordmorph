@@ -77,10 +77,14 @@ Graph **read_dic(FILE *fdic, int *max_perms)
 
 	/* Construir as arestas entre cada palavra, com pesos até o quadrado
 	 * do número máximo de permutações para cada tamanho. */
+
 	for (i = 0; i < MAX_WORD_SIZE; i++)
 		if (max_perms[i] != 0) {
+			printf("making edges %d\n", i);
 			g_make_edges(graphs[i], w_diff);
 		}
+
+	printf("done\n");
 
 	return graphs;
 }
@@ -101,6 +105,7 @@ void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 			 strcmp(word1, (char *) v_get_item(v_get(g, i))); i++) ;
 
 		st = realloc(st, g_get_free(g) * sizeof(int));
+		printf("do the dijkstra\n");
 		wt = shortest_path(g, i, st, max_perm);
 
 		/*for (j=0; j<g_get_free(g); j++)

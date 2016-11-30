@@ -6,6 +6,8 @@
 
 typedef struct _Heap Heap;
 
+unsigned short h_get_free(Heap *heap);
+
 Heap *h_init(unsigned short size);
 void h_free(Heap *h, void (*free_item)(Item));
 
