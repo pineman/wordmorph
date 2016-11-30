@@ -39,9 +39,9 @@ Heap *h_init(unsigned short size)
 void h_free(Heap *h, void (*free_item)(Item))
 {
     int i;
-    for (i = 0; i <= h->free; i++) {
+    /*for (i = 0; i <= h->free; i++) {
         free_item(h->vector[i]);
-	}
+	}*/
 
 	free(h->vector);
     free(h);
@@ -134,9 +134,6 @@ bool h_exists(Heap *h, Item I, bool (*is_equal)(Item, Item))
 	for (i=0; i < h->free; i++)
 		if (is_equal(h->vector[i], I))
 				return true;
-	
+
 	return false;
 }
-		
-
-
