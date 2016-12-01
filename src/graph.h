@@ -15,6 +15,8 @@ void g_make_edges(Graph *g, unsigned short (*calc_weight)(Item i1, Item i2, unsi
 unsigned short g_get_size(Graph *g);
 unsigned short g_get_free(Graph *g);
 unsigned short g_get_max_weight(Graph *g);
+Vertex *g_get_vert(Graph *g, unsigned short i);
+void g_print(Graph *g);
 
 Vertex *v_init(Item i);
 Vertex *v_get(Graph *g, unsigned short index);

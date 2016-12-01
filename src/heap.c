@@ -82,9 +82,9 @@ void fixdown(Heap *h, int i, int l, bool (*cmp)(Item, Item))
 
 void h_insert(Heap *h, Item I, bool (*cmp)(Item, Item))
 {
-        h->vector[h->free] = I;
-		fixup(h, h->free, cmp);
-        h->free++;
+	h->vector[h->free] = I;
+	fixup(h, h->free, cmp);
+	h->free++;
 }
 
 Item h_delmax(Heap *h, bool (*cmp)(Item, Item))

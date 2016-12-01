@@ -3,6 +3,8 @@
 #include "bool.h"
 #include "heap.h"
 
+#include <string.h>
+
 /*
  * Um grafo é uma array de Vertices.
  * Cada Vertex guarda um Item de um tipo não especificado e uma lista
@@ -106,10 +108,32 @@ unsigned short g_get_max_weight(Graph *g)
     return g->max_weight;
 }
 
+Vertex *g_get_vert(Graph *g, unsigned short i)
+{
+	return g->vertices[i];
+}
+
+void g_print(Graph *g)
+{
+	int i;
+	Edge *e;
+	List *l;
+
+	for (i = 0; i < g->size; i++) {
+		printf("Adjacency list for vertex %d (%s):\n", i, (char *) g->vertices[i]->item);
+		for (l = g->vertices[i]->adj; l != NULL; l = l_get_next(l))
+		{
+			e = (Edge *) l_get_item(l);
+			printf("vertex %d: %s (w: %d)\n", e->index, (char *) g->vertices[e->index]->item, e->weight);
+		}
+		puts("");
+	}
+}
+
 /* Vertex functions */
 Vertex *v_init(Item i)
 {
-    Vertex *new_vertex = (Vertex *) ecalloc(1, sizeof(Vertex));
+    Vertex *new_vertex = (Vertex *) emalloc(sizeof(Vertex));
     new_vertex->item = i;
     new_vertex->adj = l_init();
 

@@ -96,27 +96,31 @@ void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 
 	while (fscanf(fpal, "%s %s %d", word1, word2, &max_perm) == 3) {
 		g = graphs[strlen(word1)];
-		for (i=0; i<g_get_free(g) &&
-			 strcmp(word1, (char *) v_get_item(v_get(g, i))); i++) ;
+		i = v_find(g, word1, w_cmp);
 
 		for (j=0; j<g_get_free(g) &&
 			 strcmp(word2, (char *) v_get_item(v_get(g, j))); j++) ;
 		st = realloc(st, g_get_free(g) * sizeof(int));
 		wt = shortest_path(g, i, j, st, max_perm);
 
-		/*for (j=0; j<g_get_free(g); j++)
-			printf("%d: %d %d\n", j, st[j], wt[j]);*/
+		/*
+		for (j = 0; j < g_get_free(g); j++)
+			printf("%d ", st[j]);
+		puts("");*/
+
 		v = v_find(g, word2, w_cmp);
+
 		if (st[v] == -1)
 			fprintf(fpath, "%s %d\n%s\n", word1, -1, word2);
 		else {
 			fprintf(fpath, "%s %d\n", (char *) v_get_item(v_get(g, i)), wt[v]);
 			walk_tree(g, st, wt, st[v], fpath);
-			
+
 			fprintf(fpath, "%s\n", (char *) v_get_item(v_get(g, v)));
 		}
 		fprintf(fpath, "\n");
 	}
+
 	free(wt);
 	free(st);
 }

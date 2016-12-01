@@ -5,7 +5,7 @@
 #include "graph.h"
 #include "heap.h"
 
- /*TODO: ugly global var*/
+/* TODO: ugly global var */
 static int *wt;
 
 int *shortest_path(Graph *g, int src, int dst, int *st, int max_perm)
@@ -37,7 +37,11 @@ int *shortest_path(Graph *g, int src, int dst, int *st, int max_perm)
 
 	/* Colocar adjacentes hà medida que vao aparecendo*/
     while (!h_empty(heap)) {
-        if ((wt[v = *((int *) h_delmax(heap, cmp))]) != MAX_WT) {
+		v = *((int *) h_delmax(heap, cmp));
+
+		/*printf("Got node %d (%s) from heap.\n", v, (char *) v_get_item(g_get_vert(g, v)));*/
+
+        if (wt[v] != MAX_WT) {
             for (l = v_get_adj(v_get(g, v)); l != NULL; l = l_get_next(l)) {
                 v_adj = e_get_index(l_get_item(l));
                 if (POT_DIST < wt[v_adj]) {
