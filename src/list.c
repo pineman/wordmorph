@@ -4,8 +4,8 @@
 #include "utils.h"
 
 struct _List {
-    Item item;
-    struct _List *next;
+	Item item;
+	struct _List *next;
 };
 
 /**
@@ -15,7 +15,7 @@ struct _List {
  */
 List *l_init(void)
 {
-    return NULL;
+	return NULL;
 }
 
 
@@ -27,12 +27,12 @@ List *l_init(void)
  */
 void l_insert(List **head, Item item)
 {
-    List *new_node = (List *) emalloc(sizeof(List));
-    new_node->item = item;
+	List *new_node = (List *) emalloc(sizeof(List));
+	new_node->item = item;
 
-    new_node->next = *head;
-    *head = new_node;
-    return;
+	new_node->next = *head;
+	*head = new_node;
+	return;
 }
 
 /**
@@ -43,17 +43,17 @@ void l_insert(List **head, Item item)
  */
 void l_free(List *head, void (*free_item)(Item))
 {
-    List *aux = head;
-    List *tmp;
+	List *aux = head;
+	List *tmp;
 
-    while (aux) {
-        tmp = aux->next;
-        free_item(aux->item);
-        free(aux);
-        aux = tmp;
-    }
+	while (aux) {
+		tmp = aux->next;
+		free_item(aux->item);
+		free(aux);
+		aux = tmp;
+	}
 
-    return;
+	return;
 }
 
 /**
@@ -65,7 +65,7 @@ void l_free(List *head, void (*free_item)(Item))
  */
 List *l_get_next(List *l)
 {
-    return l->next;
+	return l->next;
 }
 
 /**
@@ -77,7 +77,7 @@ List *l_get_next(List *l)
  */
 Item l_get_item(List *l)
 {
-    return l->item;
+	return l->item;
 }
 
 /**
@@ -88,6 +88,6 @@ Item l_get_item(List *l)
  */
 void l_set_next(List *l, List *next)
 {
-    l->next = next;
+	l->next = next;
 }
 
