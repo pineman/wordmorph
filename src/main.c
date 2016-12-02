@@ -53,6 +53,7 @@ int main(int argc, char **argv)
 
 	/* Encontrar os tamanhos de palavras e o número máximo de permutações
 	 * para cada tamanho a partir do ficheiro de problemas. */
+	puts("Building graph");
 	max_perms = find_max_perms(fpal);
 	rewind(fpal);
 
@@ -65,6 +66,7 @@ int main(int argc, char **argv)
 	/* build_graphs(graphs); */
 
 	/* Ler e resolver problemas. */
+	puts("Solving pal");
 	solve_pal(fpal, fpath, graphs);
 	fclose(fpal);
 	fclose(fpath);

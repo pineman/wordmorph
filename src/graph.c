@@ -121,8 +121,7 @@ void g_print(Graph *g)
 
 	for (i = 0; i < g->size; i++) {
 		printf("Adjacency list for vertex %d (%s):\n", i, (char *) g->vertices[i]->item);
-		for (l = g->vertices[i]->adj; l != NULL; l = l_get_next(l))
-		{
+		for (l = g->vertices[i]->adj; l != NULL; l = l_get_next(l)) {
 			e = (Edge *) l_get_item(l);
 			printf("vertex %d: %s (w: %d)\n", e->index, (char *) g->vertices[e->index]->item, e->weight);
 		}

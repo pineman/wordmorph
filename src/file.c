@@ -77,11 +77,12 @@ Graph **read_dic(FILE *fdic, int *max_perms)
 
 	/* Construir as arestas entre cada palavra, com pesos até o quadrado
 	 * do número máximo de permutações para cada tamanho. */
-
-	for (i = 0; i < MAX_WORD_SIZE; i++)
+	for (i = 0; i < MAX_WORD_SIZE; i++) {
 		if (max_perms[i] != 0) {
 			g_make_edges(graphs[i], w_diff);
 		}
+	}
+
 	return graphs;
 }
 
@@ -92,33 +93,32 @@ void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 	int max_perm;
 	int i, j; /* indíce do vértice de origem do grafo. */
 	int *st = NULL, *wt = NULL;
-	int v;
 
 	while (fscanf(fpal, "%s %s %d", word1, word2, &max_perm) == 3) {
 		g = graphs[strlen(word1)];
 		i = v_find(g, word1, w_cmp);
+		j = v_find(g, word2, w_cmp);
 
-		for (j=0; j<g_get_free(g) &&
-			 strcmp(word2, (char *) v_get_item(v_get(g, j))); j++) ;
 		st = realloc(st, g_get_free(g) * sizeof(int));
 		wt = shortest_path(g, i, j, st, max_perm);
 
 		/*
-		for (j = 0; j < g_get_free(g); j++)
-			printf("%d ", st[j]);
+		for (a = 0; a < g_get_free(g); a++)
+			printf("%d ", st[a]);
 		puts("");*/
 
-		v = v_find(g, word2, w_cmp);
-
-		if (st[v] == -1)
+		if (st[j] == -1) {
 			fprintf(fpath, "%s %d\n%s\n", word1, -1, word2);
-		else {
-			fprintf(fpath, "%s %d\n", (char *) v_get_item(v_get(g, i)), wt[v]);
-			walk_tree(g, st, wt, st[v], fpath);
-
-			fprintf(fpath, "%s\n", (char *) v_get_item(v_get(g, v)));
 		}
+		else {
+			fprintf(fpath, "%s %d\n", (char *) v_get_item(v_get(g, i)), wt[j]);
+			walk_tree(g, st, wt, st[j], fpath);
+
+			fprintf(fpath, "%s\n", (char *) v_get_item(v_get(g, j)));
+		}
+
 		fprintf(fpath, "\n");
+		/* printf("Wrote path from %s to %s\n", word1, word2); */
 	}
 
 	free(wt);

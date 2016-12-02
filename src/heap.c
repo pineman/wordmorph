@@ -117,10 +117,11 @@ void h_print(Heap *h)
 
     printf("free: %d\n", h->free);
 
-    for (i=0; i<h->free; i++)
+    for (i = 0; i < h->free; i++) {
         printf("%d ", *((int *)h->vector[i]));
+    }
 
-    /*putchar('\n');*/
+	puts("");
 }
 
 bool h_exists(Heap *h, Item I, bool (*is_equal)(Item, Item))

@@ -19,39 +19,40 @@ int *shortest_path(Graph *g, int src, int dst, int *st, int max_perm)
     Heap *heap = h_init(g_get_free(g));
     wt = realloc(wt, g_get_free(g) * sizeof(int));
 
-
+	/* Inicializar árvore de caminho e array de distâncias. */
     for (v = 0; v < g_get_free(g); v++) {
         st[v] = -1;
         wt[v] = MAX_WT;
     }
 
-	/*Inicializar a heap apenas com o vertice src*/
+	/* Inicializar a heap apenas com o vértice de origem */
+	/* Item são ints (indíces dos vértices no grafo) */
     array = (int *) ecalloc(g_get_free(g), sizeof(int));
     for (i = 0; i < g_get_free(g); i++) {
         array[i] = i;
 	}
-
 	h_insert(heap, &array[src], cmp);
 
     wt[src] = 0;
-
-	/* Colocar adjacentes hà medida que vao aparecendo*/
+	/* Colocar na heap os vértices adjacentes e calcular distâncias. */
     while (!h_empty(heap)) {
+		/*h_print(heap);*/
+
 		v = *((int *) h_delmax(heap, cmp));
+		/* if (v == dst) break; */ /* TODO */
 
 		/*printf("Got node %d (%s) from heap.\n", v, (char *) v_get_item(g_get_vert(g, v)));*/
+		/*h_print(heap);*/
 
-        if (wt[v] != MAX_WT) {
-            for (l = v_get_adj(v_get(g, v)); l != NULL; l = l_get_next(l)) {
-                v_adj = e_get_index(l_get_item(l));
-                if (POT_DIST < wt[v_adj]) {
-                    wt[v_adj] = POT_DIST;
-                    st[v_adj] = v;
-					if (st[v_adj] != -1 && e_get_weight(l_get_item(l)) <= max_perm)
-						h_insert(heap, &(array[v_adj]), cmp);
-                }
-            }
-        }
+		for (l = v_get_adj(v_get(g, v)); l != NULL; l = l_get_next(l)) {
+			v_adj = e_get_index(l_get_item(l));
+
+			if (POT_DIST < wt[v_adj] && e_get_weight(l_get_item(l)) <= max_perm) {
+				wt[v_adj] = POT_DIST;
+				st[v_adj] = v;
+				h_insert(heap, &(array[v_adj]), cmp);
+			}
+		}
     }
 
     h_free(heap, free);
