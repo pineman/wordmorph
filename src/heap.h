@@ -6,23 +6,19 @@
 
 typedef struct _Heap Heap;
 
-unsigned short h_get_free(Heap *heap);
-
 Heap *h_init(unsigned short size);
 void h_free(Heap *h);
 
-void fixup(Heap *h, int i, bool (*cmp)(Item, Item));
-void fixdown(Heap *h, int i, int l, bool (*cmp)(Item, Item));
-
-void h_insert(Heap *h, Item I, bool (*cmp)(Item, Item));
-Item h_delmax(Heap *h, bool (*cmp)(Item, Item));
-
+void h_fixup(Heap *h, int i, bool (*less_pri)(Item, Item));
+void h_fixdown(Heap *h, int i, bool (*less_pri)(Item, Item));
+void h_insert(Heap *h, Item I, bool (*less_pri)(Item, Item));
+Item h_del_max_pri(Heap *h, bool (*less_pri)(Item, Item));
 bool h_empty(Heap *h);
 
 void h_exch(Heap *h, int i1, int i2);
 
-bool h_exists(Heap *h, Item I, bool (*is_equal)(Item, Item));
-
-void h_print(Heap *h);
+/* TODO: print function */
+#include "graph.h"
+void h_print(Heap *h, Graph *g);
 
 #endif

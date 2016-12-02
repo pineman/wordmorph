@@ -86,7 +86,6 @@ void g_make_edges(Graph *g, unsigned short (*calc_weight)(Item i1, Item i2, unsi
 		for (j = 0; j < i; j++) {
 			weight = calc_weight(g->vertices[i]->item, g->vertices[j]->item, g->max_weight);
 			if (weight <= g->max_weight) {
-				/*printf("vertice: %s, edge: %s\n", (char *) g->vertices[i]->item, (char *) g->vertices[j]->item);*/
 				e_add(g, i, j, weight);
 			}
 		}
@@ -113,6 +112,7 @@ Vertex *g_get_vert(Graph *g, unsigned short i)
 	return g->vertices[i];
 }
 
+/* TODO: Print function */
 void g_print(Graph *g)
 {
 	int i;
@@ -201,6 +201,7 @@ bool e_cmp_edges(Edge *e1, Edge *e2)
 	return (e1->weight > e2->weight);
 }
 
+/* TODO: Print function */
 void v_adj_print(Graph *g, Vertex *v)
 {
 	List *aux = v->adj;

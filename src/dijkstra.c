@@ -14,6 +14,7 @@ int *shortest_path(Graph *g, int src, int dst, int *st, unsigned short max_perm)
 	int v_adj; /* Index dum vértice adjacente a v */
 	List *l; /* Aresta de v para v_adj */
 	int i;
+	unsigned short w_v_adj;
 	int *array;
 
 	Heap *heap = h_init(g_get_free(g));
@@ -31,27 +32,23 @@ int *shortest_path(Graph *g, int src, int dst, int *st, unsigned short max_perm)
 	for (i = 0; i < g_get_free(g); i++) {
 		array[i] = i;
 	}
-	h_insert(heap, &array[src], cmp);
+	h_insert(heap, &array[src], d_less_pri);
 
 	wt[src] = 0;
 	/* Colocar na heap os vértices adjacentes e calcular distâncias. */
 	while (!h_empty(heap)) {
-		/*h_print(heap);*/
-
-		v = *((int *) h_delmax(heap, cmp));
-		/* TODO: deviamos conseguir sair do dijkstra mais cedo, mas não funciona*/
-		/* if (v == dst) break; */
-
-		/*printf("Got node %d (%s) from heap.\n", v, (char *) v_get_item(g_get_vert(g, v)));*/
-		/*h_print(heap);*/
+		v = *((int *) h_del_max_pri(heap, d_less_pri));
+		if (v == dst) break;
 
 		for (l = v_get_adj(v_get(g, v)); l != NULL; l = l_get_next(l)) {
-			v_adj = e_get_index(l_get_item(l));
+			w_v_adj = e_get_weight(l_get_item(l));
+			if (w_v_adj > max_perm) continue;
 
-			if (POT_DIST < wt[v_adj] && e_get_weight(l_get_item(l)) <= max_perm) {
-				wt[v_adj] = POT_DIST;
+			v_adj = e_get_index(l_get_item(l));
+			if (wt[v] + w_v_adj < wt[v_adj]) {
+				wt[v_adj] = wt[v] + w_v_adj ;
 				st[v_adj] = v;
-				h_insert(heap, &(array[v_adj]), cmp);
+				h_insert(heap, &(array[v_adj]), d_less_pri);
 			}
 		}
 	}
@@ -62,13 +59,9 @@ int *shortest_path(Graph *g, int src, int dst, int *st, unsigned short max_perm)
 	return wt;
 }
 
-bool cmp(Item s1, Item s2)
+bool d_less_pri(Item s1, Item s2)
 {
-	return wt[*((int *) s1)] < wt[*((int *) s2)];
-}
-
-
-bool is_equal(Item s1, Item s2)
-{
-	return wt[*((int *) s1)] == wt[*((int *) s2)];
+	/* Se s1 tem menos prioridade que s2, é porque
+	 * s1 tem maior distância à origem considerada do grafo. */
+	return wt[*((int *) s1)] > wt[*((int *) s2)];
 }

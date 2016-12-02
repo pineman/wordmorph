@@ -18,23 +18,6 @@ List *l_init(void)
 	return NULL;
 }
 
-
-/**
- * @brief Insert new node on the list's head
- *
- * @param head Pointer to list's head
- * @param item new node's payload
- */
-void l_insert(List **head, Item item)
-{
-	List *new_node = (List *) emalloc(sizeof(List));
-	new_node->item = item;
-
-	new_node->next = *head;
-	*head = new_node;
-	return;
-}
-
 /**
  * @brief Free the list
  *
@@ -52,7 +35,22 @@ void l_free(List *head, void (*free_item)(Item))
 		free(aux);
 		aux = tmp;
 	}
+}
 
+
+/**
+ * @brief Insert new node on the list's head
+ *
+ * @param head Pointer to list's head
+ * @param item new node's payload
+ */
+void l_insert(List **head, Item item)
+{
+	List *new_node = (List *) emalloc(sizeof(List));
+	new_node->item = item;
+
+	new_node->next = *head;
+	*head = new_node;
 	return;
 }
 

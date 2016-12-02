@@ -102,11 +102,6 @@ void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 		st = realloc(st, g_get_free(g) * sizeof(int));
 		wt = shortest_path(g, i, j, st, max_perm);
 
-		/*
-		for (a = 0; a < g_get_free(g); a++)
-			printf("%d ", st[a]);
-		puts("");*/
-
 		if (st[j] == -1) {
 			fprintf(fpath, "%s %d\n%s\n", word1, -1, word2);
 		}
@@ -118,7 +113,6 @@ void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 		}
 
 		fprintf(fpath, "\n");
-		/* printf("Wrote path from %s to %s\n", word1, word2); */
 	}
 
 	free(wt);
