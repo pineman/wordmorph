@@ -25,4 +25,3 @@
    * evitar ligar um vértice a si mesmo (número de chars em comum = 0)
 
 ### Problemas
- * O que acontece se existirem dois caminhos de menor custo?
