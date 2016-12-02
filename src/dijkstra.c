@@ -27,7 +27,7 @@ int *shortest_path(Graph *g, int src, int dst, int *st, unsigned short max_perm)
 
 	/* Inicializar a heap apenas com o vértice de origem */
 	/* Item são ints (indíces dos vértices no grafo) */
-	array = (int *) ecalloc(g_get_free(g), sizeof(int));
+	array = (int *) emalloc(g_get_free(g) * sizeof(int));
 	for (i = 0; i < g_get_free(g); i++) {
 		array[i] = i;
 	}
