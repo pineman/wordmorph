@@ -35,13 +35,13 @@ Heap *h_init(unsigned short size)
     return h;
 }
 
-
-void h_free(Heap *h, void (*free_item)(Item))
+/* TODO: devia ter free_item? mas depois é chato
+ * porque o nosso item não pode ser free()'d. */
+void h_free(Heap *h)
 {
 	free(h->vector);
     free(h);
 }
-
 
 
 void fixup(Heap *h, int i, bool (*cmp)(Item, Item))

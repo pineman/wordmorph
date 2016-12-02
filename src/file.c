@@ -8,21 +8,21 @@
 #include "word.h"
 #include "dijkstra.h"
 
-int *find_max_perms(FILE *fpal)
+unsigned short *find_max_perms(FILE *fpal)
 {
-	int *max_perms;
+	unsigned short *max_perms;
 	char buffer[MAX_WORD_SIZE];
 	char word1[MAX_WORD_SIZE], word2[MAX_WORD_SIZE];
-	int perm = 0;
+	unsigned short perm;
 	size_t size;
 
 	/* Array cujos índices são os tamanhos de palavra necessários e cujos
 	 * valores são o número máximo de permutações para esse tamanho. */
-	max_perms = (int *) ecalloc(MAX_WORD_SIZE, sizeof(int));
+	max_perms = (unsigned short *) ecalloc(MAX_WORD_SIZE, sizeof(unsigned short));
 
 	/* Ler cada linha do .pal */
 	while (fgets(buffer, MAX_WORD_SIZE, fpal) != NULL) {
-		sscanf(buffer, "%s %s %d", word1, word2, &perm);
+		sscanf(buffer, "%s %s %hu", word1, word2, &perm);
 		size = strlen(word1);
 		/* Guardar número máximo de permutações */
 		if (max_perms[size] < perm) {
@@ -33,7 +33,7 @@ int *find_max_perms(FILE *fpal)
 	return max_perms;
 }
 
-Graph **read_dic(FILE *fdic, int *max_perms)
+Graph **read_dic(FILE *fdic, unsigned short *max_perms)
 {
 	char buffer[MAX_WORD_SIZE];
 	int num_words[MAX_WORD_SIZE] = {0};
@@ -90,11 +90,11 @@ void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 {
 	Graph *g;
 	char word1[MAX_WORD_SIZE], word2[MAX_WORD_SIZE];
-	int max_perm;
+	unsigned short max_perm;
 	int i, j; /* indíce do vértice de origem do grafo. */
 	int *st = NULL, *wt = NULL;
 
-	while (fscanf(fpal, "%s %s %d", word1, word2, &max_perm) == 3) {
+	while (fscanf(fpal, "%s %s %hu", word1, word2, &max_perm) == 3) {
 		g = graphs[strlen(word1)];
 		i = v_find(g, word1, w_cmp);
 		j = v_find(g, word2, w_cmp);

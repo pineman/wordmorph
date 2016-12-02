@@ -24,7 +24,7 @@ int main(int argc, char **argv)
 	char *fpath_name;
 	char *test;
 
-	int *max_perms;
+	unsigned short *max_perms;
 	/* Array de grafos por tamanhos de palavras que contêm. */
 	Graph **graphs;
 

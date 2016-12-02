@@ -8,7 +8,7 @@
 /* TODO: ugly global var */
 static int *wt;
 
-int *shortest_path(Graph *g, int src, int dst, int *st, int max_perm)
+int *shortest_path(Graph *g, int src, int dst, int *st, unsigned short max_perm)
 {
     int v; /* Index de um vértice */
 	int v_adj; /* Index dum vértice adjacente a v */
@@ -39,7 +39,8 @@ int *shortest_path(Graph *g, int src, int dst, int *st, int max_perm)
 		/*h_print(heap);*/
 
 		v = *((int *) h_delmax(heap, cmp));
-		/* if (v == dst) break; */ /* TODO */
+		/* TODO: deviamos conseguir sair do dijkstra mais cedo, mas não funciona*/
+		/* if (v == dst) break; */
 
 		/*printf("Got node %d (%s) from heap.\n", v, (char *) v_get_item(g_get_vert(g, v)));*/
 		/*h_print(heap);*/
@@ -55,7 +56,7 @@ int *shortest_path(Graph *g, int src, int dst, int *st, int max_perm)
 		}
     }
 
-    h_free(heap, free);
+    h_free(heap);
     free(array);
 
 	return wt;
