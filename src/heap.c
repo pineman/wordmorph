@@ -128,5 +128,5 @@ void h_print(Heap *h, Graph *g)
 		printf("%d:%s ", *((int *)h->vector[i]), (char *) v_get_item(v_get(g, *((int *)h->vector[i]))));
 	}
 
-	puts("");
+	puts("\n");
 }

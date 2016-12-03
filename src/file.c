@@ -100,7 +100,7 @@ void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 		j = v_find(g, word2, w_cmp);
 
 		st = realloc(st, g_get_free(g) * sizeof(int));
-		wt = shortest_path(g, i, j, st, max_perm);
+		wt = shortest_path(g, i, j, st, max_perm*max_perm);
 
 		if (st[j] == -1) {
 			fprintf(fpath, "%s %d\n%s\n", word1, -1, word2);

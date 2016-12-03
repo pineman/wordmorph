@@ -66,7 +66,7 @@ int main(int argc, char **argv)
 	/* build_graphs(graphs); */
 
 	/* Ler e resolver problemas. */
-	puts("Solving pal");
+	puts("Solving pal\n");
 	solve_pal(fpal, fpath, graphs);
 	fclose(fpal);
 	fclose(fpath);
