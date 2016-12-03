@@ -36,20 +36,25 @@ bool w_less(Item a, Item b)
 		return false;
 }
 
+/* Retorna o número de caracteres diferentes entre as strings v1 e v2,
+ * assumindo que estas são do mesmo tamamnho. */
 unsigned short w_diff(Item v1, Item v2, unsigned short max_perm)
 {
 	/* TODO: lento como nós sabemos */
-	/*unsigned int size, i*/ 
-	unsigned int cnt = 0;
+	unsigned short cnt = 0;
 	int i;
 	char *w1 = (char *) v1;
 	char *w2 = (char *) v2;
 
-	for (i=0; w1[i] != '\0'; i++) {
-		if (w1[i] != w2[i])
+	/* TODO: Se calhar este loop pode ser hand-rolled. */
+	for (i = 0; w1[i] != '\0'; i++) {
+		if (w1[i] != w2[i]) {
 			cnt++;
-		if (cnt > max_perm)
+		}
+		/* Otimização */
+		if (cnt > max_perm) {
 			break;
+		}
 	}
 
 	return cnt;
