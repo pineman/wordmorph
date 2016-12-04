@@ -80,6 +80,9 @@ void h_fixdown(Heap *h, int i, bool (*less_pri)(Item, Item))
 
 void h_insert(Heap *h, Item I, bool (*less_pri)(Item, Item))
 {
+	#include <assert.h>
+	assert(h->free < h->size);
+
 	h->vector[h->free] = I;
 	h_fixup(h, h->free, less_pri);
 	h->free++;
