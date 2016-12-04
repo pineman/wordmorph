@@ -38,7 +38,8 @@ int *shortest_path(Graph *g, int src, int dst, int *st, unsigned short max_perm)
 	wt[src] = 0;
 	/* Colocar na heap os vértices adjacentes e calcular distâncias. */
 	while (!h_empty(heap)) {
-		v = *((int *) h_del_max_pri(heap, d_less_pri));
+		v = *((int *) h_del_max_pri(heap, d_less_pri, d_hash));
+
 		if (v == dst) break;
 
 		for (l = v_get_adj(v_get(g, v)); l != NULL; l = l_get_next(l)) {
@@ -52,7 +53,7 @@ int *shortest_path(Graph *g, int src, int dst, int *st, unsigned short max_perm)
 				wt[v_adj] = wt[v] + w_v_adj;
 				st[v_adj] = v;
 
-				if (itemIsInsideHeapDataStructure == true) {
+				if (itemIsInsideHeapDataStructure) {
 					h_inc_pri(heap, &(array[v_adj]), d_less_pri, d_hash);
 				}
 				else {

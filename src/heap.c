@@ -44,15 +44,15 @@ void h_free(Heap *h)
 }
 
 
-void h_fixup(Heap *h, int i, bool (*less_pri)(Item, Item))
+void h_fixup(Heap *h, int i, bool (*less_pri)(Item, Item), unsigned short (*hash)(Item))
 {
 	while (i > 0 && less_pri(h->vector[PARENT(i)], h->vector[i])) {
-		h_exch(h, i, PARENT(i));
+		h_exch(h, i, PARENT(i), hash);
 		i = PARENT(i);
 	}
 }
 
-void h_fixdown(Heap *h, int i, bool (*less_pri)(Item, Item))
+void h_fixdown(Heap *h, int i, bool (*less_pri)(Item, Item), unsigned short (*hash)(Item))
 {
 	int child;
 
@@ -73,7 +73,7 @@ void h_fixdown(Heap *h, int i, bool (*less_pri)(Item, Item))
 		}
 
 		/* Se não, temos de trocar o pai com o filho */
-		h_exch(h, i, child);
+		h_exch(h, i, child, hash);
 
 		/* Continuar a iterar a árvore para baixo, seguindo o pai antigo
 		 * que agora ocupa a posição do filho antigo */
@@ -86,21 +86,21 @@ void h_insert(Heap *h, Item a, bool (*less_pri)(Item, Item), unsigned short (*ha
 	h->vector[h->free] = a;
 	h->hash_table[hash(a)] = h->free;
 
-	h_fixup(h, h->free, less_pri);
+	h_fixup(h, h->free, less_pri, hash);
 	h->free++;
 }
 
-Item h_del_max_pri(Heap *h, bool (*less_pri)(Item, Item))
+Item h_del_max_pri(Heap *h, bool (*less_pri)(Item, Item), unsigned short (*hash)(Item))
 {
 	/* Trocar o último elemento com o primeiro. */
-	h_exch(h, 0, h->free - 1);
+	h_exch(h, 0, h->free - 1, hash);
 
 	/* Ignorar o último elemento, pois vai ser removido. */
 	h->free--;
 
 	/* Encontrar o sítio certo do antigo último elemento
 	 * (agora na posição 0) */
-	h_fixdown(h, 0, less_pri);
+	h_fixdown(h, 0, less_pri, hash);
 
 	return h->vector[h->free];
 }
@@ -112,23 +112,23 @@ unsigned short h_find(Heap *h, Item a, unsigned short (*hash)(Item))
 
 void h_inc_pri(Heap *h, Item a, bool (*less_pri)(Item, Item), unsigned short (*hash)(Item))
 {
-	h_fixup(h, h_find(h, a, hash), less_pri);
+	h_fixup(h, h_find(h, a, hash), less_pri, hash);
 }
 
-void h_exch(Heap *h, unsigned short i1, unsigned short i2)
+void h_exch(Heap *h, unsigned short i1, unsigned short i2, unsigned short (*hash)(Item))
 {
 	Item tmp;
 	unsigned short tmp_i;
+
+	/* Atualizar hash table */
+	tmp_i = h->hash_table[hash(h->vector[i2])];
+	h->hash_table[hash(h->vector[i2])] = h->hash_table[hash(h->vector[i1])];
+	h->hash_table[hash(h->vector[i1])] = tmp_i;
 
 	/* Troca é fácil pois apenas trabalhamos com Items (ponteiros!) */
 	tmp = h->vector[i2];
 	h->vector[i2] = h->vector[i1];
 	h->vector[i1] = tmp;
-
-	/* Atualizar hash table */
-	tmp_i = h->hash_table[i1];
-	h->hash_table[i2] = h->hash_table[i1];
-	h->hash_table[i1] = tmp_i;
 }
 
 bool h_empty(Heap *h)
@@ -146,7 +146,13 @@ void h_print(Heap *h, Graph *g)
 	printf("free: %d\n", h->free);
 
 	for (i = 0; i < h->free; i++) {
-		printf("%d:%s ", *((int *)h->vector[i]), (char *) v_get_item(v_get(g, *((int *)h->vector[i]))));
+		printf("%d:%s:%d ", *((int *)h->vector[i]), (char *) v_get_item(v_get(g, *((int *)h->vector[i]))), i);
+	}
+
+	puts("\n");
+
+	for (i = 0; i < h->size; i++) {
+		printf("%d:%s:%hu ", i, (char *) v_get_item(v_get(g, i)), h->hash_table[i]);
 	}
 
 	puts("\n");
