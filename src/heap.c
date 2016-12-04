@@ -15,6 +15,7 @@
 
 struct _Heap {
 	Item **vector;
+	unsigned short *hash_table;
 	/* free é o índice da primeira posição livre, logo,
 	 * o último elemento encotra-se posição free - 1 */
 	unsigned short free;
@@ -26,7 +27,8 @@ Heap *h_init(unsigned short size)
 {
 	Heap *h = (Heap *) emalloc(sizeof(Heap));
 	h->vector = (Item **) emalloc(size * sizeof(Item *));
-	h->size = size - 1;
+	h->hash_table = (unsigned short *) ecalloc(size, sizeof(unsigned short));
+	h->size = size;
 	h->free = 0;
 
 	return h;
@@ -37,6 +39,7 @@ Heap *h_init(unsigned short size)
 void h_free(Heap *h)
 {
 	free(h->vector);
+	free(h->hash_table);
 	free(h);
 }
 
@@ -78,12 +81,11 @@ void h_fixdown(Heap *h, int i, bool (*less_pri)(Item, Item))
 	}
 }
 
-void h_insert(Heap *h, Item I, bool (*less_pri)(Item, Item))
+void h_insert(Heap *h, Item a, bool (*less_pri)(Item, Item), unsigned short (*hash)(Item))
 {
-	#include <assert.h>
-	assert(h->free < h->size);
+	h->vector[h->free] = a;
+	h->hash_table[hash(a)] = h->free;
 
-	h->vector[h->free] = I;
 	h_fixup(h, h->free, less_pri);
 	h->free++;
 }
@@ -101,7 +103,32 @@ Item h_del_max_pri(Heap *h, bool (*less_pri)(Item, Item))
 	h_fixdown(h, 0, less_pri);
 
 	return h->vector[h->free];
+}
 
+unsigned short h_find(Heap *h, Item a, unsigned short (*hash)(Item))
+{
+	return h->hash_table[hash(a)];
+}
+
+void h_inc_pri(Heap *h, Item a, bool (*less_pri)(Item, Item), unsigned short (*hash)(Item))
+{
+	h_fixup(h, h_find(h, a, hash), less_pri);
+}
+
+void h_exch(Heap *h, unsigned short i1, unsigned short i2)
+{
+	Item tmp;
+	unsigned short tmp_i;
+
+	/* Troca é fácil pois apenas trabalhamos com Items (ponteiros!) */
+	tmp = h->vector[i2];
+	h->vector[i2] = h->vector[i1];
+	h->vector[i1] = tmp;
+
+	/* Atualizar hash table */
+	tmp_i = h->hash_table[i1];
+	h->hash_table[i2] = h->hash_table[i1];
+	h->hash_table[i1] = tmp_i;
 }
 
 bool h_empty(Heap *h)
@@ -109,15 +136,6 @@ bool h_empty(Heap *h)
 	return !(h->free);
 }
 
-void h_exch(Heap *h, int i1, int i2)
-{
-	Item tmp;
-
-	/* Troca é fácil pois apenas trabalhamos com Items (pointeiros!) */
-	tmp = h->vector[i2];
-	h->vector[i2] = h->vector[i1];
-	h->vector[i1] = tmp;
-}
 
 /* TODO: print function */
 #include "graph.h"

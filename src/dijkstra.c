@@ -16,6 +16,7 @@ int *shortest_path(Graph *g, int src, int dst, int *st, unsigned short max_perm)
 	int i;
 	unsigned short w_v_adj;
 	int *array;
+	bool itemIsInsideHeapDataStructure;
 
 	Heap *heap = h_init(g_get_free(g));
 	wt = realloc(wt, g_get_free(g) * sizeof(int));
@@ -32,12 +33,11 @@ int *shortest_path(Graph *g, int src, int dst, int *st, unsigned short max_perm)
 	for (i = 0; i < g_get_free(g); i++) {
 		array[i] = i;
 	}
-	h_insert(heap, &array[src], d_less_pri);
+	h_insert(heap, &array[src], d_less_pri, d_hash);
 
 	wt[src] = 0;
 	/* Colocar na heap os vértices adjacentes e calcular distâncias. */
 	while (!h_empty(heap)) {
-		/*h_print(heap, g);*/
 		v = *((int *) h_del_max_pri(heap, d_less_pri));
 		if (v == dst) break;
 
@@ -47,9 +47,17 @@ int *shortest_path(Graph *g, int src, int dst, int *st, unsigned short max_perm)
 
 			v_adj = e_get_index(l_get_item(l));
 			if (wt[v] + w_v_adj < wt[v_adj]) {
-				wt[v_adj] = wt[v] + w_v_adj ;
+				itemIsInsideHeapDataStructure = (wt[v_adj] != MAX_WT);
+
+				wt[v_adj] = wt[v] + w_v_adj;
 				st[v_adj] = v;
-				h_insert(heap, &(array[v_adj]), d_less_pri);
+
+				if (itemIsInsideHeapDataStructure == true) {
+					h_inc_pri(heap, &(array[v_adj]), d_less_pri, d_hash);
+				}
+				else {
+					h_insert(heap, &(array[v_adj]), d_less_pri, d_hash);
+				}
 			}
 		}
 	}
@@ -65,4 +73,9 @@ bool d_less_pri(Item s1, Item s2)
 	/* Se s1 tem menos prioridade que s2, é porque
 	 * s1 tem maior distância à origem considerada do grafo. */
 	return wt[*((int *) s1)] > wt[*((int *) s2)];
+}
+
+unsigned short d_hash(Item a)
+{
+	return *((int *) a);
 }
