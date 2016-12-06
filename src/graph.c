@@ -16,12 +16,13 @@
 
 struct _Vertex {
 	Item item;
-	List *adj;
+	Edge *adj;
 };
 
 struct _Edge {
 	unsigned short weight;
 	unsigned short index;
+	struct _Edge *next;
 };
 
 /* free - posição livre do array de Vertices
@@ -55,7 +56,7 @@ void g_free(Graph *g, void (free_item)(Item item))
 
 	for (i = 0; i < g->size; i++) {
 		aux = g->vertices[i];
-		l_free(aux->adj, free);
+		free_adj(aux->adj);
 		free_item(aux->item);
 		free(aux);
 	}
@@ -87,7 +88,6 @@ void g_make_edges(Graph *g, unsigned short (*calc_weight)(Item i1, Item i2, unsi
 			weight = calc_weight(g->vertices[i]->item, g->vertices[j]->item, g->max_weight);
 			if (weight <= g->max_weight) {
 				/* Agora o peso entra quadraticamente. */
-				/* TODO: se calhar o quadrado é lento, switch {} ?*/
 				e_add(g, i, j, weight*weight);
 			}
 		}
@@ -119,14 +119,12 @@ Vertex *g_get_vert(Graph *g, unsigned short i)
 void g_print(Graph *g)
 {
 	int i;
-	Edge *e;
-	List *l;
+	Edge *l;
 
 	for (i = 0; i < g->size; i++) {
 		printf("Adjacency list for vertex %d (%s):\n", i, (char *) g->vertices[i]->item);
-		for (l = g->vertices[i]->adj; l != NULL; l = l_get_next(l)) {
-			e = (Edge *) l_get_item(l);
-			printf("vertex %d: %s (w: %d)\n", e->index, (char *) g->vertices[e->index]->item, e->weight);
+		for (l = g->vertices[i]->adj; l != NULL; l = l->next) {
+			printf("vertex %d: %s (w: %d)\n", l->index, (char *) g->vertices[l->index]->item, l->weight);
 		}
 		puts("");
 	}
@@ -137,7 +135,7 @@ Vertex *v_init(Item i)
 {
 	Vertex *new_vertex = (Vertex *) emalloc(sizeof(Vertex));
 	new_vertex->item = i;
-	new_vertex->adj = l_init();
+	new_vertex->adj = NULL;
 
 	return new_vertex;
 }
@@ -162,7 +160,7 @@ Item v_get_item(Vertex *v)
 	return v->item;
 }
 
-List *v_get_adj(Vertex *v)
+Edge *v_get_adj(Vertex *v)
 {
 	return v->adj;
 }
@@ -175,18 +173,27 @@ Edge *e_init(unsigned short index, unsigned short weight)
 	Edge *new_edge = (Edge *) emalloc(sizeof(Edge));
 	new_edge->index = index;
 	new_edge->weight = weight;
+	new_edge->next = NULL;
 
 	return new_edge;
+}
+
+void e_insert(Edge **adj, unsigned short index, unsigned short weight)
+{
+	Edge *new_edge = (Edge *) emalloc(sizeof(Edge));
+	new_edge->index = index;
+	new_edge->weight = weight;
+	new_edge->next = *adj;
+	*adj = new_edge;
+
+	return;
 }
 
 /* Adds edges in both vertices */
 void e_add(Graph *g, unsigned short i1, unsigned short i2, unsigned short weight)
 {
-	Edge *l1 = e_init(i2, weight);
-	Edge *l2 = e_init(i1, weight);
-
-	l_insert(&(g->vertices[i1]->adj), l1);
-	l_insert(&(g->vertices[i2]->adj), l2);
+	e_insert(&(g->vertices[i1]->adj), i2, weight);
+	e_insert(&(g->vertices[i2]->adj), i1, weight);
 }
 
 unsigned short e_get_weight(Edge *e)
@@ -207,9 +214,26 @@ bool e_cmp_edges(Edge *e1, Edge *e2)
 /* TODO: Print function */
 void v_adj_print(Graph *g, Vertex *v)
 {
-	List *aux = v->adj;
+	Edge *aux = v->adj;
 	while (aux != NULL) {
-		printf("adj: %s\n", (char *) g->vertices[e_get_index((Edge *) l_get_item(aux))]->item);
-		aux = l_get_next(aux);
+		printf("adj: %s\n", (char *) g->vertices[aux->index]);
+		aux = aux->next;
 	}
+}
+
+void free_adj(Edge *head)
+{
+	Edge *aux = head;
+	Edge *tmp;
+
+	while (aux) {
+		tmp = aux->next;
+		free(aux);
+		aux = tmp;
+	}
+}
+
+Edge *l_get_next(Edge *l)
+{
+	return l->next;
 }

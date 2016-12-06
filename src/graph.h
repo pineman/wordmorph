@@ -1,8 +1,8 @@
 #ifndef _GRAPH_H
 #define _GRAPH_H
 
-#include "list.h"
 #include "bool.h"
+#include "item.h"
 
 typedef struct _Vertex Vertex;
 typedef struct _Edge Edge;
@@ -22,7 +22,7 @@ Vertex *v_init(Item i);
 Vertex *v_get(Graph *g, unsigned short index);
 int v_find(Graph *g, Item i1, int (*cmp_item)(Item c1, Item c2));
 Item v_get_item(Vertex *v);
-List *v_get_adj(Vertex *v);
+Edge *v_get_adj(Vertex *v);
 
 Edge *e_init(unsigned short index, unsigned short weight);
 void e_add(Graph *g, unsigned short i1, unsigned short i2, unsigned short weight);
@@ -31,5 +31,8 @@ unsigned short e_get_index(Edge *e);
 bool e_cmp_edges(Edge *e1, Edge *e2);
 
 void v_adj_print(Graph *g, Vertex *v);
+void free_adj(Edge *head);
+void e_insert(Edge **adj, unsigned short index, unsigned short weight);
 
+Edge *l_get_next(Edge *l);
 #endif
