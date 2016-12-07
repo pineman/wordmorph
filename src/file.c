@@ -25,7 +25,7 @@ unsigned short *find_max_perms(FILE *fpal)
 		sscanf(buffer, "%s %s %hu", word1, word2, &perm);
 		size = strlen(word1);
 		/* Guardar número máximo de permutações */
-		if (max_perms[size] < perm) {
+		if (max_perms[size] < perm && w_diff(word1, word2, 1) > 1) {
 			max_perms[size] = perm;
 		}
 	}
@@ -93,6 +93,7 @@ void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 	unsigned short max_perm;
 	int i, j; /* indíce do vértice de origem do grafo. */
 	int *st = NULL, *wt = NULL;
+	int diff;
 
 	while (fscanf(fpal, "%s %s %hu", word1, word2, &max_perm) == 3) {
 		g = graphs[strlen(word1)];
@@ -100,6 +101,13 @@ void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 		j = v_find(g, word2, w_cmp);
 
 		st = realloc(st, g_get_free(g) * sizeof(int));
+
+		if ((diff = w_diff(word1, word2, 1)) <= 1) {
+			/* Solução trivial */
+			fprintf(fpath, "%s %d\n%s\n\n", word1, diff, word2);
+			continue;
+		}
+
 		wt = shortest_path(g, i, j, st, max_perm*max_perm);
 
 		if (st[j] == -1) {
