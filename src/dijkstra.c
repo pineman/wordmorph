@@ -12,7 +12,7 @@ int *shortest_path(Graph *g, int src, int dst, int *st, unsigned short max_perm)
 {
 	int v; /* Index de um vértice */
 	int v_adj; /* Index dum vértice adjacente a v */
-	List *l; /* Aresta de v para v_adj */
+	Edge *l; /* Aresta de v para v_adj */
 	int i;
 	unsigned short w_v_adj;
 	int *array;
@@ -43,10 +43,10 @@ int *shortest_path(Graph *g, int src, int dst, int *st, unsigned short max_perm)
 		if (v == dst) break;
 
 		for (l = v_get_adj(v_get(g, v)); l != NULL; l = l_get_next(l)) {
-			w_v_adj = e_get_weight(l_get_item(l));
+			w_v_adj = e_get_weight(l);
 			if (w_v_adj > max_perm) continue;
 
-			v_adj = e_get_index(l_get_item(l));
+			v_adj = e_get_index(l);
 			if (wt[v] + w_v_adj < wt[v_adj]) {
 				itemIsInsideHeapDataStructure = (wt[v_adj] != MAX_WT);
 
