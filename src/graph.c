@@ -180,7 +180,7 @@ Vertex *g_get_vert(Graph *g, unsigned short i)
 	return g->vertices[i];
 }
 
-
+/*TODO: wrong name*/
 /**
  * @brief Inicializar um vertice com item i.
  * 
@@ -202,6 +202,8 @@ Vertex *v_get(Graph *g, unsigned short index)
 	return g->vertices[index];
 }
 
+
+/*TODO: wrong name*/
 /**
  * @brief Encontra vertice no grafo.
  * @details Procura um vertice no grafo linearmente.
@@ -245,8 +247,16 @@ Edge *v_get_adj(Vertex *v)
 }
 
 
-/* Edge functions */
-/* Initializes a single edge */
+/*TODO: not used*/
+/**
+ * @brief Initialize edge
+[long description]
+ * 
+ * @param index Indice do vertice de destino.
+ * @param weight Peso da aresta.
+ * 
+ * @return Ponteiro para nova edge.
+ */
 Edge *e_init(unsigned short index, unsigned short weight)
 {
 	Edge *new_edge = (Edge *) emalloc(sizeof(Edge));
@@ -257,6 +267,13 @@ Edge *e_init(unsigned short index, unsigned short weight)
 	return new_edge;
 }
 
+/**
+ * @brief Inserir edge na lista de adjacências.
+ * 
+ * @param adj Lista de adjacências.
+ * @param index Indice do vertice de destino.
+ * @param weight Peso da aresta.
+ */
 void e_insert(Edge **adj, unsigned short index, unsigned short weight)
 {
 	Edge *new_edge = (Edge *) emalloc(sizeof(Edge));
@@ -268,38 +285,64 @@ void e_insert(Edge **adj, unsigned short index, unsigned short weight)
 	return;
 }
 
-/* Adds edges in both vertices */
+/**
+ * @brief Cria arestas entre vertices.
+ * @details Insere uma aresta em cada vertice da ligação.
+ * 
+ * @param g Ponteiro para grafo.
+ * @param i1 Indice do vertice de partida.
+ * @param i2 Indice do verticd de destino.
+ * @param weight Peso da aresta.
+ */
 void e_add(Graph *g, unsigned short i1, unsigned short i2, unsigned short weight)
 {
 	e_insert(&(g->vertices[i1]->adj), i2, weight);
 	e_insert(&(g->vertices[i2]->adj), i1, weight);
 }
 
+/**
+ * @brief Função acessora do peso da aresta.
+ * 
+ * @param e Ponteiro para edge.
+ * @return Peso da aresta
+ */
 unsigned short e_get_weight(Edge *e)
 {
 	return e->weight;
 }
 
+/**
+ * @brief Função acessora do indice do vertice de destino da aresta.
+ * 
+ * @param e Ponteiro para aresta.
+ * @return Indice do vertice de destino da aresta.
+ */
 unsigned short e_get_index(Edge *e)
 {
 	return e->index;
 }
 
+/*TODO: Not needed*/
+/**
+ * @brief [brief description]
+ * @details [long description]
+ * 
+ * @param e1 [description]
+ * @param e2 [description]
+ * 
+ * @return [description]
+ */
 bool e_cmp_edges(Edge *e1, Edge *e2)
 {
 	return (e1->weight > e2->weight);
 }
 
-/* TODO: Print function */
-void v_adj_print(Graph *g, Vertex *v)
-{
-	Edge *aux = v->adj;
-	while (aux != NULL) {
-		printf("adj: %s\n", (char *) g->vertices[aux->index]);
-		aux = aux->next;
-	}
-}
 
+/**
+ * @brief Liberta a lista de adjacências.
+ * 
+ * @param head Ponteiro para a cabeça da lista de adjacências
+ */
 void free_adj(Edge *head)
 {
 	Edge *aux = head;
@@ -312,6 +355,14 @@ void free_adj(Edge *head)
 	}
 }
 
+
+/*TODO: wrong name*/
+/**
+ * @brief Função acessora do proximo elemento da lista de adjacências
+ * 
+ * @param l Ponteiro para aresta
+ * @return Proximo elemento da lista de adjacências
+ */
 Edge *l_get_next(Edge *l)
 {
 	return l->next;

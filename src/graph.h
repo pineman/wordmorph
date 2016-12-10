@@ -26,7 +26,6 @@ unsigned short g_get_size(Graph *g);
 unsigned short g_get_free(Graph *g);
 unsigned short g_get_max_weight(Graph *g);
 Vertex *g_get_vert(Graph *g, unsigned short i);
-void g_print(Graph *g);
 
 Vertex *v_init(Item i);
 Vertex *v_get(Graph *g, unsigned short index);
@@ -40,7 +39,7 @@ unsigned short e_get_weight(Edge *e);
 unsigned short e_get_index(Edge *e);
 bool e_cmp_edges(Edge *e1, Edge *e2);
 
-void v_adj_print(Graph *g, Vertex *v);
+
 void free_adj(Edge *head);
 void e_insert(Edge **adj, unsigned short index, unsigned short weight);
 
