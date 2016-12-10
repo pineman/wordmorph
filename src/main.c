@@ -33,13 +33,7 @@ void usage(char *prog_name)
 }
 
 /**
- * @brief [brief description]
- * @details [long description]
- *
- * @param argc [description]
- * @param argv [description]
- *
- * @return [description]
+ * @brief Main: ponto de entrada do programa.
  */
 int main(int argc, char **argv)
 {
@@ -84,9 +78,6 @@ int main(int argc, char **argv)
 	graphs = read_dic(fdic, max_perms);
 	fclose(fdic);
 	free(max_perms);
-
-	/* TODO: Construir grafos?? */
-	/* build_graphs(graphs); */
 
 	/* Ler e resolver problemas. */
 	solve_pal(fpal, fpath, graphs);

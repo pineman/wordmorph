@@ -14,7 +14,8 @@
 #include "graph.h"
 #include "heap.h"
 
-/* */
+/* wt é global privada do dijkstra.c, para facilitar
+ * o acesso pela função d_less_pri(). */
 static int *wt;
 
 /**
@@ -25,7 +26,7 @@ static int *wt;
  * @param src [description]
  * @param dst [description]
  * @param st [description]
- * @param short [description]
+ * @param max_perm [description]
  * @return [description]
  */
 int *shortest_path(Graph *g, int src, int dst, int *st, unsigned short max_perm)
@@ -89,6 +90,14 @@ int *shortest_path(Graph *g, int src, int dst, int *st, unsigned short max_perm)
 	return wt;
 }
 
+/**
+ * @brief [brief description]
+ * @details [long description]
+ *
+ * @param s1 [description]
+ * @param s2 [description]
+ * @return [description]
+ */
 bool d_less_pri(Item s1, Item s2)
 {
 	/* Se s1 tem menos prioridade que s2, é porque
@@ -96,6 +105,13 @@ bool d_less_pri(Item s1, Item s2)
 	return wt[*((int *) s1)] > wt[*((int *) s2)];
 }
 
+/**
+ * @brief [brief description]
+ * @details [long description]
+ *
+ * @param a [description]
+ * @return [description]
+ */
 unsigned short d_hash(Item a)
 {
 	return *((int *) a);

@@ -129,8 +129,8 @@ void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 	unsigned short max_perm;
 	int src; /* Indíce do vértice de origem do grafo. */
 	int dst; /* Indíce do vértice de destino do grafo. */
-	int *st = NULL; /* Árvore de caminho. */
-	int *wt = NULL; /* Tabela de distâncias à origem. */
+	int *path = NULL; /* Árvore de caminho. */
+	int *dist = NULL; /* Tabela de dipathâncias à origem. */
 	int d;
 
 	while (fscanf(fpal, "%s %s %hu", word1, word2, &max_perm) == 3) {
@@ -146,47 +146,47 @@ void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 		src = g_find_vertex(g, word1, w_cmp);
 		dst = g_find_vertex(g, word2, w_cmp);
 
-		/* Realocar st para o tamanho corrente. */
-		st = realloc(st, g_get_free(g) * sizeof(int));
-		/* Shortest_path devolve wt e trata da sua realocação. */
-		wt = shortest_path(g, src, dst, st, max_perm*max_perm);
+		/* Realocar path para o tamanho corrente. */
+		path = realloc(path, g_get_free(g) * sizeof(int));
+		/* Shortepath_path devolve dist e trata da sua realocação. */
+		dist = shortest_path(g, src, dst, path, max_perm*max_perm);
 
-		if (st[dst] == -1) {
+		if (path[dst] == -1) {
 			/* Não foi encotrado um caminho entre word1 e word2. */
 			fprintf(fpath, "%s %d\n%s\n", word1, -1, word2);
 		}
 		else {
 			/* Foi encontrado um caminho. Temos de percorrer a árvore de
-			 * caminho st. */
-			fprintf(fpath, "%s %d\n", (char *) v_get_item(g_get_vertex(g, src)), wt[dst]);
-			fprint_path(fpath, g, st, wt, st[dst]);
+			 * caminho path. */
+			fprintf(fpath, "%s %d\n", (char *) v_get_item(g_get_vertex(g, src)), dist[dst]);
+			fprint_path(fpath, g, path, dist, path[dst]);
 			fprintf(fpath, "%s\n", (char *) v_get_item(g_get_vertex(g, dst)));
 		}
 
 		fprintf(fpath, "\n");
 	}
 
-	free(wt);
-	free(st);
+	free(dist);
+	free(path);
 }
 
 /**
  * @brief Imprime caminho até ao vértice dst.
- * @details É necessário inverter o caminho. Para tal, esta
- * função é recursiva: dst é os sucessivo antecessor de st[dst].
+ * @details É necessário inverter o caminho. Para tal, epatha
+ * função é recursiva: dst é os sucessivo antecessor de path[dst].
  *
  * @param fpath Ficheiro de saída .path.
  * @param g Grafo de tamanho de palavra pertinente.
- * @param st Árvore de caminho.
- * @param wt Tabela de distâncias.
- * @param dst Índice do vértice de destino na tabela de vértices (grafo).
+ * @param path Árvore de caminho.
+ * @param dist Tabela de dipathâncias.
+ * @param dst Índice do vértice de depathino na tabela de vértices (grafo).
  */
-void fprint_path(FILE *fpath, Graph *g, int *st, int *wt, int dst)
+void fprint_path(FILE *fpath, Graph *g, int *path, int *dist, int dst)
 {
-	/* Enquanto ainda não estamos no fim do caminho... */
-	if (st[dst] != -1) {
+	/* Enquanto ainda não epathamos no fim do caminho... */
+	if (path[dst] != -1) {
 		/* ... Chamar recursivamente, com dst = antecessor de dst. */
-		fprint_path(fpath, g, st, wt, st[dst]);
+		fprint_path(fpath, g, path, dist, path[dst]);
 		/* Finalmente, quando chegamos ao fim, imprimir os vários
 		 * vértices do caminho. */
 		fprintf(fpath, "%s\n", (char *) v_get_item(g_get_vertex(g, dst)));
