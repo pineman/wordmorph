@@ -19,7 +19,20 @@
 /* Strings constantes que dão as extensões válidas dos ficheiros de entrada. */
 static const char *VALID_EXTS[] = {".dic", ".pal"};
 
+void free_memory(Graph **graphs);
 void usage(char *prog_name);
+
+void free_memory(Graph **graphs)
+{
+	int i;
+
+	for (i = 0; i < MAX_WORD_SIZE; i++) {
+		if (graphs[i] != NULL) {
+			g_free(graphs[i], w_free);
+		}
+	}
+	free(graphs);
+}
 
 /**
  * @brief Imprimir a utlização do programa no caso de argumentos inválidos.
@@ -40,11 +53,9 @@ int main(int argc, char **argv)
 	FILE *fdic, *fpal, *fpath;
 	char *fpath_name;
 	char *test;
-
 	unsigned short *max_perms;
 	/* Array de grafos por tamanhos de palavras que contêm. */
 	Graph **graphs;
-
 	int i;
 
 	/* Verificação dos parâmetros de entrada*/
@@ -85,12 +96,7 @@ int main(int argc, char **argv)
 	fclose(fpath);
 
 	/* Libertar memória. */
-	for (i = 0; i < MAX_WORD_SIZE; i++) {
-		if (graphs[i] != NULL) {
-			g_free(graphs[i], w_free);
-		}
-	}
-	free(graphs);
+	free_memory(graphs);
 
 	return EXIT_SUCCESS;
 }

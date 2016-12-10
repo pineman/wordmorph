@@ -8,7 +8,7 @@
  * @details
  *	Este tipo é utilizado como Item dos vértices do grafo;
  *	a função w_cmp é utilizada na procura de um vértice no grafo
- *	e a função w_diff para obter o número de caracteres diferentes entre
+ *	e a função w_diff para obter o número de carateres diferentes entre
  *	duas palavras.
  */
 #ifndef _WORD_H

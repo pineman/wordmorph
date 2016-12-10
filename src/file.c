@@ -134,7 +134,7 @@ void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 	int d;
 
 	while (fscanf(fpal, "%s %s %hu", word1, word2, &max_perm) == 3) {
-		/* Se as duas palavras do .pal diferirem de 1 ou 0 caracteres,
+		/* Se as duas palavras do .pal diferirem de 1 ou 0 carateres,
 		 * a solução é trivial. */
 		if ((d = w_diff(word1, word2, 1)) <= 1) {
 			fprintf(fpath, "%s %d\n%s\n\n", word1, d, word2);

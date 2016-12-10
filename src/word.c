@@ -8,7 +8,7 @@
  * @details
  *	Este tipo é utilizado como Item dos vértices do grafo;
  *	a função w_cmp é utilizada na procura de um vértice no grafo
- *	e a função w_diff para obter o número de caracteres diferentes entre
+ *	e a função w_diff para obter o número de carateres diferentes entre
  *	duas palavras.
  */
 #include <stdlib.h>
@@ -43,17 +43,17 @@ void w_free(Item word)
 }
 
 /**
- * @brief Calcular o número de caracteres diferentes entre duas palavras de
+ * @brief Calcular o número de carateres diferentes entre duas palavras de
  *	tamanhos iguais.
  * @details Este cálculo é fulcral para a construção das arestas
- *	ponderadas do grafo, cujo peso é igual ao quadrado do número de caracteres
+ *	ponderadas do grafo, cujo peso é igual ao quadrado do número de carateres
  *	diferentes entre as duas palavras de quaisquer dois vértices.
- *	Esta função é linear com o número de caracteres das palavras.
+ *	Esta função é linear com o número de carateres das palavras.
  *
  * @param v1 Palavra 1
  * @param v2 Palavra 2
- * @param max_perm O número máximo permitido de caracteres diferentes.
- * @return Devolve o número de caracteres diferentes entre as duas palavras,
+ * @param max_perm O número máximo permitido de carateres diferentes.
+ * @return Devolve o número de carateres diferentes entre as duas palavras,
  *	no máximo igual a max_perm.
  */
 unsigned short w_diff(Item v1, Item v2, unsigned short max_perm)
