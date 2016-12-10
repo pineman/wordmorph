@@ -139,8 +139,8 @@ void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 		}
 
 		g = graphs[strlen(word1)];
-		i = v_find(g, word1, w_cmp);
-		j = v_find(g, word2, w_cmp);
+		i = g_find_vertex(g, word1, w_cmp);
+		j = g_find_vertex(g, word2, w_cmp);
 
 		st = realloc(st, g_get_free(g) * sizeof(int));
 		wt = shortest_path(g, i, j, st, max_perm*max_perm);
@@ -149,10 +149,10 @@ void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 			fprintf(fpath, "%s %d\n%s\n", word1, -1, word2);
 		}
 		else {
-			fprintf(fpath, "%s %d\n", (char *) v_get_item(v_get(g, i)), wt[j]);
+			fprintf(fpath, "%s %d\n", (char *) v_get_item(g_get_vertex(g, i)), wt[j]);
 			walk_tree(g, st, wt, st[j], fpath);
 
-			fprintf(fpath, "%s\n", (char *) v_get_item(v_get(g, j)));
+			fprintf(fpath, "%s\n", (char *) v_get_item(g_get_vertex(g, j)));
 		}
 
 		fprintf(fpath, "\n");
@@ -176,7 +176,7 @@ void walk_tree(Graph *g, int *st, int *wt, int dst, FILE *path)
 {
 	if (st[dst] != -1) {
 		walk_tree(g, st, wt, st[dst], path);
-		fprintf(path, "%s\n", (char *) v_get_item(v_get(g, dst)));
+		fprintf(path, "%s\n", (char *) v_get_item(g_get_vertex(g, dst)));
 	}
 	return;
 }

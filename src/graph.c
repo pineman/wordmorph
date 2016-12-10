@@ -4,9 +4,9 @@
  * @authors João Freitas <joao.m.freitas@tecnico.ulisboa.pt>
  * @date 14 Dezembro 2016
  *
- * @brief Implementação do algoritmo de Dijkstra.
+ * @brief Implementação da biblioteca de grafos.
  * @details
- *
+ * Implementação de grafos ponderados utilizando listas de adjacências.
  */
 #include <string.h>
 #include <stdlib.h>
@@ -16,30 +16,34 @@
 #include "bool.h"
 #include "heap.h"
 
-/*TODO: error checking*/
-
-/*
- * Um grafo é uma array de Vertices.
- * Cada Vertex guarda um Item de um tipo não especificado e uma lista
- * simplesmente ligada de Edges.
- *
- * Os Edges definem uma ligação e têm informação sobre o Vertex de chegada,
- * através do seu indice no array de Vertex, e sobre o peso da ligação.
+/**
+ * @brief Vertice de um grafo
+ * @details Cada vertice contem um tipo abstracto e a sua lista de adjacencias. 
  */
 struct _Vertex {
 	Item item;
 	Edge *adj;
 };
 
+/**
+ * @brief Aresta ponderada.
+ * @details As arestas contêm o peso da ligação, o indice de destino e um
+ * ponteiro para a proxima aresta do vertice.
+ * 
+ */
 struct _Edge {
 	unsigned short weight;
 	unsigned short index;
 	struct _Edge *next;
 };
 
-/* free - posição livre do array de Vertices
- * size - tamanho total do Grafo
- * max_weight - peso máximo de uma aresta no grafo
+/**
+ * @brief Grafo
+ * @details Contem array de vertices, 
+ * numero maximo de vertices que o grafo pode conter,
+ * numero de vertices que o grafo contem e
+ * peso maximo das arestas no grafo
+ * 
  */
 struct _Graph {
 	Vertex **vertices;
@@ -102,12 +106,6 @@ void g_insert(Graph *g, Item i)
 	g->vertices[g->free] = new_vertex;
 	g->free++;
 }
-
-/* Creates links between Vertices in the Graph
- * Warning: O(v^2)
- * TODO: É mesmo necessario criar duas edges sempre que se faz uma ligação?
- */
- 
 
 /**
  * @brief Cria ligações entre vertices.
@@ -175,12 +173,32 @@ unsigned short g_get_max_weight(Graph *g)
  * 
  * @return Vertice i do grafo.
  */
-Vertex *g_get_vert(Graph *g, unsigned short i)
+Vertex *g_get_vertex(Graph *g, unsigned short i)
 {
 	return g->vertices[i];
 }
 
-/*TODO: wrong name*/
+/**
+ * @brief Encontra vertice no grafo.
+ * @details Procura um vertice no grafo linearmente.
+ * 
+ * @param g Ponteiro para grafo.
+ * @param i1 Item que indentifica o vertice a encontrar
+ * @param cmp_item Ponteiro para função comparadora de vertices.
+ * @return Indice do vertice encontrado ou -1 em caso de insucesso.
+ */
+int g_find_vertex(Graph *g, Item i1, int (*cmp_item)(Item c1, Item c2))
+{
+	int i;
+
+	for (i = 0; i < g_get_free(g); i++)
+		if (!cmp_item(g->vertices[i]->item, i1))
+			return i;
+
+	return -1;
+}
+
+
 /**
  * @brief Inicializar um vertice com item i.
  * 
@@ -194,34 +212,6 @@ Vertex *v_init(Item i)
 	new_vertex->adj = NULL;
 
 	return new_vertex;
-}
-
-
-Vertex *v_get(Graph *g, unsigned short index)
-{
-	return g->vertices[index];
-}
-
-
-/*TODO: wrong name*/
-/**
- * @brief Encontra vertice no grafo.
- * @details Procura um vertice no grafo linearmente.
- * 
- * @param g Ponteiro para grafo.
- * @param i1 Item que indentifica o vertice a encontrar
- * @param cmp_item Ponteiro para função comparadora de vertices.
- * @return Indice do vertice encontrado ou -1 em caso de insucesso.
- */
-int v_find(Graph *g, Item i1, int (*cmp_item)(Item c1, Item c2))
-{
-	int i;
-
-	for (i = 0; i < g_get_free(g); i++)
-		if (!cmp_item(g->vertices[i]->item, i1))
-			return i;
-
-	return -1;
 }
 
 /**
@@ -244,27 +234,6 @@ Item v_get_item(Vertex *v)
 Edge *v_get_adj(Vertex *v)
 {
 	return v->adj;
-}
-
-
-/*TODO: not used*/
-/**
- * @brief Initialize edge
-[long description]
- * 
- * @param index Indice do vertice de destino.
- * @param weight Peso da aresta.
- * 
- * @return Ponteiro para nova edge.
- */
-Edge *e_init(unsigned short index, unsigned short weight)
-{
-	Edge *new_edge = (Edge *) emalloc(sizeof(Edge));
-	new_edge->index = index;
-	new_edge->weight = weight;
-	new_edge->next = NULL;
-
-	return new_edge;
 }
 
 /**
@@ -322,21 +291,16 @@ unsigned short e_get_index(Edge *e)
 	return e->index;
 }
 
-/*TODO: Not needed*/
 /**
- * @brief [brief description]
- * @details [long description]
+ * @brief Função acessora do proximo elemento da lista de adjacências
  * 
- * @param e1 [description]
- * @param e2 [description]
- * 
- * @return [description]
+ * @param l Ponteiro para aresta
+ * @return Proximo elemento da lista de adjacências
  */
-bool e_cmp_edges(Edge *e1, Edge *e2)
+Edge *e_get_next(Edge *l)
 {
-	return (e1->weight > e2->weight);
+	return l->next;
 }
-
 
 /**
  * @brief Liberta a lista de adjacências.
@@ -353,17 +317,4 @@ void free_adj(Edge *head)
 		free(aux);
 		aux = tmp;
 	}
-}
-
-
-/*TODO: wrong name*/
-/**
- * @brief Função acessora do proximo elemento da lista de adjacências
- * 
- * @param l Ponteiro para aresta
- * @return Proximo elemento da lista de adjacências
- */
-Edge *l_get_next(Edge *l)
-{
-	return l->next;
 }

@@ -63,7 +63,7 @@ int *shortest_path(Graph *g, int src, int dst, int *st, unsigned short max_perm)
 
 		if (v == dst) break;
 
-		for (l = v_get_adj(v_get(g, v)); l != NULL; l = l_get_next(l)) {
+		for (l = v_get_adj(g_get_vertex(g, v)); l != NULL; l = e_get_next(l)) {
 			w_v_adj = e_get_weight(l);
 			if (w_v_adj > max_perm) continue;
 

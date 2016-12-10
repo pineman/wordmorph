@@ -156,13 +156,13 @@ void h_print(Heap *h, Graph *g)
 	printf("free: %d\n", h->free);
 
 	for (i = 0; i < h->free; i++) {
-		printf("%d:%s:%d ", *((int *)h->vector[i]), (char *) v_get_item(v_get(g, *((int *)h->vector[i]))), i);
+		printf("%d:%s:%d ", *((int *)h->vector[i]), (char *) v_get_item(g_get_vertex(g, *((int *)h->vector[i]))), i);
 	}
 
 	puts("\n");
 
 	for (i = 0; i < h->size; i++) {
-		printf("%d:%s:%hu ", i, (char *) v_get_item(v_get(g, i)), h->hash_table[i]);
+		printf("%d:%s:%hu ", i, (char *) v_get_item(g_get_vertex(g, i)), h->hash_table[i]);
 	}
 
 	puts("\n");
