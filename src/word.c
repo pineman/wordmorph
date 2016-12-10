@@ -4,9 +4,12 @@
  * @authors João Freitas <joao.m.freitas@tecnico.ulisboa.pt>
  * @date 14 Dezembro 2016
  *
- * @brief Implementação do algoritmo de Dijkstra.
+ * @brief Implementação do tipo principal Word (char *)
  * @details
- *
+ *	Este tipo é utilizado como Item dos vértices do grafo;
+ *	a função w_cmp é utilizada na procura de um vértice no grafo
+ *	e a função w_diff para obter o número de caracteres diferentes entre
+ *	duas palavras.
  */
 #include <stdlib.h>
 #include <string.h>
@@ -16,11 +19,10 @@
 #include "item.h"
 
 /**
- * @brief [brief description]
- * @details [long description]
+ * @brief Inicializar uma nova palavra.
  *
- * @param word [description]
- * @return [description]
+ * @param word Palavra a ser alocada.
+ * @return Ponteiro para uma nova palavra alocada.
  */
 Item w_new(char *word)
 {
@@ -31,36 +33,36 @@ Item w_new(char *word)
 }
 
 /**
- * @brief [brief description]
- * @details [long description]
+ * @brief Liberta uma palavra.
  *
- * @param word [description]
+ * @param word Palavra alocada com w_new() a libertar.
  */
 void w_free(Item word)
 {
 	free(word);
 }
 
-/* Retorna o número de caracteres diferentes entre as strings v1 e v2,
- * assumindo que estas são do mesmo tamanho. */
 /**
- * @brief [brief description]
- * @details [long description]
+ * @brief Calcular o número de caracteres diferentes entre duas palavras de
+ *	tamanhos iguais.
+ * @details Este cálculo é fulcral para a construção das arestas
+ *	ponderadas do grafo, cujo peso é igual ao quadrado do número de caracteres
+ *	diferentes entre as duas palavras de quaisquer dois vértices.
+ *	Esta função é linear com o número de caracteres das palavras.
  *
- * @param v1 [description]
- * @param v2 [description]
- * @param max_perm [description]
- * @return [description]
+ * @param v1 Palavra 1
+ * @param v2 Palavra 2
+ * @param max_perm O número máximo permitido de caracteres diferentes.
+ * @return Devolve o número de caracteres diferentes entre as duas palavras,
+ *	no máximo igual a max_perm.
  */
 unsigned short w_diff(Item v1, Item v2, unsigned short max_perm)
 {
-	/* TODO: lento como nós sabemos */
 	unsigned short cnt = 0;
 	int i;
 	char *w1 = (char *) v1;
 	char *w2 = (char *) v2;
 
-	/* TODO: Se calhar este loop pode ser hand-rolled. */
 	for (i = 0; w1[i] != '\0'; i++) {
 		if (w1[i] != w2[i]) {
 			cnt++;
@@ -75,14 +77,13 @@ unsigned short w_diff(Item v1, Item v2, unsigned short max_perm)
 }
 
 /**
- * @brief [brief description]
- * @details [long description]
+ * @brief Compara duas palavras. Wrapper para strcmp().
  *
- * @param c1 [description]
- * @param c2 [description]
- * @return [description]
+ * @param v1 Palavra 1.
+ * @param v2 Palavra 2.
+ * @return Inteiro igual ao valor de strcmp().
  */
-int w_cmp(Item c1, Item c2)
+int w_cmp(Item v1, Item v2)
 {
-	return strcmp((const char *) c1, (const char *) c2);
+	return strcmp((const char *) v1, (const char *) v2);
 }

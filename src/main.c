@@ -4,9 +4,7 @@
  * @authors João Freitas <joao.m.freitas@tecnico.ulisboa.pt>
  * @date 14 Dezembro 2016
  *
- * @brief Implementação do algoritmo de Dijkstra.
- * @details
- *
+ * @brief Ponto de entrada do programa.
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,15 +16,15 @@
 #include "file.h"
 #include "word.h"
 
+/* Strings constantes que dão as extensões válidas dos ficheiros de entrada. */
 static const char *VALID_EXTS[] = {".dic", ".pal"};
 
 void usage(char *prog_name);
 
 /**
- * @brief [brief description]
- * @details [long description]
+ * @brief Imprimir a utlização do programa no caso de argumentos inválidos.
  *
- * @param prog_name [description]
+ * @param prog_name Nome do programa.
  */
 void usage(char *prog_name)
 {
@@ -65,6 +63,7 @@ int main(int argc, char **argv)
 		test = strrchr(argv[i+1], '.');
 
 		if (!test || strcmp(test, VALID_EXTS[i]) != 0) {
+			fprintf(stderr, "Ficheiro %s tem extensão inválida.\n", argv[i+1]);
 			usage(argv[1]);
 		}
 	}

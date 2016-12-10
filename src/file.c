@@ -4,9 +4,9 @@
  * @authors João Freitas <joao.m.freitas@tecnico.ulisboa.pt>
  * @date 14 Dezembro 2016
  *
- * @brief Implementação do algoritmo de Dijkstra.
+ * @brief Funções de I/O.
  * @details
- *
+ *	Construir grafos e imprimir caminhos.
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,11 +21,13 @@
 
 
 /**
- * @brief [brief description]
- * @details [long description]
+ * @brief Encontrar número máximo de permutações para cada tamanho de palavra.
  *
- * @param fpal [description]
- * @return [description]
+ * @param fpal Ficheiro .pal de problemas.
+ *
+ * @return max_perms Tabela de unsigned shorts, indexada pelos tamanhos
+ *	de palavra existentes no .pal e cujos valores são o número máximo de permutações
+ *	para esse tamanho de palavra, zero se esse tamanho não existir.
  */
 unsigned short *find_max_perms(FILE *fpal)
 {
@@ -35,8 +37,7 @@ unsigned short *find_max_perms(FILE *fpal)
 	unsigned short perm;
 	size_t size;
 
-	/* Array cujos índices são os tamanhos de palavra necessários e cujos
-	 * valores são o número máximo de permutações para esse tamanho. */
+	/* Inicializar max_perms a zero. */
 	max_perms = (unsigned short *) ecalloc(MAX_WORD_SIZE, sizeof(unsigned short));
 
 	/* Ler cada linha do .pal */
@@ -53,13 +54,16 @@ unsigned short *find_max_perms(FILE *fpal)
 }
 
 /**
- * @brief [brief description]
- * @details [long description]
+ * @brief Construir tabela de grafos com vértices sendo palavras vindas
+ *	do dicionário.
  *
- * @param fdic [description]
- * @param short [description]
+ * @param fdic Ficheiro de dicionário.
+ * @param max_perms Tabela com número máximo de permutações por tamanho,
+ *	vinda de find_max_perms()
  *
- * @return [description]
+ * @return graphs Tabela de grafos, indexada pelo tamanho de palavras
+ *	que contém; ou seja, graph[2] corresponde o grafo que contém vértices
+ *	(palavras) de tamanho dois. Nos tamanhos não existentes, graph[i] é NULL.
  */
 Graph **read_dic(FILE *fdic, unsigned short *max_perms)
 {
@@ -96,10 +100,6 @@ Graph **read_dic(FILE *fdic, unsigned short *max_perms)
 		/* Ignorar palavras cujos tamanhos já sabemos que não precisamos. */
 		if (max_perms[size] != 0) {
 			g_insert(graphs[size], w_new(buffer));
-			/*TODO: A criação de edges é demasiado lenta, não sei se por estar a
-			 * fazer algo estupido ou se por ser uma má forma de abordar o
-			 * problema.
-			 */
 		}
 	}
 
@@ -115,44 +115,52 @@ Graph **read_dic(FILE *fdic, unsigned short *max_perms)
 }
 
 /**
- * @brief [brief description]
- * @details [long description]
+ * @brief Encontrar caminho mais curto entre cada duas palavras do ficheiro
+ *	de problemas.
  *
- * @param fpal [description]
- * @param fpath [description]
- * @param graphs [description]
+ * @param fpal Ficheiro .pal de problemas.
+ * @param fpath Ficheiro .path de saída com os caminhos e pesos correspondentes.
+ * @param graphs Tabela de grafos.
  */
 void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 {
-	Graph *g;
+	Graph *g; /* Grafo do tamanho de palavra pretendido. */
 	char word1[MAX_WORD_SIZE], word2[MAX_WORD_SIZE];
 	unsigned short max_perm;
-	int i, j; /* indíce do vértice de origem do grafo. */
-	int *st = NULL, *wt = NULL;
-	int diff;
+	int src; /* Indíce do vértice de origem do grafo. */
+	int dst; /* Indíce do vértice de destino do grafo. */
+	int *st = NULL; /* Árvore de caminho. */
+	int *wt = NULL; /* Tabela de distâncias à origem. */
+	int d;
 
 	while (fscanf(fpal, "%s %s %hu", word1, word2, &max_perm) == 3) {
-		if ((diff = w_diff(word1, word2, 1)) <= 1) {
-			/* Solução trivial */
-			fprintf(fpath, "%s %d\n%s\n\n", word1, diff, word2);
+		/* Se as duas palavras do .pal diferirem de 1 ou 0 caracteres,
+		 * a solução é trivial. */
+		if ((d = w_diff(word1, word2, 1)) <= 1) {
+			fprintf(fpath, "%s %d\n%s\n\n", word1, d, word2);
 			continue;
 		}
 
+		/* Senão, temos de correr o algoritmo de caminho mais curto. */
 		g = graphs[strlen(word1)];
-		i = g_find_vertex(g, word1, w_cmp);
-		j = g_find_vertex(g, word2, w_cmp);
+		src = g_find_vertex(g, word1, w_cmp);
+		dst = g_find_vertex(g, word2, w_cmp);
 
+		/* Realocar st para o tamanho corrente. */
 		st = realloc(st, g_get_free(g) * sizeof(int));
-		wt = shortest_path(g, i, j, st, max_perm*max_perm);
+		/* Shortest_path devolve wt e trata da sua realocação. */
+		wt = shortest_path(g, src, dst, st, max_perm*max_perm);
 
-		if (st[j] == -1) {
+		if (st[dst] == -1) {
+			/* Não foi encotrado um caminho entre word1 e word2. */
 			fprintf(fpath, "%s %d\n%s\n", word1, -1, word2);
 		}
 		else {
-			fprintf(fpath, "%s %d\n", (char *) v_get_item(g_get_vertex(g, i)), wt[j]);
-			walk_tree(g, st, wt, st[j], fpath);
-
-			fprintf(fpath, "%s\n", (char *) v_get_item(g_get_vertex(g, j)));
+			/* Foi encontrado um caminho. Temos de percorrer a árvore de
+			 * caminho st. */
+			fprintf(fpath, "%s %d\n", (char *) v_get_item(g_get_vertex(g, src)), wt[dst]);
+			fprint_path(fpath, g, st, wt, st[dst]);
+			fprintf(fpath, "%s\n", (char *) v_get_item(g_get_vertex(g, dst)));
 		}
 
 		fprintf(fpath, "\n");
@@ -163,20 +171,24 @@ void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 }
 
 /**
- * @brief [brief description]
- * @details [long description]
+ * @brief Imprime caminho até ao vértice dst.
+ * @details É necessário inverter o caminho. Para tal, esta
+ * função é recursiva: dst é os sucessivo antecessor de st[dst].
  *
- * @param g [description]
- * @param st [description]
- * @param wt [description]
- * @param dst [description]
- * @param path [description]
+ * @param fpath Ficheiro de saída .path.
+ * @param g Grafo de tamanho de palavra pertinente.
+ * @param st Árvore de caminho.
+ * @param wt Tabela de distâncias.
+ * @param dst Índice do vértice de destino na tabela de vértices (grafo).
  */
-void walk_tree(Graph *g, int *st, int *wt, int dst, FILE *path)
+void fprint_path(FILE *fpath, Graph *g, int *st, int *wt, int dst)
 {
+	/* Enquanto ainda não estamos no fim do caminho... */
 	if (st[dst] != -1) {
-		walk_tree(g, st, wt, st[dst], path);
-		fprintf(path, "%s\n", (char *) v_get_item(g_get_vertex(g, dst)));
+		/* ... Chamar recursivamente, com dst = antecessor de dst. */
+		fprint_path(fpath, g, st, wt, st[dst]);
+		/* Finalmente, quando chegamos ao fim, imprimir os vários
+		 * vértices do caminho. */
+		fprintf(fpath, "%s\n", (char *) v_get_item(g_get_vertex(g, dst)));
 	}
-	return;
 }

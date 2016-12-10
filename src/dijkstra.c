@@ -4,9 +4,8 @@
  * @authors João Freitas <joao.m.freitas@tecnico.ulisboa.pt>
  * @date 14 Dezembro 2016
  *
- * @brief Implementação do algoritmo de Dijkstra.
- * @details
- *
+ * @brief Implementação do algoritmo de Dijkstra para encontrar caminhos mais
+ * curtos em grafos.
  */
 #include <stdlib.h>
 

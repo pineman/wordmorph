@@ -4,7 +4,7 @@
  * @authors João Freitas <joao.m.freitas@tecnico.ulisboa.pt>
  * @date 14 Dezembro 2016
  *
- * @brief Definição de um tipo booleano true ou false.
+ * @brief Definição do tipo booleano true ou false.
  */
 #ifndef _BOOL_H
 #define _BOOL_H
