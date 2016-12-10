@@ -16,6 +16,8 @@
 #include "bool.h"
 #include "heap.h"
 
+/*TODO: error checking*/
+
 /*
  * Um grafo é uma array de Vertices.
  * Cada Vertex guarda um Item de um tipo não especificado e uma lista
@@ -24,7 +26,6 @@
  * Os Edges definem uma ligação e têm informação sobre o Vertex de chegada,
  * através do seu indice no array de Vertex, e sobre o peso da ligação.
  */
-
 struct _Vertex {
 	Item item;
 	Edge *adj;
@@ -48,7 +49,13 @@ struct _Graph {
 };
 
 
-/* Graph functions */
+/**
+ * @brief Inicializar um grafo.
+ * @param size Tamanho máximo do grafo.
+ * @param max_weight Peso máximo das arestas.
+ * 
+ * @return Grafo.
+ */
 Graph *g_init(unsigned short size, unsigned short max_weight)
 {
 	Graph *g = (Graph *) emalloc(sizeof(Graph));
@@ -60,6 +67,11 @@ Graph *g_init(unsigned short size, unsigned short max_weight)
 	return g;
 }
 
+/**
+ * @brief Liberta a memoria alocada para o grafo.
+ * @param g Ponteiro para grafo.
+ * @param free_item Função libertadora de items.
+ */
 void g_free(Graph *g, void (free_item)(Item item))
 {
 	unsigned int i;
@@ -76,6 +88,12 @@ void g_free(Graph *g, void (free_item)(Item item))
 	free(g);
 }
 
+
+/**
+ * @brief Insere um item na posição livre do grafo.
+ * @param g Ponteiro para grafo.
+ * @param i Item a inserir.
+ */
 void g_insert(Graph *g, Item i)
 {
 	Vertex *new_vertex;
@@ -88,6 +106,16 @@ void g_insert(Graph *g, Item i)
 /* Creates links between Vertices in the Graph
  * Warning: O(v^2)
  * TODO: É mesmo necessario criar duas edges sempre que se faz uma ligação?
+ */
+ 
+
+/**
+ * @brief Cria ligações entre vertices.
+ * @details Verifica quais os vertices cujo peso é menor que o máximo permitido
+ * e insere as ligações correspondentes na lista de adjacências.
+ * 
+ * @param g Ponteiro para grafo.
+ * @param calc_weight Ponteiro para função que calcula pesos entre arestas. 
  */
 void g_make_edges(Graph *g, unsigned short (*calc_weight)(Item i1, Item i2, unsigned short max))
 {
@@ -106,42 +134,59 @@ void g_make_edges(Graph *g, unsigned short (*calc_weight)(Item i1, Item i2, unsi
 	g->max_weight *= g->max_weight;
 }
 
+/**
+ * @brief Função acessora do numero máximo de vertices no grafo.
+ * 
+ * @param g Ponteiro para grafo.
+ * @return Numero máximo de vertices no grafo.
+ */
 unsigned short g_get_size(Graph *g)
 {
 	return g->size;
 }
 
+/**
+ * @brief Função acessora do numero de vertices no grafo.
+ * 
+ * @param g Ponteiro para grafo.
+ * @return Numero de vertices no grafo.
+ */
 unsigned short g_get_free(Graph *g)
 {
 	return g->free;
 }
 
+/**
+ * @brief Função acessora do peso máximo das arestas no grafo.
+ * 
+ * @param g Ponteiro para grafo
+ * @return Peso máximo entre arestas no grafo.
+ */
 unsigned short g_get_max_weight(Graph *g)
 {
 	return g->max_weight;
 }
 
+/**
+ * @brief Função acessora de um vertice i do grafo.
+ * 
+ * @param g Ponteiro para grafo.
+ * @param i Índice do vertice.
+ * 
+ * @return Vertice i do grafo.
+ */
 Vertex *g_get_vert(Graph *g, unsigned short i)
 {
 	return g->vertices[i];
 }
 
-/* TODO: Print function */
-void g_print(Graph *g)
-{
-	int i;
-	Edge *l;
 
-	for (i = 0; i < g->size; i++) {
-		printf("Adjacency list for vertex %d (%s):\n", i, (char *) g->vertices[i]->item);
-		for (l = g->vertices[i]->adj; l != NULL; l = l->next) {
-			printf("vertex %d: %s (w: %d)\n", l->index, (char *) g->vertices[l->index]->item, l->weight);
-		}
-		puts("");
-	}
-}
-
-/* Vertex functions */
+/**
+ * @brief Inicializar um vertice com item i.
+ * 
+ * @param i Item a inserir no vertice.
+ * @return Ponteiro para o novo vertice.
+ */
 Vertex *v_init(Item i)
 {
 	Vertex *new_vertex = (Vertex *) emalloc(sizeof(Vertex));
@@ -151,11 +196,21 @@ Vertex *v_init(Item i)
 	return new_vertex;
 }
 
+
 Vertex *v_get(Graph *g, unsigned short index)
 {
 	return g->vertices[index];
 }
 
+/**
+ * @brief Encontra vertice no grafo.
+ * @details Procura um vertice no grafo linearmente.
+ * 
+ * @param g Ponteiro para grafo.
+ * @param i1 Item que indentifica o vertice a encontrar
+ * @param cmp_item Ponteiro para função comparadora de vertices.
+ * @return Indice do vertice encontrado ou -1 em caso de insucesso.
+ */
 int v_find(Graph *g, Item i1, int (*cmp_item)(Item c1, Item c2))
 {
 	int i;
@@ -167,11 +222,23 @@ int v_find(Graph *g, Item i1, int (*cmp_item)(Item c1, Item c2))
 	return -1;
 }
 
+/**
+ * @brief Função acessora de items no vertice
+ * 
+ * @param v Ponteiro para vertice
+ * @return Item do vertice.
+ */
 Item v_get_item(Vertex *v)
 {
 	return v->item;
 }
 
+/**
+ * @brief Função acessora de listas de adjacências.
+ * 
+ * @param v Ponteiro para vertice.
+ * @return Lista de adjacências.
+ */
 Edge *v_get_adj(Vertex *v)
 {
 	return v->adj;
