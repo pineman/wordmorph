@@ -20,8 +20,12 @@
 static const char *VALID_EXTS[] = {".dic", ".pal"};
 
 void free_memory(Graph **graphs);
-void usage(char *prog_name);
 
+/**
+ * @brief Libertar a memória alocada ao longo do programa.
+ *
+ * @param graphs Tabela de grafos criados para a resolução de problemas.
+ */
 void free_memory(Graph **graphs)
 {
 	int i;
@@ -34,16 +38,6 @@ void free_memory(Graph **graphs)
 	free(graphs);
 }
 
-/**
- * @brief Imprimir a utlização do programa no caso de argumentos inválidos.
- *
- * @param prog_name Nome do programa.
- */
-void usage(char *prog_name)
-{
-	fprintf(stderr, "Uso: %s [dicionário.dic] [problemas.pal]\n", prog_name);
-	exit(EXIT_FAILURE);
-}
 
 /**
  * @brief Main: ponto de entrada do programa.
@@ -60,7 +54,7 @@ int main(int argc, char **argv)
 
 	/* Verificação dos parâmetros de entrada*/
 	if (argc != 3) {
-		usage(argv[0]);
+		return EXIT_FAILURE;
 	}
 
 	/* Verificar extensões dos ficheiros */
@@ -68,12 +62,11 @@ int main(int argc, char **argv)
 		test = strrchr(argv[i+1], '.');
 
 		if (!test || strcmp(test, VALID_EXTS[i]) != 0) {
-			fprintf(stderr, "Ficheiro %s tem extensão inválida.\n", argv[i+1]);
-			usage(argv[1]);
+			return EXIT_FAILURE;
 		}
 	}
 
-	/* Abrir ficheiros de entrada (efopen faz exit() em caso de erro) */
+	/* Abrir ficheiros (efopen faz exit() em caso de erro) */
 	fdic = efopen(argv[1], "r");
 	fpal = efopen(argv[2], "r");
 	fpath_name = change_file_ext(argv[2], OUT_EXT);
