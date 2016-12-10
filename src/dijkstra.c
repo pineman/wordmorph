@@ -1,3 +1,13 @@
+/**
+ * @file dijkstra.c
+ * @authors João Pinheiro <joao.castro.pinheiro@tecnico.ulisboa.pt>
+ * @authors João Freitas <joao.m.freitas@tecnico.ulisboa.pt>
+ * @date 14 Dezembro 2016
+ *
+ * @brief Implementação do algoritmo de Dijkstra.
+ * @details
+ *
+ */
 #include <stdlib.h>
 
 #include "dijkstra.h"
@@ -5,13 +15,24 @@
 #include "graph.h"
 #include "heap.h"
 
-/* TODO: ugly global var */
+/* */
 static int *wt;
 
+/**
+ * @brief [brief description]
+ * @details [long description]
+ *
+ * @param g [description]
+ * @param src [description]
+ * @param dst [description]
+ * @param st [description]
+ * @param short [description]
+ * @return [description]
+ */
 int *shortest_path(Graph *g, int src, int dst, int *st, unsigned short max_perm)
 {
-	int v; /* Index de um vértice */
-	int v_adj; /* Index dum vértice adjacente a v */
+	int v; /* Indíce de um vértice */
+	int v_adj; /* Indíce de um vértice adjacente a v */
 	Edge *l; /* Aresta de v para v_adj */
 	int i;
 	unsigned short w_v_adj;

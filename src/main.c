@@ -1,3 +1,13 @@
+/**
+ * @file main.c
+ * @authors João Pinheiro <joao.castro.pinheiro@tecnico.ulisboa.pt>
+ * @authors João Freitas <joao.m.freitas@tecnico.ulisboa.pt>
+ * @date 14 Dezembro 2016
+ *
+ * @brief Implementação do algoritmo de Dijkstra.
+ * @details
+ *
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,12 +22,27 @@ static const char *VALID_EXTS[] = {".dic", ".pal"};
 
 void usage(char *prog_name);
 
+/**
+ * @brief [brief description]
+ * @details [long description]
+ *
+ * @param prog_name [description]
+ */
 void usage(char *prog_name)
 {
 	fprintf(stderr, "Uso: %s [dicionário.dic] [problemas.pal]\n", prog_name);
 	exit(EXIT_FAILURE);
 }
 
+/**
+ * @brief [brief description]
+ * @details [long description]
+ *
+ * @param argc [description]
+ * @param argv [description]
+ *
+ * @return [description]
+ */
 int main(int argc, char **argv)
 {
 	FILE *fdic, *fpal, *fpath;
@@ -47,7 +72,7 @@ int main(int argc, char **argv)
 	/* Abrir ficheiros de entrada (efopen faz exit() em caso de erro) */
 	fdic = efopen(argv[1], "r");
 	fpal = efopen(argv[2], "r");
-	fpath_name = change_file_ext(argv[2], OUT_EXT, OUT_EXT_SIZE);
+	fpath_name = change_file_ext(argv[2], OUT_EXT);
 	fpath = efopen(fpath_name, "w");
 	free(fpath_name);
 

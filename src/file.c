@@ -1,4 +1,15 @@
+/**
+ * @file file.c
+ * @authors João Pinheiro <joao.castro.pinheiro@tecnico.ulisboa.pt>
+ * @authors João Freitas <joao.m.freitas@tecnico.ulisboa.pt>
+ * @date 14 Dezembro 2016
+ *
+ * @brief Implementação do algoritmo de Dijkstra.
+ * @details
+ *
+ */
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "file.h"
@@ -8,6 +19,14 @@
 #include "word.h"
 #include "dijkstra.h"
 
+
+/**
+ * @brief [brief description]
+ * @details [long description]
+ *
+ * @param fpal [description]
+ * @return [description]
+ */
 unsigned short *find_max_perms(FILE *fpal)
 {
 	unsigned short *max_perms;
@@ -33,6 +52,15 @@ unsigned short *find_max_perms(FILE *fpal)
 	return max_perms;
 }
 
+/**
+ * @brief [brief description]
+ * @details [long description]
+ *
+ * @param fdic [description]
+ * @param short [description]
+ *
+ * @return [description]
+ */
 Graph **read_dic(FILE *fdic, unsigned short *max_perms)
 {
 	char buffer[MAX_WORD_SIZE];
@@ -86,6 +114,14 @@ Graph **read_dic(FILE *fdic, unsigned short *max_perms)
 	return graphs;
 }
 
+/**
+ * @brief [brief description]
+ * @details [long description]
+ *
+ * @param fpal [description]
+ * @param fpath [description]
+ * @param graphs [description]
+ */
 void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 {
 	Graph *g;
@@ -126,6 +162,16 @@ void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 	free(st);
 }
 
+/**
+ * @brief [brief description]
+ * @details [long description]
+ *
+ * @param g [description]
+ * @param st [description]
+ * @param wt [description]
+ * @param dst [description]
+ * @param path [description]
+ */
 void walk_tree(Graph *g, int *st, int *wt, int dst, FILE *path)
 {
 	if (st[dst] != -1) {

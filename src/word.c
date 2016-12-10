@@ -1,43 +1,57 @@
+/**
+ * @file word.c
+ * @authors João Pinheiro <joao.castro.pinheiro@tecnico.ulisboa.pt>
+ * @authors João Freitas <joao.m.freitas@tecnico.ulisboa.pt>
+ * @date 14 Dezembro 2016
+ *
+ * @brief Implementação do algoritmo de Dijkstra.
+ * @details
+ *
+ */
 #include <stdlib.h>
 #include <string.h>
 
-#include "bool.h"
 #include "utils.h"
 #include "word.h"
+#include "item.h"
 
-/* TODO:
+/**
+ * @brief [brief description]
+ * @details [long description]
  *
- * struct _Word {
- *	char *word;
- * };
- *
-*/
-
-char *w_new(char *word)
+ * @param word [description]
+ * @return [description]
+ */
+Item w_new(char *word)
 {
 	char *new_word = (char *) emalloc((strlen(word) + 1) * sizeof(char));
 	strcpy(new_word, word);
 
-	return new_word;
+	return (Item) new_word;
 }
 
+/**
+ * @brief [brief description]
+ * @details [long description]
+ *
+ * @param word [description]
+ */
 void w_free(Item word)
 {
 	free(word);
 }
 
-bool w_less(Item a, Item b)
-{
-	int less;
-	less = strcmp((char *) a, (char *) b);
-	if (less <= 0)
-		return true;
-	else
-		return false;
-}
-
 /* Retorna o número de caracteres diferentes entre as strings v1 e v2,
- * assumindo que estas são do mesmo tamamnho. */
+ * assumindo que estas são do mesmo tamanho. */
+/**
+ * @brief [brief description]
+ * @details [long description]
+ *
+ * @param v1 [description]
+ * @param v2 [description]
+ * @param max_perm [description]
+ * @return [description]
+ */
 unsigned short w_diff(Item v1, Item v2, unsigned short max_perm)
 {
 	/* TODO: lento como nós sabemos */
@@ -60,12 +74,14 @@ unsigned short w_diff(Item v1, Item v2, unsigned short max_perm)
 	return cnt;
 }
 
-/* Funções acessoras */
-int w_get_size(char *word)
-{
-	return (int) strlen(word);
-}
-
+/**
+ * @brief [brief description]
+ * @details [long description]
+ *
+ * @param c1 [description]
+ * @param c2 [description]
+ * @return [description]
+ */
 int w_cmp(Item c1, Item c2)
 {
 	return strcmp((const char *) c1, (const char *) c2);

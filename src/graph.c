@@ -1,9 +1,20 @@
+/**
+ * @file graph.c
+ * @authors João Pinheiro <joao.castro.pinheiro@tecnico.ulisboa.pt>
+ * @authors João Freitas <joao.m.freitas@tecnico.ulisboa.pt>
+ * @date 14 Dezembro 2016
+ *
+ * @brief Implementação do algoritmo de Dijkstra.
+ * @details
+ *
+ */
+#include <string.h>
+#include <stdlib.h>
+
 #include "graph.h"
 #include "utils.h"
 #include "bool.h"
 #include "heap.h"
-
-#include <string.h>
 
 /*
  * Um grafo é uma array de Vertices.
@@ -148,7 +159,8 @@ Vertex *v_get(Graph *g, unsigned short index)
 int v_find(Graph *g, Item i1, int (*cmp_item)(Item c1, Item c2))
 {
 	int i;
-	for (i=0; i<g_get_free(g); i++)
+
+	for (i = 0; i < g_get_free(g); i++)
 		if (!cmp_item(g->vertices[i]->item, i1))
 			return i;
 
