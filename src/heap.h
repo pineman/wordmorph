@@ -1,11 +1,12 @@
 /**
- * @file heap.h
+ * @file heap.c
  * @authors João Pinheiro <joao.castro.pinheiro@tecnico.ulisboa.pt>
  * @authors João Freitas <joao.m.freitas@tecnico.ulisboa.pt>
  * @date 14 Dezembro 2016
  *
- * @brief Implementação do algoritmo de Dijkstra.
+ * @brief Implementação da biblioteca de acervos.
  * @details
+ * Implementação de uma fila prioritária utilizando acervos. 
  *
  */
 #ifndef _HEAP_H
@@ -30,9 +31,5 @@ void h_inc_pri(Heap *h, Item a, bool (*less_pri)(Item, Item), unsigned short (*h
 
 void h_exch(Heap *h, unsigned short i1, unsigned short i2, unsigned short (*hash)(Item));
 bool h_empty(Heap *h);
-
-/* TODO: print function */
-#include "graph.h"
-void h_print(Heap *h, Graph *g);
 
 #endif
