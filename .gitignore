@@ -37,3 +37,7 @@ tags
 src/wordmorph
 src/.dummy
 doc
+
+*.aux
+*.pdf
+*.toc
