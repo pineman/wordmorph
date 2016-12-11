@@ -5,7 +5,7 @@
 \usepackage[margin=3cm,includefoot,footskip=30pt]{geometry}
 
 \usepackage{graphicx}
-\graphicspath{ {imagens/} }
+\graphicspath{ {imagens/} {flowcharts/}}
 \usepackage{bold-extra}
 \usepackage{epstopdf}
 \usepackage{float}
@@ -258,38 +258,56 @@ do projecto implementado;
 	\par
 	Esta função primeiramente inicializa um acervo, (re)aloca a tabela de distâcias à origem \texttt{wt} e inicializa-a com o valor \texttt{MAX\textunderscore WT} representando uma distância infinita e a árvore de caminhos \texttt{st} com \texttt{-1} sinalizando que nenhum vértice foi visitado. O vértice de origem é também inserido no acervo inicialmente e a sua distância à origem é colocada a \texttt{0}. Apresenta-se o estado final das sucessivas iterações do ciclo \texttt{while} exterior do algoritmo de Dijkstra:
 	\begin{center}
-		\texttt{v = 0\\
+		\begin{minipage}{0.45\linewidth}
+		\texttt{\\
+		v = 0\\
 		v != dst (= 2) \\
 		wt = [0, 1, 4, MAX\textunderscore WT] \\
 		st = [-1, 0, 0, -1] \\
 		heap = [1, 2] \\}
+		\end{minipage}
 	\end{center}
 	\par
 	Na primeira iteração, o vértice \texttt{0} saiu da fila e foram colocados os seus adjacentes \texttt{1} e \texttt{2}, tendo sido marcados como visitados por \texttt{0} em \texttt{st} e com distâncias, respetivamente, \texttt{1} e \texttt{4} em \texttt{wt}. O acervo ficou com o vértice \texttt{1} na posição 0 mais prioritária então por este ter menor distância e assim maior prioridade. Assim, o vértice 1 sairá do acervo na próxima iteração:
 	\begin{center}
-		\texttt{v = 1\\
-		v != dst (= 2) \\
-		wt = [0, 1, 2, MAX\textunderscore WT] \\
-		st = [-1, 0, 1, -1] \\
-		heap = [2] \\}
+		\begin{minipage}{0.45\linewidth}
+			\texttt{\\
+			v = 1\\
+			v != dst (= 2) \\
+			wt = [0, 1, 2, MAX\textunderscore WT] \\
+			st = [-1, 0, 1, -1] \\
+			heap = [2] \\}
+		\end{minipage}
+		\hspace{0.05\linewidth}
 	\end{center}
 	\par
 	Os vértices adjacentes de 1 são \texttt{0} e \texttt{2}, mas \texttt{0} não entrará no acevo pois a sua distância (\texttt{0}) já é menor do que vista pelo vértice \texttt{1} (\texttt{1}). O vértice \texttt{2} tem a sua prioridade incrementada, pois, a partir do vértice \texttt{1}, a sua distância à origem é \texttt{wt[1] + 1 = 1 + 1 = 2} que é menor que a previamente encontrada de \texttt{wt[2] = 4}. Assim, o vértice 2 passa a ocupar a posição mais prioritária no acervo e sairá deste na próxima iteração:
 	\begin{center}
-		\texttt{v = 2 \\
-		v == dst \\
-		wt = [0, 1, 2, MAX\textunderscore WT] \\
-		st = [-1, 0, 1, -1] \\
-		heap = [2] \\}
+		\begin{minipage}{0.45\linewidth}
+		\texttt{\\
+			v = 2 \\
+			v == dst \\
+			wt = [0, 1, 2, MAX\textunderscore WT] \\
+			st = [-1, 0, 1, -1] \\
+			heap = [2] \\}
+		\end{minipage}
+		\hspace{0.05\linewidth}
 	\end{center}
+
 	\par
 	O vértice de destino saiu do acervo e parou-se a procura. A execução regressa a \texttt{solve\textunderscore pal()} que escreverá o peso \texttt{wt[dst] = 2} e o caminho para este problema:
 	\begin{center}
+	\begin{minipage}{0.15\linewidth}
 		\texttt{tragar 2 \\
 				tragam \\
 				travam}
+	\end{minipage}
 	\end{center}
 	\par
 	Onde o caminho foi impresso na ordem correta pela função recursiva \texttt{fprint\textunderscore path()} (seguindo o caminho para trás desde \texttt{st[dst]} até chegar ao ponto inicial onde \texttt{st[src] = -1}):
+
+	\begin{figure}[H]
+		\includegraphics[width=\linewidth]{arquitetura.eps}
+	\end{figure}
 
 \end{document}
