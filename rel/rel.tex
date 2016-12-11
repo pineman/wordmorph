@@ -204,36 +204,61 @@ do projecto implementado;
 			\texttt{i = 3, j = 2} \\
 			\texttt{calc\textunderscore weight("flores", "travam", 2) = 3}
 	\end{itemize}
-
-  E o grafo resultante como representado no programa, sob listas de adjacências: \\
-	\begin{minipage}{\linewidth}
-		  \centering
-		  \begin{minipage}{0.45\linewidth}
-			  \begin{figure}[H]
-				  \centering
-				  \includegraphics[width=4cm]{graph}
-				  \caption{This is the first figure}
-			  \end{figure}
-		  \end{minipage}
-		  \hspace{0.05\linewidth}
-		  \begin{minipage}{0.45\linewidth}
-			\begin{center}
-				\texttt{0: 1 \textrightarrow{} 2 \textrightarrow{} NULL \\
-						1: 0 \textrightarrow{} 2 \textrightarrow{} NULL \\
-						2: 0 \textrightarrow{} 1 \textrightarrow{} NULL \\
-						3: \textrightarrow{} NULL}
-			\end{center}
-		  \end{minipage}
-	  \end{minipage}
-
-	\textbf{dragar} \\
-	tragar \\
-	tragam \\
-	travam \\
-	\textbf{oravam}
 	\par
-• Pelo menos, um pequeno exemplo completo e detalhado de aplicação, com descrição
-da utilização das estruturas de dados em cada passo e de como são tomadas as
-decisões.
-
+	E o grafo resultante como representado no programa, sob listas de adjacências e graficamente: \\
+	\begin{minipage}{\linewidth}
+		\centering
+		\begin{minipage}{0.45\linewidth}
+		\begin{center}
+			\texttt{0: 1 \textrightarrow{} 2 \textrightarrow{} NULL \\
+					1: 0 \textrightarrow{} 2 \textrightarrow{} NULL \\
+					2: 0 \textrightarrow{} 1 \textrightarrow{} NULL \\
+					3: NULL}
+		\end{center}
+		\end{minipage}
+		\hspace{0.05\linewidth}
+		\begin{minipage}{0.45\linewidth}
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=4cm]{graph}
+				\caption{This is the first figure}
+			\end{figure}
+		\end{minipage}
+	\end{minipage}
+	\par
+	Construído o grafo, salta-se para a função \texttt{solve\textunderscore pal()}. O ficheiro de problemas é lido outra vez. Como \texttt{w\textunderscore diff("tragar", "travam", 1) = 2 > 1}, a solução não é trivial. Deste modo, encontramos o vértice de origem, correspondente a \texttt{"tragar"} e o de destino \texttt{"travam"}, aloca-se a árvore de caminhos \texttt{path} e corre-se \texttt{shortest\textunderscore path()}.
+	\par
+	Esta função primeiramente inicializa um acervo, a tabela de distâcias à origem \texttt{wt} com o valor \texttt{MAX\textunderscore WT} representando uma distância infinita e a árvore de caminhos com \texttt{-1} sinalizando que nenhum vértice foi visitado. O vértice de origem é também inserido no acervo inicialmente e a sua distância à origem colocada a \texttt{0}. Apresenta-se o estado final das sucessivas iterações do ciclo exterior \texttt{while} do algoritmo de Dijkstra:
+	\begin{center}
+		\texttt{v = 0\\
+		v != dst (= 2) \\
+		wt = [0, 1, 4, MAX\textunderscore WT] \\
+		st = [-1, 0, 0, -1] \\
+		heap = [1, 2] \\}
+	\end{center}
+	\par
+	Na primeira iteração, o vértice \texttt{0} saiu da fila e foram colocados os seus adjacentes \texttt{1} e \texttt{2}, tendo sido marcados como visitados por \texttt{0} em \texttt{st} e com distâncias, respetivamente, \texttt{1} e \texttt{4} em \texttt{wt}. O acervo ficou com o vértice \texttt{1} na posição 0 mais prioritária então por este ter menor distância e assim maior prioridade. Assim, o vértice 1 sairá do acervo na próxima iteração:
+	\begin{center}
+		\texttt{v = 1\\
+		v != dst (= 2) \\
+		wt = [0, 1, 2, MAX\textunderscore WT] \\
+		st = [-1, 0, 1, -1] \\
+		heap = [2] \\}
+	\end{center}
+	\par
+	Os vértices adjacentes de 1 são \texttt{0} e \texttt{2}, mas \texttt{0} não entrará no acevo pois a sua distância (\texttt{0}) já é menor do que vista pelo vértice \texttt{1} (\texttt{1}). O vértice \texttt{2} tem a sua prioridade incrementada, pois, a partir do vértice \texttt{1}, a sua distância à origem é \texttt{wt[1] + 1 = 1 + 1 = 2} que é menor que a previamente encontrada de \texttt{wt[2] = 4}. Assim, o vértice 2 passa a ocupar a posição mais prioritária no acervo e sairá deste na próxima iteração:
+	\begin{center}
+		\texttt{v = 2 \\
+		v == dst \\
+		wt = [0, 1, 2, MAX\textunderscore WT] \\
+		st = [-1, 0, 1, -1] \\
+		heap = [2] \\}
+	\end{center}
+	\par
+	O vértice de destino saiu do acervo e para-se a procura. A execução regressa a \texttt{solve\textunderscore pal()} que escreverá o caminho, imprimido na ordem correta pela função recursiva \texttt{fprint\textunderscore path()} (seguindo o caminho para trás desde \texttt{st[dst]} até chegar ao ponto inicial onde \texttt{st[src] = -1} e aí imprimindo tomando partido da pilha de chamada da função) e o peso \texttt{wt[dst] = 2} para este problema:
+	\begin{center}
+		\texttt{tragar 2 \\
+				tragam \\
+				travam}
+	\end{center}
 \end{document}
