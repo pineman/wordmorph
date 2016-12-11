@@ -33,4 +33,7 @@ clean:
 doc: Doxyfile *.c *.h
 	doxygen
 
+tar: 
+	tar czvf wordmorph.tgz *.c *.h Makefile
+
 # TODO: criar make test: automatizar memcheck, massif e gprof
