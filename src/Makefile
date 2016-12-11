@@ -21,8 +21,7 @@ $(EXEC): $(SRC:%.c=%.o)
 -include $(SRC:%.c=%.d)
 
 clean:
-	rm -rf *.o *.d *.out* $(EXEC)
-	rm -rf doc
+	rm -rf *.o *.d *.out* $(EXEC) .dummy doc tags
 
 # This rebuilds everything if the Makefile was modified
 # http://stackoverflow.com/questions/3871444/making-all-rules-depend-on-the-makefile-itself/3892826#3892826

@@ -147,8 +147,8 @@ void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 		dst = g_find_vertex(g, word2, w_cmp);
 
 		/* Realocar path para o tamanho corrente. */
-		path = realloc(path, g_get_free(g) * sizeof(int));
-		/* Shortepath_path devolve dist e trata da sua realocação. */
+		path = realloc(path, g_get_size(g) * sizeof(int));
+		/* shortest_path() devolve dist e trata da sua realocação. */
 		dist = shortest_path(g, src, dst, path, max_perm*max_perm);
 
 		if (path[dst] == -1) {

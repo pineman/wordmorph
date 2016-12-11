@@ -78,6 +78,7 @@ unsigned short w_diff(Item v1, Item v2, unsigned short max_perm)
 
 /**
  * @brief Compara duas palavras. Wrapper para strcmp().
+ * @details Devolve 0 quando v1 = v2, e != 0 quando v1 != v2.
  *
  * @param v1 Palavra 1.
  * @param v2 Palavra 2.

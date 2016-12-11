@@ -15,7 +15,7 @@
 
 #define MAX_WT 10000000
 
-int *shortest_path(Graph *g, int src, int dst, int *st, unsigned short max_perm);
+int *shortest_path(Graph *g, int src, int dst, int *st, unsigned short max_weight);
 bool d_less_pri(Item s1, Item s2);
 unsigned short d_hash(Item a);
 

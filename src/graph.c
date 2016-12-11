@@ -18,7 +18,8 @@
 
 /**
  * @brief Vertice de um grafo
- * @details Cada vertice contem um tipo abstracto e a sua lista de adjacencias. 
+ * @details Cada vértice contém um tipo abstracto e um ponteiro para
+ *	a cabeça da sua lista de adjacências.
  */
 struct _Vertex {
 	Item item;
@@ -27,9 +28,10 @@ struct _Vertex {
 
 /**
  * @brief Aresta ponderada.
- * @details As arestas contêm o peso da ligação, o indice de destino e um
- * ponteiro para a proxima aresta do vertice.
- * 
+ * @details As arestas contêm o peso da ligação, o índice de destino e um
+ *	ponteiro para a proxima aresta ajacente do vértice, i.e., uma lista
+ *	de adjacências.
+ *
  */
 struct _Edge {
 	unsigned short weight;
@@ -39,16 +41,16 @@ struct _Edge {
 
 /**
  * @brief Grafo
- * @details Contem array de vertices, 
- * numero maximo de vertices que o grafo pode conter,
- * numero de vertices que o grafo contem e
- * peso maximo das arestas no grafo
- * 
+ * @details vertices: array de vértices
+ *	size: número máximo de vertices que o grafo pode conter
+ *	free: número de vértices que o grafo contém (posição livre)
+ *	max_weight: peso máximo das arestas do grafo
+ *
  */
 struct _Graph {
 	Vertex **vertices;
-	unsigned short free;
 	unsigned short size;
+	unsigned short free;
 	unsigned short max_weight;
 };
 
@@ -57,7 +59,7 @@ struct _Graph {
  * @brief Inicializar um grafo.
  * @param size Tamanho máximo do grafo.
  * @param max_weight Peso máximo das arestas.
- * 
+ *
  * @return Grafo.
  */
 Graph *g_init(unsigned short size, unsigned short max_weight)
@@ -103,6 +105,7 @@ void g_insert(Graph *g, Item i)
 	Vertex *new_vertex;
 
 	new_vertex = v_init(i);
+	/* g->free é a posição livre no grafo. */
 	g->vertices[g->free] = new_vertex;
 	g->free++;
 }
@@ -111,9 +114,9 @@ void g_insert(Graph *g, Item i)
  * @brief Cria ligações entre vertices.
  * @details Verifica quais os vertices cujo peso é menor que o máximo permitido
  * e insere as ligações correspondentes na lista de adjacências.
- * 
+ *
  * @param g Ponteiro para grafo.
- * @param calc_weight Ponteiro para função que calcula pesos entre arestas. 
+ * @param calc_weight Ponteiro para função que calcula pesos entre arestas.
  */
 void g_make_edges(Graph *g, unsigned short (*calc_weight)(Item i1, Item i2, unsigned short max))
 {
@@ -134,7 +137,7 @@ void g_make_edges(Graph *g, unsigned short (*calc_weight)(Item i1, Item i2, unsi
 
 /**
  * @brief Função acessora do numero máximo de vertices no grafo.
- * 
+ *
  * @param g Ponteiro para grafo.
  * @return Numero máximo de vertices no grafo.
  */
@@ -145,7 +148,7 @@ unsigned short g_get_size(Graph *g)
 
 /**
  * @brief Função acessora do numero de vertices no grafo.
- * 
+ *
  * @param g Ponteiro para grafo.
  * @return Numero de vertices no grafo.
  */
@@ -156,7 +159,7 @@ unsigned short g_get_free(Graph *g)
 
 /**
  * @brief Função acessora do peso máximo das arestas no grafo.
- * 
+ *
  * @param g Ponteiro para grafo
  * @return Peso máximo entre arestas no grafo.
  */
@@ -167,10 +170,10 @@ unsigned short g_get_max_weight(Graph *g)
 
 /**
  * @brief Função acessora de um vertice i do grafo.
- * 
+ *
  * @param g Ponteiro para grafo.
  * @param i Índice do vertice.
- * 
+ *
  * @return Vertice i do grafo.
  */
 Vertex *g_get_vertex(Graph *g, unsigned short i)
@@ -181,7 +184,7 @@ Vertex *g_get_vertex(Graph *g, unsigned short i)
 /**
  * @brief Encontra vertice no grafo.
  * @details Procura um vertice no grafo linearmente.
- * 
+ *
  * @param g Ponteiro para grafo.
  * @param i1 Item que indentifica o vertice a encontrar
  * @param cmp_item Ponteiro para função comparadora de vertices.
@@ -191,7 +194,7 @@ int g_find_vertex(Graph *g, Item i1, int (*cmp_item)(Item c1, Item c2))
 {
 	int i;
 
-	for (i = 0; i < g_get_free(g); i++)
+	for (i = 0; i < g_get_size(g); i++)
 		if (!cmp_item(g->vertices[i]->item, i1))
 			return i;
 
@@ -201,7 +204,7 @@ int g_find_vertex(Graph *g, Item i1, int (*cmp_item)(Item c1, Item c2))
 
 /**
  * @brief Inicializar um vertice com item i.
- * 
+ *
  * @param i Item a inserir no vertice.
  * @return Ponteiro para o novo vertice.
  */
@@ -216,7 +219,7 @@ Vertex *v_init(Item i)
 
 /**
  * @brief Função acessora de items no vertice
- * 
+ *
  * @param v Ponteiro para vertice
  * @return Item do vertice.
  */
@@ -227,7 +230,7 @@ Item v_get_item(Vertex *v)
 
 /**
  * @brief Função acessora de listas de adjacências.
- * 
+ *
  * @param v Ponteiro para vertice.
  * @return Lista de adjacências.
  */
@@ -238,7 +241,7 @@ Edge *v_get_adj(Vertex *v)
 
 /**
  * @brief Inserir edge na lista de adjacências.
- * 
+ *
  * @param adj Lista de adjacências.
  * @param index Indice do vertice de destino.
  * @param weight Peso da aresta.
@@ -257,7 +260,7 @@ void e_insert(Edge **adj, unsigned short index, unsigned short weight)
 /**
  * @brief Cria arestas entre vertices.
  * @details Insere uma aresta em cada vertice da ligação.
- * 
+ *
  * @param g Ponteiro para grafo.
  * @param i1 Indice do vertice de partida.
  * @param i2 Indice do verticd de destino.
@@ -271,7 +274,7 @@ void e_add(Graph *g, unsigned short i1, unsigned short i2, unsigned short weight
 
 /**
  * @brief Função acessora do peso da aresta.
- * 
+ *
  * @param e Ponteiro para edge.
  * @return Peso da aresta
  */
@@ -282,7 +285,7 @@ unsigned short e_get_weight(Edge *e)
 
 /**
  * @brief Função acessora do indice do vertice de destino da aresta.
- * 
+ *
  * @param e Ponteiro para aresta.
  * @return Indice do vertice de destino da aresta.
  */
@@ -293,7 +296,7 @@ unsigned short e_get_index(Edge *e)
 
 /**
  * @brief Função acessora do proximo elemento da lista de adjacências
- * 
+ *
  * @param l Ponteiro para aresta
  * @return Proximo elemento da lista de adjacências
  */
@@ -304,7 +307,7 @@ Edge *e_get_next(Edge *l)
 
 /**
  * @brief Liberta a lista de adjacências.
- * 
+ *
  * @param head Ponteiro para a cabeça da lista de adjacências
  */
 void free_adj(Edge *head)

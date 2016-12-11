@@ -6,7 +6,7 @@
  *
  * @brief Implementação da biblioteca de acervos.
  * @details
- * Implementação de uma fila prioritária utilizando acervos. 
+ * Implementação de uma fila prioritária utilizando acervos.
  *
  */
 #include <stdlib.h>
@@ -23,11 +23,11 @@
 
 /**
  * @brief Acervo.
- * @details Contem array de items que respeita a condição de acervo
- * tabela que mapeia a posição dos elementos dentro do acervo
- * numero de elementos no acervo
- * numero maximo de elementos no acervo.
- * 
+ * @details vector: Tabela de items que respeita a condição de acervo
+ * hash_table: tabela que mapeia a posição dos elementos dentro do acervo
+ * free: número de elementos no acervo (posição livre)
+ * size: número máximo de elementos no acervo.
+ *
  */
 struct _Heap {
 	Item **vector;
@@ -38,8 +38,8 @@ struct _Heap {
 
 /**
  * @brief Inicializa a heap.
- * 
- * @param size Tamanho maximo da heap.
+ *
+ * @param size Tamanho máximo da heap.
  * @return Ponteiro para heap.
  */
 Heap *h_init(unsigned short size)
@@ -55,7 +55,7 @@ Heap *h_init(unsigned short size)
 
 /**
  * @brief Liberta a heap.
- * 
+ *
  * @param h Ponteiro para heap.
  */
 void h_free(Heap *h)
@@ -68,10 +68,10 @@ void h_free(Heap *h)
 
 /**
  * @brief Actualiza a posição de uma elemento para cima na heap.
- * @details Compara sucessivamente um elemento da heap com o seu pai enquanto 
+ * @details Compara sucessivamente um elemento da heap com o seu pai enquanto
  * este for menos prioritario que o filho, troca os elementos quando estes não
  * respeitam a condição de acervo.
- * 
+ *
  * @param h Ponteiro para heap.
  * @param i Indice do elemento a verificar.
  * @param less_pri Ponteiro para função que compara prioridades.
@@ -87,10 +87,10 @@ void h_fixup(Heap *h, int i, bool (*less_pri)(Item, Item), unsigned short (*hash
 
 /**
  * @brief Atualiza a posição de uma elemento para baixo na heap.
- * 
+ *
  * @param h Ponteiro para heap
  * @param i Indice do elemento a fazer fixdown.
- * @param less_pri Ponteiro para função que compara prioridades. 
+ * @param less_pri Ponteiro para função que compara prioridades.
  * @param hash Ponteiro para função que retorna o indice na heap de um elemento.
  */
 void h_fixdown(Heap *h, int i, bool (*less_pri)(Item, Item), unsigned short (*hash)(Item))
@@ -124,7 +124,7 @@ void h_fixdown(Heap *h, int i, bool (*less_pri)(Item, Item), unsigned short (*ha
 
 /**
  * @brief Insere elemento na heap.
- * 
+ *
  * @param h Ponteiro para heap.
  * @param a Item a inserir na heap.
  * @param less_pri Ponteiro para função que compara prioridades.
@@ -141,7 +141,7 @@ void h_insert(Heap *h, Item a, bool (*less_pri)(Item, Item), unsigned short (*ha
 
 /**
  * @brief Obter o elemento na heap de maior prioridade.
- * 
+ *
  * @param h Ponteiro para heap.
  * @param less_pri Ponteiro para função que compara prioridades.
  * @param hash Ponteiro para função que retorna o indice na heap de um elemento.
@@ -164,7 +164,7 @@ Item h_del_max_pri(Heap *h, bool (*less_pri)(Item, Item), unsigned short (*hash)
 
 /**
  * @brief Encontra indice de um elemento na heap a partir de um item
- * 
+ *
  * @param h Ponteiro para heap
  * @param a Item a encontrar na heap
  * @param hash Ponteiro para função que retorna o indice na heap de um elemento.
@@ -177,7 +177,7 @@ unsigned short h_find(Heap *h, Item a, unsigned short (*hash)(Item))
 
 /**
  * @brief Atualiza a posição na heap de um elemento que aumentou a sua prioridade.
- * 
+ *
  * @param h Ponteiro para heap.
  * @param a Item a atualizar a posição.
  * @param less_pri Ponteiro para função que compara prioridades.
@@ -190,7 +190,7 @@ void h_inc_pri(Heap *h, Item a, bool (*less_pri)(Item, Item), unsigned short (*h
 
 /**
  * @brief Troca elementos na heap
- * 
+ *
  * @param h Ponteiro para heap
  * @param i1 Indice do primeiro elemento a trocar
  * @param i2 Indice do segundo elemento a trocar
@@ -214,7 +214,7 @@ void h_exch(Heap *h, unsigned short i1, unsigned short i2, unsigned short (*hash
 
 /**
  * @brief Verifica se a heap esta vazia.
- * 
+ *
  * @param h Ponteiro para heap.
  * @return Verdadeiro se a heap estiver vazia e falso se não.
  */
