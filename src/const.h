@@ -9,6 +9,8 @@
 #ifndef _CONST_H
 #define _CONST_H
 
+/* Tamanho máximo das várias tabelas e buffers,
+ * pois dependem todos da maior palavra existente no dicionário. */
 #define MAX_WORD_SIZE 64
 #define OUT_EXT ".path"
 

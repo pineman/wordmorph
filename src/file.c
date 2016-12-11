@@ -76,7 +76,10 @@ Graph **read_dic(FILE *fdic, unsigned short *max_perms)
 	/* Ler o dicionário uma primeira vez para saber quantos vértices
 	 * de cada tamanho de palavra alocar, para construir os grafos. */
 	while (fscanf(fdic, "%s", buffer) == 1) {
-		num_words[strlen(buffer)]++;
+		i = strlen(buffer);
+		if (max_perms[i] != 0) {
+			num_words[strlen(buffer)]++;
+		}
 	}
 
 	rewind(fdic);
