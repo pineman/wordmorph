@@ -112,35 +112,51 @@
 	\par
 	Este problema é muito facilmente transposto num problema de grafos ponderados, em que os vértices representam palavras e as arestas ligações de $k$ permutações, sendo o peso da aresta igual a $k^2$.
 	\par
-	Como podem existir vários tamanhos de palavras no ficheiro de problemas, decidiu-se utilizar uma tabela de grafos indexada por um inteiro representando o tamanho de palavra que um grafo contém. Para construir os vários grafos, lê-se o ficheiro de problemas para perceber quais tamanhos de palavras e o respetivo número máximo de permutações seriam necessários. De seguida, criam-se as arestas no de acordo com este número, comparando palavra a palavra. Para resolver os problemas, utiliza-se um algoritmo de caminho mais curto no grafo pertinente.
+	Como podem existir vários tamanhos de palavras no ficheiro de problemas, decidiu-se utilizar uma tabela de grafos indexada por um inteiro representando o tamanho de palavras que um grafo contém. Para construir os vários grafos, lê-se o ficheiro de problemas para perceber quais tamanhos de palavras e o respetivo número máximo de permutações serão necessários. De seguida, criam-se as arestas no grafo de acordo com este número, comparando palavra a palavra. Para resolver os problemas, utiliza-se um algoritmo de caminho mais curto no grafo pertinente.
 
 
 \section{Arquitetura}
-	<fluxogramas>
+	<fluxogramas> and stuff
 • Uma descrição completa da arquitectura do programa, incluindo fluxogramas
 detalhados e um texto claro, mas sucinto, indicando a divisão lógica e funcional dos
 módulos desenvolvidos para a resolução do problema, explicitando os respectivos
 objectivos, as funções utilizadas e as estruturas de dados de suporte;
 
 \section{Tipos de dados}
-	- graph (vertex, edge)
-	- heap
+	\begin{itemize}
+		\item array de graph
+		\begin{itemize}
+			\item array de vertex
+			\begin{itemize}
+				\item lista (implícita) de edge
+			\end{itemize}
+		\end{itemize}
+
+		\item heap
+	\end{itemize}
 • Uma descrição detalhada dos tipos de dados utilizadas e justificação dos mesmos
 (tabelas, listas, filas, pilhas, árvores, grafos, acervos, etc.);
 
 \section{Algoritmos}
-	- dijkstra
-	- g\textunderscore make\textunderscore edges
-	- fprint\textunderscore path
-• Descrição dos algoritmos usados (por exemplo, na manipulação dos tipos de dados);
+	\begin{itemize}
+		\item dijkstra
+		\item algoritmos da heap?
+		\item g\textunderscore make\textunderscore edges
+		\item fprint\textunderscore path
+	\end{itemize}
+	\par
+	Descrição dos algoritmos usados (por exemplo, na manipulação dos tipos de dados);
 
 \section{Subsistemas}
-	- file.c
-	- heap.c
-	- graph.c
-	- dijkstra.c
-	- word.c
-• Uma descrição dos subsistemas funcionais que existam e, para cada um:
+	\begin{itemize}
+		\item file.c
+		\item heap.c
+		\item graph.c
+		\item dijkstra.c
+		\item word.c
+	\end{itemize}
+	\par
+	Uma descrição dos subsistemas funcionais que existam e, para cada um:
 	– a descrição dos objectivos do subsistema (até 5 linhas);
 	– o nome do módulo onde estão definidos os tipos de dados abstractos
 	  (ficheiros .h) a utilizar no subsistema;
@@ -149,13 +165,25 @@ objectivos, as funções utilizadas e as estruturas de dados de suporte;
 	  respectiva assinatura e os objectivos da função (descrição sumária, sem código);
 
 \section{Análise de complexidade}
-	- fors do file.c $O(n)$
-	- dijkstra $\Theta((E+V) lg V)$
-	- g\textunderscore make\textunderscore edges $O(V^2)$
-	- memoria: $\Theta(V + E)$
-• Uma análise, formal e/ou empírica, dos requisitos computacionais do programa desenvolvido, tanto em termos da memória que utiliza como da complexidade computacional, com particular ênfase no custo das operações de processamento sobre os tipos de dados usados e/ou criados;
+	\par
+	Tempo
+	\begin{itemize}
+		\item fors do file.c $O(n)$
+		\item dijkstra $\Theta((E+V) lg V)$
+		\item g\textunderscore make\textunderscore edges $O(V^2)$
+	\end{itemize}
+	\par
+	Memória
+	\begin{itemize}
+		\item memoria: $\Theta(V + E)$
+	\end{itemize}
+	\par
+	Uma análise, formal e/ou empírica, dos requisitos computacionais do programa desenvolvido, tanto em termos da memória que utiliza como da complexidade computacional, com particular ênfase no custo das operações de processamento sobre os tipos de dados usados e/ou criados;
 
 \section{Análise crítica}
+	\par
+	Ideia: falar de como utilizarmos listas abstratas ao início, mas percebemos que estas gastavam demasiada memória e por isso tivemos de utilizar uma solução com listas ''implícitas'' na estrutura \texttt{Vertex}.
+	\par
 • Uma análise crítica do funcionamento do programa e a avaliação do desempenho
 do projecto implementado;
 
@@ -172,12 +200,12 @@ do projecto implementado;
 	\end{center}
 	\par
 	Depois de verificar os parâmetros de entrada e abrir os ficheiros, \texttt{find\textunderscore max\textunderscore perms()} é chamada.
-	Inicializa \texttt{max\textunderscore perms} a zero e de seguida o ficheiro de problemas é lido: como \texttt{w\textunderscore diff()} devolve 2 e \texttt{max\textunderscore perms[6] = 0 < 2}, então \texttt{max\textunderscore perms[6] = 2} e os restantes índices ficam iguais a zero.
+	Inicializa \texttt{max\textunderscore perms} a zero e de seguida o ficheiro de problemas é lido: como \texttt{w\textunderscore diff()} devolve 2 e \texttt{max\textunderscore perms[6] = 0 < 2}, então \texttt{max\textunderscore perms[6] = 2} e os valores nos restantes índices ficam iguais a zero.
 	\par
-	A seguir constrói-se o grafo, chamando \texttt{read\textunderscore dic()}. Esta função primeiramente lê o dicionário à procura do número de palavras de cada tamanho a alocar, e chega a \texttt{num\textunderscore words[6] = 4} pois \texttt{max\textunderscore perms[1] = max\textunderscore perms[5] = 0}. Seguidamente, \texttt{graphs[6]} é inicializado com 4 vértices (palavras), ficando os restantes valores nos índices \texttt{i} de \texttt{graphs} iguais a \texttt{NULL} pois representam os restantes tamanhos de palavra em que \texttt{max\textunderscore perms = 0}. Agora o dicionário é lido outra vez para alocar as palavras em si, sendo \texttt{g\textunderscore insert()} e \texttt{w\textunderscore new()} chamadas 4 vezes, correspondendo às 4 palavras de tamanho 6. A seguir é chamada \texttt{g\textunderscore make\textunderscore edges()} para construir as arestas entre os vértices do grafo de tamanho de palavra 6. A tabela de vértices é:
+	A seguir constrói-se o grafo, chamando \texttt{read\textunderscore dic()}. Esta função primeiramente lê o dicionário à procura do número de palavras de cada tamanho a alocar e chega apenas a \texttt{num\textunderscore words[6] = 4}, ignorando a palavra de tamanho 1  pois \texttt{max\textunderscore perms[1] = 0}. Seguidamente, \texttt{graphs[6]} é inicializado com 4 vértices (palavras), ficando os restantes valores nos índices \texttt{i} de \texttt{graphs} iguais a \texttt{NULL} pois representam os restantes tamanhos de palavra em que \texttt{max\textunderscore perms = 0}. Agora o dicionário é lido outra vez para alocar as palavras em si, sendo \texttt{g\textunderscore insert()} e \texttt{w\textunderscore new()} chamadas 4 vezes, correspondendo às 4 palavras de tamanho 6. A seguir é chamada \texttt{g\textunderscore make\textunderscore edges()} para construir as arestas entre os vértices do grafo de tamanho de palavra 6. A tabela de vértices é:
 	\texttt{[0: "tragar", 1: "tragam", 2: "travam", 3: "flores"]}
 	\par
-	Os resultados dos ciclos são apresentados de seguida:
+	Os resultados dos ciclos em \texttt{g\textunderscore make\textunderscore edges()} são apresentados de seguida:
 	\begin{itemize}
 		\item
 			\texttt{i = 0, j = 0} \\
@@ -205,7 +233,7 @@ do projecto implementado;
 			\texttt{calc\textunderscore weight("flores", "travam", 2) = 3}
 	\end{itemize}
 	\par
-	E o grafo resultante como representado no programa, sob listas de adjacências e graficamente: \\
+	O grafo resultante como representado no programa, sob listas de adjacências (à direita) e graficamente (à esquerda) é: \\
 	\begin{minipage}{\linewidth}
 		\centering
 		\begin{minipage}{0.45\linewidth}
@@ -221,14 +249,14 @@ do projecto implementado;
 			\begin{figure}[H]
 				\centering
 				\includegraphics[width=4cm]{graph}
-				\caption{This is the first figure}
+				\caption{Representação gráfica do grafo de exemplo}
 			\end{figure}
 		\end{minipage}
-	\end{minipage}
+	\end{minipage} \\
 	\par
-	Construído o grafo, salta-se para a função \texttt{solve\textunderscore pal()}. O ficheiro de problemas é lido outra vez. Como \texttt{w\textunderscore diff("tragar", "travam", 1) = 2 > 1}, a solução não é trivial. Deste modo, encontramos o vértice de origem, correspondente a \texttt{"tragar"} e o de destino \texttt{"travam"}, aloca-se a árvore de caminhos \texttt{path} e corre-se \texttt{shortest\textunderscore path()}.
+	Construído o grafo, salta-se para a função \texttt{solve\textunderscore pal()}. O ficheiro de problemas é lido outra vez. Como \texttt{w\textunderscore diff("tragar", "travam", 1) = 2 > 1}, a solução não é trivial. Deste modo, encontramos o vértice de origem, correspondente a \texttt{"tragar"} e o de destino \texttt{"travam"}, (re)aloca-se a árvore de caminhos \texttt{path} e corre-se \texttt{shortest\textunderscore path()}.
 	\par
-	Esta função primeiramente inicializa um acervo, a tabela de distâcias à origem \texttt{wt} com o valor \texttt{MAX\textunderscore WT} representando uma distância infinita e a árvore de caminhos com \texttt{-1} sinalizando que nenhum vértice foi visitado. O vértice de origem é também inserido no acervo inicialmente e a sua distância à origem colocada a \texttt{0}. Apresenta-se o estado final das sucessivas iterações do ciclo exterior \texttt{while} do algoritmo de Dijkstra:
+	Esta função primeiramente inicializa um acervo, (re)aloca a tabela de distâcias à origem \texttt{wt} e inicializa-a com o valor \texttt{MAX\textunderscore WT} representando uma distância infinita e a árvore de caminhos \texttt{st} com \texttt{-1} sinalizando que nenhum vértice foi visitado. O vértice de origem é também inserido no acervo inicialmente e a sua distância à origem é colocada a \texttt{0}. Apresenta-se o estado final das sucessivas iterações do ciclo \texttt{while} exterior do algoritmo de Dijkstra:
 	\begin{center}
 		\texttt{v = 0\\
 		v != dst (= 2) \\
@@ -255,10 +283,13 @@ do projecto implementado;
 		heap = [2] \\}
 	\end{center}
 	\par
-	O vértice de destino saiu do acervo e para-se a procura. A execução regressa a \texttt{solve\textunderscore pal()} que escreverá o caminho, imprimido na ordem correta pela função recursiva \texttt{fprint\textunderscore path()} (seguindo o caminho para trás desde \texttt{st[dst]} até chegar ao ponto inicial onde \texttt{st[src] = -1} e aí imprimindo tomando partido da pilha de chamada da função) e o peso \texttt{wt[dst] = 2} para este problema:
+	O vértice de destino saiu do acervo e parou-se a procura. A execução regressa a \texttt{solve\textunderscore pal()} que escreverá o peso \texttt{wt[dst] = 2} e o caminho para este problema:
 	\begin{center}
 		\texttt{tragar 2 \\
 				tragam \\
 				travam}
 	\end{center}
+	\par
+	Onde o caminho foi impresso na ordem correta pela função recursiva \texttt{fprint\textunderscore path()} (seguindo o caminho para trás desde \texttt{st[dst]} até chegar ao ponto inicial onde \texttt{st[src] = -1}):
+
 \end{document}
