@@ -19,6 +19,7 @@
 \usepackage{amssymb}
 \usepackage{listings}
 \usepackage{color}
+\usepackage{textcomp}
 \newcommand\showdiv[1]{\overline{\smash{\hstretch{.5}{)}\mkern-3.2mu\hstretch{.5}{)}}#1}}
 \newcommand\ph[1]{\textcolor{white}{#1}}
 
@@ -176,7 +177,7 @@ do projecto implementado;
 	A seguir constrói-se o grafo, chamando \texttt{read\textunderscore dic()}. Esta função primeiramente lê o dicionário à procura do número de palavras de cada tamanho a alocar, e chega a \texttt{num\textunderscore words[6] = 4} pois \texttt{max\textunderscore perms[1] = max\textunderscore perms[5] = 0}. Seguidamente, \texttt{graphs[6]} é inicializado com 4 vértices (palavras), ficando os restantes valores nos índices \texttt{i} de \texttt{graphs} iguais a \texttt{NULL} pois representam os restantes tamanhos de palavra em que \texttt{max\textunderscore perms = 0}. Agora o dicionário é lido outra vez para alocar as palavras em si, sendo \texttt{g\textunderscore insert()} e \texttt{w\textunderscore new()} chamadas 4 vezes, correspondendo às 4 palavras de tamanho 6. A seguir é chamada \texttt{g\textunderscore make\textunderscore edges()} para construir as arestas entre os vértices do grafo de tamanho de palavra 6. A tabela de vértices é:
 	\texttt{[0: "tragar", 1: "tragam", 2: "travam", 3: "flores"]}
 	\par
-	E os resultados dos ciclos são apresentados de seguida:
+	Os resultados dos ciclos são apresentados de seguida:
 	\begin{itemize}
 		\item
 			\texttt{i = 0, j = 0} \\
@@ -204,11 +205,19 @@ do projecto implementado;
 			\texttt{calc\textunderscore weight("flores", "travam", 2) = 3}
 	\end{itemize}
 	\par
-	E o grafo resultante:
+	O grafo resultante em forma gráfica:
 	% TODO: pls freitas halp
 	\begin{figure}[h]
 		\includegraphics[width=0.5\linewidth]{graph}
 	\end{figure}
+	\par
+	E o grafo resultante como representado no programa, sob listas de adjacências: \\
+	\begin{center}
+		\texttt{0: 1 \textrightarrow{} 2 \textrightarrow{} NULL \\
+				1: 0 \textrightarrow{} 2 \textrightarrow{} NULL \\
+				2: 0 \textrightarrow{} 1 \textrightarrow{} NULL \\
+				3: \textrightarrow{} NULL}
+	\end{center}
 
 		\textbf{dragar} \\
 		tragar \\
