@@ -20,9 +20,17 @@
 \usepackage{listings}
 \usepackage{color}
 \usepackage{textcomp}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
 \newcommand\showdiv[1]{\overline{\smash{\hstretch{.5}{)}\mkern-3.2mu\hstretch{.5}{)}}#1}}
 \newcommand\ph[1]{\textcolor{white}{#1}}
-\newcommand\tu[1]{\textunderscore}
+\newcommand\tu[0]{\textunderscore}
 
 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
@@ -117,29 +125,39 @@
 \section{Arquitetura}
 	\par
 	Os seguintes fluxogramas ilustram a arquitetura do programa no geral, incluindo referências às principais funções utilizadas:
-	%\begin{figure}[H]
-	%	\centering
-	%	\includegraphics[width=0.6\linewidth]{main.eps}
-	%	\caption{Fluxograma principal do programa (função \texttt{main}).}
-	%\end{figure}
-	%\begin{figure}[H]
-	%	\centering
-	%	\includegraphics[width=0.85\linewidth]{read_dic.eps}
-	%	\caption{Fluxograma da função \texttt{read\tu dic} que constrói o grafo.}
-	%\end{figure}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.69\linewidth]{main}
+		\caption{Fluxograma principal do programa (função \texttt{main()}).}
+	\end{figure}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=1\linewidth]{read_dic}
+		\caption{Fluxograma da função \texttt{read\tu dic()} que constrói o grafo.}
+	\end{figure}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.85\linewidth]{solve_pal}
+		\caption{Fluxograma da função \texttt{solve\tu pal()} que calcula e escreve os caminhos.}
+	\end{figure}
 
 	\par
 	As estruturas de dados, algoritmos e subsistemas utilizados no programa serão descritos mais aprofundadamente nas próximas secções.
-	\par
-	Uma descrição completa da arquitectura do programa, incluindo fluxogramas
-detalhados e um texto claro, mas sucinto, indicando a divisão lógica e funcional dos
-módulos desenvolvidos para a resolução do problema, explicitando os respectivos
-objectivos, as funções utilizadas e as estruturas de dados de suporte;
 
 
 \section{Estruturas de dados}
 	\par
-	Como podem existir vários tamanhos de palavras no ficheiro de problemas, decidiu-se utilizar uma tabela de grafos indexada por um inteiro representando o tamanho de palavras que um grafo contém. Para construir os vários grafos, lê-se o ficheiro de problemas para perceber quais tamanhos de palavras e o respetivo número máximo de permutações serão necessários. De seguida, criam-se as arestas no grafo de acordo com este número, comparando palavra a palavra. Para resolver os problemas, utiliza-se um algoritmo de caminho mais curto no grafo pertinente.
+	Como podem existir vários tamanhos de palavras no ficheiro de problemas, pode ser necessário construir mais do que um grafo. Decidiu-se utilizar uma tabela de grafos indexada por um inteiro representando o tamanho de palavras que um grafo contém. Obtou-se por representar o grafo por listas de adjacências por estes se provarem ser relativamente esparsos, poupando assim memória face à implementação através de matriz de adjacências.Os elementos mais relevantes da estrutura \texttt{Graph} são a tabela de vértices, o número de vértices e o peso máximo das arestas do grafo.
+	\par
+	Um vértice contém um tipo de dados genérico (neste caso, as palavras do dicionário) e também um ponteiro para a cabeça duma lista ''implícita'' \footnote{explicação na \autoref{sec:analise}.}, simplesmente ligada, de arestas para os vértices adjacentes.
+	\par
+	Por sua vez, uma aresta contém o índice do vértice a que liga, o peso da ligação e um ponteiro para a próxima aresta da lista dum vértice particular.
+	\par\null\par
+	A outra estrutura de dados relevante é o acervo, utilizado como fila prioritária no cálculo dos caminhos mais curtos, devido às suas operações assimptoticamente eficientes. A implementação é sob a forma de tabela de tipo de dados genérico, que identifica um vértice.
+	\par
+	O acervo contém ainda uma tabela de dispersão simples, que efetua o mapeamento contrário à tabela de elementos do acervo (i.e., é indexada pelo item identificador de um vértice e guarda a posição deste na tabela de elementos do acervo), permitindo assim procura em tempo constante na estrutura. Assim, utiliza-se o índice inteiro do vértice no grafo e a função de dispersão torna-se trivial e assegura que não haverá colisões.
+
+	% TODO: pensei num diagramazinho
 	\begin{itemize}
 		\item array de graph
 		\begin{itemize}
@@ -155,14 +173,14 @@ objectivos, as funções utilizadas e as estruturas de dados de suporte;
 	Uma descrição detalhada dos tipos de dados utilizadas e justificação dos mesmos
 (tabelas, listas, filas, pilhas, árvores, grafos, acervos, etc.);
 
+
 \section{Algoritmos}
-			Para o cálculo de caminhos mais curtos entre palavras foi utilizado
-			o algoritmo de Dijkstra.
-			\begin{figure}[H]
-				\centering
-				\includegraphics[width=\linewidth]{dijkstra}
-				\caption{Algoritmo de Dijkstra}
-			\end{figure}
+	Para o cálculo de caminhos mais curtos entre palavras foi implementado o algoritmo de Dijkstra.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\linewidth]{dijkstra}
+		\caption{Algoritmo de Dijkstra}
+	\end{figure}
 
 	\begin{itemize}
 		\item dijkstra
@@ -207,6 +225,7 @@ objectivos, as funções utilizadas e as estruturas de dados de suporte;
 	Uma análise, formal e/ou empírica, dos requisitos computacionais do programa desenvolvido, tanto em termos da memória que utiliza como da complexidade computacional, com particular ênfase no custo das operações de processamento sobre os tipos de dados usados e/ou criados;
 
 \section{Análise crítica}
+\label{sec:analise}
 	\par
 	Ideia: falar de como utilizarmos listas abstratas ao início, mas percebemos que estas gastavam demasiada memória e por isso tivemos de utilizar uma solução com listas ''implícitas'' na estrutura \texttt{Vertex}.
 	\par
