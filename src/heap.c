@@ -30,7 +30,7 @@
  *
  */
 struct _Heap {
-	Item **vector;
+	Item *vector;
 	unsigned short *hash_table;
 	unsigned short free;
 	unsigned short size;
@@ -45,7 +45,7 @@ struct _Heap {
 Heap *h_init(unsigned short size)
 {
 	Heap *h = (Heap *) emalloc(sizeof(Heap));
-	h->vector = (Item **) emalloc(size * sizeof(Item *));
+	h->vector = (Item *) emalloc(size * sizeof(Item));
 	h->hash_table = (unsigned short *) ecalloc(size, sizeof(unsigned short));
 	h->size = size;
 	h->free = 0;

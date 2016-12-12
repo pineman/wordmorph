@@ -1,12 +1,12 @@
 /**
- * @file heap.c
+ * @file heap.h
  * @authors João Pinheiro <joao.castro.pinheiro@tecnico.ulisboa.pt>
  * @authors João Freitas <joao.m.freitas@tecnico.ulisboa.pt>
  * @date 14 Dezembro 2016
  *
  * @brief Implementação da biblioteca de acervos.
  * @details
- * Implementação de uma fila prioritária utilizando acervos. 
+ * Implementação de uma fila prioritária utilizando acervos.
  *
  */
 #ifndef _HEAP_H

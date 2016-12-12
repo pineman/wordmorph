@@ -1,5 +1,5 @@
 /**
- * @file graph.c
+ * @file graph.h
  * @authors João Pinheiro <joao.castro.pinheiro@tecnico.ulisboa.pt>
  * @authors João Freitas <joao.m.freitas@tecnico.ulisboa.pt>
  * @date 14 Dezembro 2016
