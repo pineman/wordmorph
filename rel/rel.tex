@@ -52,11 +52,9 @@
 \rfoot{Página \thepage}
 \lfoot{\small Engenharia Eletrotécnica e de Computadores - IST}
 
-
 \usepackage{pdfpages}
 
 \begin{document}
-
 \includepdf[pages={1}]{capa/capa.pdf}
 
 \tableofcontents
@@ -140,7 +138,6 @@
 		\includegraphics[width=0.85\linewidth]{solve_pal}
 		\caption{Fluxograma da função \texttt{solve\tu pal()} que calcula e escreve os caminhos.}
 	\end{figure}
-
 	\par
 	As estruturas de dados, algoritmos e subsistemas utilizados no programa serão descritos mais aprofundadamente nas próximas secções.
 
@@ -153,25 +150,27 @@
 	\par
 	Por sua vez, uma aresta contém o índice do vértice a que liga, o peso da ligação e um ponteiro para a próxima aresta da lista dum vértice particular.
 	\par\null\par
-	A outra estrutura de dados relevante é o acervo, utilizado como fila prioritária no cálculo dos caminhos mais curtos, devido às suas operações assimptoticamente eficientes. A implementação é sob a forma de tabela de tipo de dados genérico, que identifica um vértice.
+	A outra estrutura de dados relevante é o acervo, utilizado como fila prioritária no cálculo dos caminhos mais curtos, devido às suas operações assimtoticamente eficientes. A implementação é sob a forma de tabela de tipo de dados genérico, que identifica um vértice.
 	\par
 	O acervo contém ainda uma tabela de dispersão simples, que efetua o mapeamento contrário à tabela de elementos do acervo (i.e., é indexada pelo item identificador de um vértice e guarda a posição deste na tabela de elementos do acervo), permitindo assim procura em tempo constante na estrutura. Assim, utiliza-se o índice inteiro do vértice no grafo e a função de dispersão torna-se trivial e assegura que não haverá colisões.
 
 	% TODO: pensei num diagramazinho
 	\begin{itemize}
-		\item array de graph
+		\item tabela de graph
 		\begin{itemize}
-			\item array de vertex
+			\item tabela de vertex
 			\begin{itemize}
 				\item lista (implícita) de edge
 			\end{itemize}
 		\end{itemize}
 
 		\item heap
+		\begin{itemize}
+			\item tabela de elementos abstratos
+			\item tabela de dispersão
+		\end{itemize}
+
 	\end{itemize}
-	\par
-	Uma descrição detalhada dos tipos de dados utilizadas e justificação dos mesmos
-(tabelas, listas, filas, pilhas, árvores, grafos, acervos, etc.);
 
 
 \section{Algoritmos}
@@ -191,6 +190,7 @@
 	\par
 	Descrição dos algoritmos usados (por exemplo, na manipulação dos tipos de dados);
 
+
 \section{Subsistemas}
 	\begin{itemize}
 		\item file.c
@@ -208,6 +208,7 @@
 	– listagem das funções implementadas no subsistema, indicando para cada uma a
 	  respectiva assinatura e os objectivos da função (descrição sumária, sem código);
 
+
 \section{Análise de complexidade}
 	\par
 	Tempo
@@ -224,13 +225,16 @@
 	\par
 	Uma análise, formal e/ou empírica, dos requisitos computacionais do programa desenvolvido, tanto em termos da memória que utiliza como da complexidade computacional, com particular ênfase no custo das operações de processamento sobre os tipos de dados usados e/ou criados;
 
+
 \section{Análise crítica}
 \label{sec:analise}
 	\par
-	Ideia: falar de como utilizarmos listas abstratas ao início, mas percebemos que estas gastavam demasiada memória e por isso tivemos de utilizar uma solução com listas ''implícitas'' na estrutura \texttt{Vertex}.
+	Inicialmente, foram implementadas listas simplesmente ligadas de tipo de dados abstrato, num módulo separado, para o efeito das listas de adjacências dos vértices. No entanto, nestas condições verificou-se uma utilização excessiva de memória, muito superior ao valor esperado para os testes oferecidos pelo corpo docente. Decidiu-se então utilizar uma solução com listas ''implícitas'', i.e., com um ponteiro para a cabeça da lista (ponteiro para aresta) dentro da estrutura do vértice e um poteiro para a próxima aresta dentro da estrtura da aresta em si. No entanto, foram ainda implementadas funções acessoras a esta lista, por necessidade.
 	\par
-	Uma análise crítica do funcionamento do programa e a avaliação do desempenho
-do projecto implementado;
+	Deste modo, verificou-se que a utilização de memória caiu para tanto quanto a metade na maioria dos testes. Tal explica-se pelo facto de a implementação por tipo de dados abstrato utilizar mais ponteiros, e, assim, mais memória, duma maneira muito percétivel, devido ao elevado número de arestas criadas durante a execução do programa.
+	\par\null\par
+	Existirão porventura algumas otimizações não implementadas para lidar com casos mais extremos, por exemplo, para lidar com números máximos de permutações muito grandes vindos do ficheiro de problemas. No entanto, este facto não se revelou um problema nos testes e, no caso geral, o programa comporta-se assintoticamente bem.
+
 
 \section{Exemplo de execução}
 	\par
