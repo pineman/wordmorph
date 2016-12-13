@@ -181,14 +181,6 @@ trivial e assegura que não haverá colisões.
 
 
 \section{Algoritmos}
-\begin{itemize}
-		\item g\tu make\tu edges, g\tu insert, g\tu find\tu vertex
-		\item fprint\tu path
-	\end{itemize}
-	\par
-	Descrição dos algoritmos usados (por exemplo, na manipulação dos tipos de 
-dados);
-
 	\par
 	Devido às restrições impostas para a resolução do problema proposto foi 
 necessário utilizar algoritmos que pudessem ser executados em tempo ùtil e que 
@@ -268,8 +260,8 @@ caminho entre os vertices de partida e de chegada estará completo.} e o vertice
 de partida. Para imprimir esse caminho é necessário percorre-lo em ordem 
 inversa. 
 	\par A resolução do problema torna-se simples utilizando uma função 
-recursiva que percorre o caminho do fim para inicio e imprime os vertices 
-quando apos a função retornar.
+recursiva que percorre o caminho do fim para inicio e imprimi os vertices assim 
+que a função retorna.
 
 
 \section{Subsistemas}
@@ -290,6 +282,17 @@ quando apos a função retornar.
 
 
 \section{Análise de complexidade}
+	\par
+	O algoritmo de Dijkstra pode ser separado em duas partes 
+lógicas, inicializações e o loop principal.
+	\par
+	As inicializações têm complexidade $O(V) + O(1) = O(V)$. 
+	\par 
+	Por outro o loop principal corre $V$ vezes a rotina \texttt{delmax} que tem 
+complexidade $O(log(V))$ e percorre a lista de adjacentes de cada vertice. Para 
+cada adjacente executa instruções de complexidade de $O(log(V))$.
+	\par A complexidade total pode ser escrita da seguinte forma: 
+$O(V*log(V) + O(E*log(E))$
 	\par
 	Tempo
 	\begin{itemize}
