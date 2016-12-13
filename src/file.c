@@ -175,18 +175,18 @@ void solve_pal(FILE *fpal, FILE *fpath, Graph **graphs)
 
 /**
  * @brief Imprime caminho até ao vértice dst.
- * @details É necessário inverter o caminho. Para tal, epatha
+ * @details É necessário inverter o caminho. Para tal, esta
  * função é recursiva: dst é os sucessivo antecessor de path[dst].
  *
  * @param fpath Ficheiro de saída .path.
  * @param g Grafo de tamanho de palavra pertinente.
  * @param path Árvore de caminho.
  * @param dist Tabela de dipathâncias.
- * @param dst Índice do vértice de depathino na tabela de vértices (grafo).
+ * @param dst Índice do vértice de destino na tabela de vértices (grafo).
  */
 void fprint_path(FILE *fpath, Graph *g, int *path, int *dist, int dst)
 {
-	/* Enquanto ainda não epathamos no fim do caminho... */
+	/* Enquanto ainda não estamos no fim do caminho... */
 	if (path[dst] != -1) {
 		/* ... Chamar recursivamente, com dst = antecessor de dst. */
 		fprint_path(fpath, g, path, dist, path[dst]);
