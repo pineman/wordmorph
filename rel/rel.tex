@@ -1,8 +1,8 @@
-\documentclass[a4paper, 18pt]{article}
+\documentclass[portuguese, a4paper]{article}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage[portuguese]{babel}
-\usepackage[margin=3cm,includefoot,footskip=30pt]{geometry}
+\usepackage{babel}
+\usepackage[margin=3cm]{geometry}
 \usepackage{lmodern}
 
 \usepackage{graphicx}
@@ -16,11 +16,11 @@
 \usepackage{mathtools}
 \usepackage{amsmath}
 \allowdisplaybreaks
-\usepackage{cleveref}
 \usepackage{amssymb}
 \usepackage{listings}
 \usepackage{color}
 \usepackage{textcomp}
+\usepackage{caption}
 \usepackage{hyperref}
 \hypersetup{
     colorlinks,
@@ -29,10 +29,10 @@
     linkcolor=black,
     urlcolor=black
 }
+
 \newcommand\showdiv[1]{\overline{\smash{\hstretch{.5}{)}\mkern-3.2mu\hstretch{.5}{)}}#1}}
 \newcommand\ph[1]{\textcolor{white}{#1}}
 \newcommand\tu[0]{\textunderscore}
-
 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
@@ -49,7 +49,7 @@
 \renewcommand{\footrulewidth}{0.5pt}
 
 \rhead{Word Morph}
-\lhead{Algoritmos e Estruturas de Dados\rightmark}
+\lhead{Algoritmos e Estruturas de Dados}
 \rfoot{Página \thepage}
 \lfoot{\small Engenharia Eletrotécnica e de Computadores - IST}
 
@@ -63,19 +63,27 @@
 
 \section{Especificação do problema}
 	\par
-	O problema proposto é encontrar caminhos entre duas palavras do mesmo tamanho. Estes caminhos consistem em permutações de letras. Em cada passo podem-se alterar no máximo um dado número de letras. No entanto, o peso duma ligação é o quadrado do número de carateres mudados. O objetivo é então encontrar o caminho de menor custo (i.e., que minimiza o peso total das ligações do caminho) entre a palavra de origem e a palavra de destino, passando por palavras do dicionário dado. Por exemplo, dado o problema:
+	O problema proposto é encontrar caminhos entre duas palavras do mesmo
+	tamanho. Estes caminhos consistem em permutações de letras. Em cada passo
+	podem-se alterar no máximo um dado número de letras. No entanto, o peso duma
+	ligação é o quadrado do número de carateres mudados. O objetivo é então
+	encontrar o caminho de menor custo (i.e., que minimiza o peso total das
+	ligações do caminho) entre a palavra de origem e a palavra de destino,
+	passando por palavras do dicionário dado. Por exemplo, dado o problema:
 	\begin{center}
 		\texttt{dragar oravam 2}
 	\end{center}
 	\par
-	É preciso encontrar o caminho de \textbf{dragar} a \textbf{oravam}, permutando, no máximo, 2 palavras em cada passo. Um caminho válido é então:
+	É preciso encontrar o caminho de \textbf{dragar} a \textbf{oravam},
+	permutando, no máximo, 2 palavras em cada passo. Um caminho válido é então:
 	\begin{center}
 		\textbf{dragar} \\
 		tragam \\
 		\textbf{oravam}
 	\end{center}
 	\par
-	Através de duas mutações de dois carateres cada. O custo total deste caminho é $2 \times 2^2 = 8$. No entanto, um caminho de menor custo seria:
+	Através de duas mutações de dois carateres cada. O custo total deste caminho
+	é $2 \times 2^2 = 8$. No entanto, um caminho de menor custo seria:
 	\begin{center}
 		\textbf{dragar} \\
 		tragar \\
@@ -84,18 +92,27 @@
 		\textbf{oravam}
 	\end{center}
 	\par
-	Através de 4 mutações de um carater cada. O custo total deste caminho é $4 \times 1^1 = 4$, sendo de menor custo do que o anterior e, deste modo, a resposta correta.
+	Através de 4 mutações de um carater cada. O custo total deste caminho é
+	$4\times1^1 = 4$, sendo de menor custo do que o anterior e, deste modo, a
+	resposta correta.
 	\par
-	Para resolver grandes quantidades destes problemas, implementou-se uma solução na linguagem \textit{C}.
-	O programa recebe dois parâmetros: \\
+	Para resolver grandes quantidades destes problemas, implementou-se uma
+	solução na linguagem \textit{C}. O programa recebe dois parâmetros: \\
 	\begin{itemize}
-		\item Um ficheiro de dicionário de extensão \texttt{.dic} de palavras não acentuadas, não hifenadas e não necessariamente ordenado alfabeticamente, no formato de palavras separadas por um só espaço e uma ou mais palavras por linha.
-		\item Um ficheiro de problemas de extensão \texttt{.pal} com vários problemas, um por linha, no formato:
+		\item
+		Um ficheiro de dicionário de extensão \texttt{.dic} de
+		palavras não acentuadas, não hifenadas e não necessariamente ordenado
+		alfabeticamente, no formato de palavras separadas por um só espaço e uma ou
+		mais palavras por linha.
+		\item
+		Um ficheiro de problemas de extensão \texttt{.pal} com
+		vários problemas, um por linha, no formato:
 		\begin{center}
-		\texttt{<origem> <destino> <número máximo de permutações>}
+			\texttt{<origem> <destino> <número máximo de permutações>}
 		\end{center}
 		\par
-		Onde se assume que o formato está correto e as palavras pertencem ao dicionário.
+		Onde se assume que o formato está correto e as palavras pertencem ao
+		dicionário.
 	\end{itemize}
 	\par
 	O programa é invocado então da seguinte maneira:
@@ -103,7 +120,9 @@
 		\texttt{\$ ./wordmorph <dicionário.dic> <problemas.pal>}
 	\end{center}
 	\par
-	O programa escreve um ficheiro de saída de extensão \texttt{.path}, explicitando os caminhos e o custo associado, no seguinte formato, por exemplo, para o exemplo anterior \texttt{dragar oravam 2}:
+	O programa escreve um ficheiro de saída de extensão \texttt{.path},
+	explicitando os caminhos e o custo associado, no seguinte formato, por
+	exemplo, para o exemplo anterior \texttt{dragar oravam 2}:
 	\begin{center}
 		\texttt{
 		dragar 4\\
@@ -113,66 +132,77 @@
 		oravam}
 	\end{center}
 	\par
-	É de notar que se não existir caminho, o peso será \texttt{-1}; se as palavras forem iguais, o peso será \texttt{0}. Existe uma linha em branco entre cada solução.
+	É de notar que se não existir caminho, o peso será \texttt{-1}; se as
+	palavras forem iguais, o peso será \texttt{0}. Existe uma linha em branco
+	entre cada solução.
 
 
 \section{Abordagem ao problema}
 	\par
-	Este problema é muito facilmente transposto num problema de grafos ponderados, em que os vértices representam palavras e as arestas ligações de $k$ permutações, sendo o peso da aresta igual a $k^2$. Calcular os caminhos mais curtos entre palavras traduz-se então num problema de caminho mais curto em grafos, onde se conhecem algoritmos de boa complexidade tanto temporal como de memória.
+	Este problema é muito facilmente transposto num problema de grafos
+	ponderados, em que os vértices representam palavras e as arestas ligações de
+	$k$ permutações, sendo o peso da aresta igual a $k^2$. Calcular os caminhos
+	mais curtos entre palavras traduz-se então num problema de caminho mais
+	curto em grafos, onde se conhecem algoritmos de boa complexidade tanto
+	temporal como de memória.
 
 
 \section{Arquitetura}
 	\par
-	Os seguintes fluxogramas ilustram a arquitetura do programa no geral, incluindo referências às principais funções utilizadas:
+	Os seguintes fluxogramas ilustram a arquitetura do programa no geral,
+	incluindo referências às principais funções utilizadas:
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.5\linewidth]{main}
+		\includegraphics[width=0.70\linewidth]{main}
 		\caption{Fluxograma principal do programa (função \texttt{main()}).}
 	\end{figure}
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.5\linewidth]{read_dic}
+		\includegraphics[width=0.70\linewidth]{read_dic}
 		\caption{Fluxograma da função \texttt{read\tu dic()} que constrói o grafo.}
 	\end{figure}
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.70\linewidth]{solve_pal}
-		\caption{Fluxograma da função \texttt{solve\tu pal()} que calcula e escreve os caminhos.}
+		\caption{Fluxograma da função \texttt{solve\tu pal()} que calcula e
+		escreve os caminhos.}
 	\end{figure}
 	\par
-	As estruturas de dados, algoritmos e subsistemas utilizados no programa serão descritos mais aprofundadamente nas próximas secções.
+	As estruturas de dados, algoritmos e subsistemas utilizados no programa
+	serão descritos mais aprofundadamente nas próximas secções.
 
 
 \section{Estruturas de dados}
 	\par
-	Como podem existir vários tamanhos de palavras no ficheiro de problemas, 
-pode ser necessário construir mais do que um grafo. Decidiu-se utilizar uma 
-tabela de grafos indexada por um inteiro representando o tamanho de palavras que 
-um grafo contém. Optou-se por representar o grafo por listas de adjacências por 
-estes se provarem ser relativamente esparsos, poupando assim memória face à 
-implementação através de matriz de adjacências.Os elementos mais relevantes da 
-estrutura \texttt{Graph} são a tabela de vértices, o número de vértices e o peso 
-máximo das arestas do grafo.
+	Como podem existir vários tamanhos de palavras no ficheiro de problemas,
+	pode ser necessário construir mais do que um grafo. Decidiu-se utilizar uma
+	tabela de grafos indexada por um inteiro representando o tamanho de palavras
+	que um grafo contém. Optou-se por representar o grafo por listas de
+	adjacências por estes se provarem ser relativamente esparsos, poupando assim
+	memória face à implementação através de matriz de adjacências.Os elementos
+	mais relevantes da estrutura \texttt{Graph} são a tabela de vértices, o
+	número de vértices e o peso máximo das arestas do grafo.
 	\par
-	Um vértice contém um tipo de dados genérico (neste caso, as palavras do 
-dicionário) e também um ponteiro para a cabeça duma lista ''implícita'' 
-\footnote{explicação na \autoref{sec:analise}.}, simplesmente ligada, de arestas 
-para os vértices adjacentes.
+	Um vértice contém um tipo de dados genérico (neste caso, as palavras do
+	dicionário) e também um ponteiro para a cabeça duma lista ''implícita''
+	\footnote{explicação na secção \ref{sec:analise}.}, simplesmente ligada, de
+	arestas para os vértices adjacentes.
 	\par
-	Por sua vez, uma aresta contém o índice do vértice a que liga, o peso da 
-ligação e um ponteiro para a próxima aresta da lista dum vértice particular.
+	Por sua vez, uma aresta contém o índice do vértice a que liga, o peso da
+	ligação e um ponteiro para a próxima aresta da lista dum vértice
+	particular.
 	\par\null\par
-	A outra estrutura de dados relevante é o acervo, utilizado como fila 
-prioritária no cálculo dos caminhos mais curtos, devido às suas operações 
-assimtoticamente eficientes. A implementação é sob a forma de tabela de tipo de 
-dados genérico, que identifica um vértice.
+	A outra estrutura de dados relevante é o acervo, utilizado como fila
+	prioritária no cálculo dos caminhos mais curtos, devido às suas operações
+	assimtoticamente eficientes. A implementação é sob a forma de tabela de tipo
+	de dados genérico, que identifica um vértice.
 	\par
-	O acervo contém ainda uma tabela de dispersão simples, que efetua o 
-mapeamento contrário à tabela de elementos do acervo (i.e., é indexada pelo item 
-identificador de um vértice e guarda a posição deste na tabela de elementos do 
-acervo), permitindo assim procura em tempo constante na estrutura. Assim, 
-utiliza-se o índice inteiro do vértice no grafo e a função de dispersão torna-se 
-trivial e assegura que não haverá colisões.
+	O acervo contém ainda uma tabela de dispersão simples, que efetua o
+	mapeamento contrário à tabela de elementos do acervo (i.e., é indexada pelo
+	item identificador de um vértice e guarda a posição deste na tabela de
+	elementos do acervo), permitindo assim procura em tempo constante na
+	estrutura. Assim, utiliza-se o índice inteiro do vértice no grafo e a função
+	de dispersão torna-se trivial e assegura que não haverá colisões.
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.4\linewidth]{data}
@@ -182,85 +212,86 @@ trivial e assegura que não haverá colisões.
 
 \section{Algoritmos}
 	\par
-	Devido às restrições impostas para a resolução do problema proposto foi 
-necessário utilizar algoritmos que pudessem ser executados em tempo ùtil e que 
-fizessem uma gestão eficiente da memória.
+	Devido às restrições impostas para a resolução do problema proposto foi
+	necessário utilizar algoritmos que pudessem ser executados em tempo ùtil e
+	que fizessem uma gestão eficiente da memória.
 
 
 \subsection{Criação de arestas}
 	\par
-	Após a leitura das palavras e da inserção dos vertices no grafo é 
-necessário criar as ligações entre os vertices. O algoritmo responsavel pela 
-execução da tarefa é um dos mais simples e inefecientes neste projecto.
+	Após a leitura das palavras e da inserção dos vertices no grafo é necessário
+	criar as ligações entre os vertices. O algoritmo responsavel pela execução
+	da tarefa é um dos mais simples e inefecientes neste projecto.
 	\par
 	Segue-se a descrição simples do algoritmo.\\
-	
-	
+
+
 	\texttt{Para cada vertice i do grafo}\\
 	\indent\indent\texttt{Para cada vertice j de 0 até i}\\
 	\indent\indent\indent\texttt{Criar aresta i->j}\\
 	\indent\indent\indent\texttt{Criar aresta j->i}\\
-	
+
 	\par
-	Como o grafo é não direcionado é possivel criar ao mesmo tempo a ligação 
-entre vertice i e o vertice j e a ligação entre o vertice j e o vertice i.
-	
-	
+	Como o grafo é não direcionado é possivel criar ao mesmo tempo a ligação
+	entre vertice i e o vertice j e a ligação entre o vertice j e o vertice i.
+
+
 \subsection{Algoritmo de Dijkstra}
 \label{sec:alg_dijkstra}
 	\begin{figure}[H]
 		\centering
-		\label{fig:dijkstra}
 		\includegraphics[width=0.85\linewidth]{dijkstra}
 		\caption{Algoritmo de Dijkstra}
+		\label{fig:dijkstra}
 	\end{figure}
-
 	\par
-	Para o cálculo de caminhos mais curtos entre palavras foi implementado 
-uma versão modificada do algoritmo de Dijkstra, descrito no fluxograma da 
-figura \ref{fig:dijkstra}.
+	Para o cálculo de caminhos mais curtos entre palavras foi implementado uma
+	versão modificada do algoritmo de Dijkstra, descrito no fluxograma da
+	figura \ref{fig:dijkstra}.
 	\par
-	Na sua forma original o algoritmo de Dijkstra calcula caminhos estre um 
-vertice e todos os outros vertices do grafo. Como tal não é necessário, nesta 
-implementação paramos a execução do algoritmo assim que o vertice de destino 
-sai da fila prioritária.
+	Na sua forma original o algoritmo de Dijkstra calcula caminhos estre um
+	vertice e todos os outros vertices do grafo. Como tal não é necessário,
+	nesta implementação paramos a execução do algoritmo assim que o vertice de
+	destino sai da fila prioritária.
 	\par
-	Do mesmo modo, a operação de colocar 
-todos os vertices do grafo na fila prioritária pode ser extremamente 
-ineficiente, devido principalmente ao grande numero de vertices mas tambem, por 
-ser necessário processar vertices para os quais não existe caminho a partir do 
-vertice de partida. Em alternativa basta, inicialmente, colocar o vertice de 
-partida na fila, processá-lo e em seguida colocar os seus adjacentes na fila. 
-	\par Em pior caso não existirá caminho entre o vertice de partida e o 
-vertice de chegada e será necessário colocar na fila todos os vertices 
-que estejam ligados ao vertice de partida.     
+	Do mesmo modo, a operação de colocar todos os vertices do grafo na fila
+	prioritária pode ser extremamente ineficiente, devido principalmente ao
+	grande numero de vertices mas tambem, por ser necessário processar vertices
+	para os quais não existe caminho a partir do vertice de partida. Em
+	alternativa basta, inicialmente, colocar o vertice de partida na fila,
+	processá-lo e em seguida colocar os seus adjacentes na fila.
+	\par
+	Em pior caso não existirá caminho entre o vertice de partida e o
+	vertice de chegada e será necessário colocar na fila todos os vertices que
+	estejam ligados ao vertice de partida.a
 
 \subsection{Acervos}
 	\par
-	A eficiencia do algoritmo de Dijkstra depende muito da eficiencia dos 
-algortimos que interagem com a  estrutura de dados utilizada como fila de 
-priorades.
+	A eficiencia do algoritmo de Dijkstra depende muito da eficiencia dos
+	algortimos que interagem com a  estrutura de dados utilizada como fila de
+	priorades.
 	\par
-	Devido à forma natural dos acervos, em arvore binária balançada de 
-prioridades, remover o elemento mais prioritário é uma operação trivial, assim 
-como as operações de inserção, fixup e fixdown.
-	\par Por outro lado, a procura por um elemento no acervo é linear uma vez 
-que não existe nenhum criterio obvio de divisão do problema. Por esse motivo 
-foi implementada uma tabela que permite o mapeamento entre um elemento e a sua 
-posição no acervo.
-	Esta alteração permite saber atualizar a prioridade de um elemento da heap 
-em tempo logaritmico, ou seja, a complexidade da rotina \texttt{fixup}.
-	
+	Devido à forma natural dos acervos, em arvore binária balançada de
+	prioridades, remover o elemento mais prioritário é uma operação trivial,
+	assim como as operações de inserção, fixup e fixdown.
+	\par
+	Por outro lado, a procura por um elemento no acervo é linear uma vez
+	que não existe nenhum criterio obvio de divisão do problema. Por esse motivo
+	foi implementada uma tabela que permite o mapeamento entre um elemento e a
+	sua posição no acervo.  Esta alteração permite saber atualizar a prioridade
+	de um elemento da heap em tempo logaritmico, ou seja, a complexidade da
+	rotina \texttt{fixup}.
+
 \subsection{Impressão do caminho}
 	\par
-	O algoritmo de Dijkstra retorna uma arvore de caminhos mais curtos entre os 
-vertices do grafo\footnote{Alguns caminhos estarão incompletos devido a 
-optimizações descritas na \autoref{sec:alg_dijkstra}. De qualquer forma o 
-caminho entre os vertices de partida e de chegada estará completo.} e o vertice 
-de partida. Para imprimir esse caminho é necessário percorre-lo em ordem 
-inversa. 
-	\par A resolução do problema torna-se simples utilizando uma função 
-recursiva que percorre o caminho do fim para inicio e imprimi os vertices assim 
+	O algoritmo de Dijkstra retorna uma arvore de caminhos mais curtos entre os
+vertices do grafo\footnote{Alguns caminhos estarão incompletos devido a
+optimizações descritas na secção \ref{sec:alg_dijkstra}. De qualquer forma o
+caminho entre os vertices de partida e de chegada estará completo.} e o vertice
+de partida. Para imprimir esse caminho é necessário percorre-lo em ordem
+inversa.
+	\par A resolução do problema torna-se simples utilizando uma função
+recursiva que percorre o caminho do fim para inicio e imprimi os vertices assim
 que a função retorna.
 
 
@@ -275,23 +306,24 @@ que a função retorna.
 	Uma descrição dos subsistemas funcionais que existam e, para cada um:
 	– a descrição dos objectivos do subsistema (até 5 linhas);
 	– o nome do módulo onde estão definidos os tipos de dados abstractos
-	  (ficheiros .h) a utilizar no subsistema;
+	(ficheiros .h) a utilizar no subsistema;
 	– o nome do módulo C onde estão as funções do respectivo subsistema;
-	– listagem das funções implementadas no subsistema, indicando para cada uma a
-	  respectiva assinatura e os objectivos da função (descrição sumária, sem código);
+	– listagem das funções implementadas no subsistema, indicando para cada uma
+	a respectiva assinatura e os objectivos da função (descrição sumária, sem
+	código);
 
 
 \section{Análise de complexidade}
 	\par
-	O algoritmo de Dijkstra pode ser separado em duas partes 
+	O algoritmo de Dijkstra pode ser separado em duas partes
 lógicas, inicializações e o loop principal.
 	\par
-	As inicializações têm complexidade $O(V) + O(1) = O(V)$. 
-	\par 
-	Por outro o loop principal corre $V$ vezes a rotina \texttt{delmax} que tem 
-complexidade $O(log(V))$ e percorre a lista de adjacentes de cada vertice. Para 
+	As inicializações têm complexidade $O(V) + O(1) = O(V)$.
+	\par
+	Por outro o loop principal corre $V$ vezes a rotina \texttt{delmax} que tem
+complexidade $O(log(V))$ e percorre a lista de adjacentes de cada vertice. Para
 cada adjacente executa instruções de complexidade de $O(log(V))$.
-	\par A complexidade total pode ser escrita da seguinte forma: 
+	\par A complexidade total pode ser escrita da seguinte forma:
 $O(V*log(V) + O(E*log(E))$
 	\par
 	Tempo
@@ -306,17 +338,36 @@ $O(V*log(V) + O(E*log(E))$
 		\item memoria: $\Theta(V + E)$
 	\end{itemize}
 	\par
-	Uma análise, formal e/ou empírica, dos requisitos computacionais do programa desenvolvido, tanto em termos da memória que utiliza como da complexidade computacional, com particular ênfase no custo das operações de processamento sobre os tipos de dados usados e/ou criados;
+	Uma análise, formal e/ou empírica, dos requisitos computacionais do programa
+	desenvolvido, tanto em termos da memória que utiliza como da complexidade
+	computacional, com particular ênfase no custo das operações de processamento
+	sobre os tipos de dados usados e/ou criados;
 
 
 \section{Análise crítica}
 \label{sec:analise}
 	\par
-	Inicialmente, foram implementadas listas simplesmente ligadas de tipo de dados abstrato, num módulo separado, para o efeito das listas de adjacências dos vértices. No entanto, nestas condições verificou-se uma utilização excessiva de memória, muito superior ao valor esperado para os testes oferecidos pelo corpo docente. Decidiu-se então utilizar uma solução com listas ''implícitas'', i.e., com um ponteiro para a cabeça da lista (ponteiro para aresta) dentro da estrutura do vértice e um poteiro para a próxima aresta dentro da estrtura da aresta em si. No entanto, foram ainda implementadas funções acessoras a esta lista, por necessidade.
+	Inicialmente, foram implementadas listas simplesmente ligadas de tipo de
+	dados abstrato, num módulo separado, para o efeito das listas de adjacências
+	dos vértices. No entanto, nestas condições verificou-se uma utilização
+	excessiva de memória, muito superior ao valor esperado para os testes
+	oferecidos pelo corpo docente. Decidiu-se então utilizar uma solução com
+	listas ''implícitas'', i.e., com um ponteiro para a cabeça da lista
+	(ponteiro para aresta) dentro da estrutura do vértice e um poteiro para a
+	próxima aresta dentro da estrtura da aresta em si. No entanto, foram ainda
+	implementadas funções acessoras a esta lista, por necessidade.
 	\par
-	Deste modo, verificou-se que a utilização de memória caiu para tanto quanto a metade na maioria dos testes. Tal explica-se pelo facto de a implementação por tipo de dados abstrato utilizar mais ponteiros, e, assim, mais memória, duma maneira muito percétivel, devido ao elevado número de arestas criadas durante a execução do programa.
+	Deste modo, verificou-se que a utilização de memória caiu para tanto quanto
+	a metade na maioria dos testes. Tal explica-se pelo facto de a implementação
+	por tipo de dados abstrato utilizar mais ponteiros, e, assim, mais memória,
+	duma maneira muito percétivel, devido ao elevado número de arestas criadas
+	durante a execução do programa.
 	\par\null\par
-	Existirão porventura algumas otimizações não implementadas para lidar com casos mais extremos, por exemplo, para lidar com números máximos de permutações muito grandes vindos do ficheiro de problemas. No entanto, este facto não se revelou um problema nos testes e, no caso geral, o programa comporta-se assintoticamente bem.
+	Existirão porventura algumas otimizações não implementadas para lidar com
+	casos mais extremos, por exemplo, para lidar com números máximos de
+	permutações muito grandes vindos do ficheiro de problemas. No entanto, este
+	facto não se revelou um problema nos testes e, no caso geral, o programa
+	comporta-se assintoticamente bem.
 
 
 \section{Exemplo de execução}
@@ -331,13 +382,28 @@ $O(V*log(V) + O(E*log(E))$
 		\texttt{tragar tragam travam a flores}
 	\end{center}
 	\par
-	Depois de verificar os parâmetros de entrada e abrir os ficheiros, \texttt{find\tu max\tu perms()} é chamada.
-	Inicializa \texttt{max\tu perms} a zero e de seguida o ficheiro de problemas é lido: como \texttt{w\tu diff()} devolve 2 e \texttt{max\tu perms[6] = 0 < 2}, então \texttt{max\tu perms[6] = 2} e os valores nos restantes índices ficam iguais a zero.
+	Depois de verificar os parâmetros de entrada e abrir os ficheiros,
+	\texttt{find\tu max\tu perms()} é chamada.  Inicializa \texttt{max\tu perms}
+	a zero e de seguida o ficheiro de problemas é lido: como \texttt{w\tu
+	diff()} devolve 2 e \texttt{max\tu perms[6] = 0 < 2}, então \texttt{max\tu
+	perms[6] = 2} e os valores nos restantes índices ficam iguais a zero.
 	\par
-	A seguir constrói-se o grafo, chamando \texttt{read\tu dic()}. Esta função primeiramente lê o dicionário à procura do número de palavras de cada tamanho a alocar e chega apenas a \texttt{num\tu words[6] = 4}, ignorando a palavra de tamanho 1  pois \texttt{max\tu perms[1] = 0}. Seguidamente, \texttt{graphs[6]} é inicializado com 4 vértices (palavras), ficando os restantes valores nos índices \texttt{i} de \texttt{graphs} iguais a \texttt{NULL} pois representam os restantes tamanhos de palavra em que \texttt{max\tu perms = 0}. Agora o dicionário é lido outra vez para alocar as palavras em si, sendo \texttt{g\tu insert()} e \texttt{w\tu new()} chamadas 4 vezes, correspondendo às 4 palavras de tamanho 6. A seguir é chamada \texttt{g\tu make\tu edges()} para construir as arestas entre os vértices do grafo de tamanho de palavra 6. A tabela de vértices é:
-	\texttt{[0: "tragar", 1: "tragam", 2: "travam", 3: "flores"]}
+	A seguir constrói-se o grafo, chamando \texttt{read\tu dic()}. Esta função
+	primeiramente lê o dicionário à procura do número de palavras de cada
+	tamanho a alocar e chega apenas a \texttt{num\tu words[6] = 4}, ignorando a
+	palavra de tamanho 1  pois \texttt{max\tu perms[1] = 0}. Seguidamente,
+	\texttt{graphs[6]} é inicializado com 4 vértices (palavras), ficando os
+	restantes valores nos índices \texttt{i} de \texttt{graphs} iguais a
+	\texttt{NULL} pois representam os restantes tamanhos de palavra em que
+	\texttt{max\tu perms = 0}. Agora o dicionário é lido outra vez para alocar
+	as palavras em si, sendo \texttt{g\tu insert()} e \texttt{w\tu new()}
+	chamadas 4 vezes, correspondendo às 4 palavras de tamanho 6. A seguir é
+	chamada \texttt{g\tu make\tu edges()} para construir as arestas entre os
+	vértices do grafo de tamanho de palavra 6. A tabela de vértices é:
+	\texttt{[0: "tragar", 1: "tragam", 2: "travam", 3: "flores"]}.
 	\par
-	Os resultados dos ciclos em \texttt{g\tu make\tu edges()} são apresentados de seguida:
+	Os resultados dos ciclos em \texttt{g\tu make\tu edges()} são apresentados
+	de seguida:
 	\begin{itemize}
 		\item
 			\texttt{i = 0, j = 0} \\
@@ -365,7 +431,8 @@ $O(V*log(V) + O(E*log(E))$
 			\texttt{calc\tu weight("flores", "travam", 2) = 3}
 	\end{itemize}
 	\par
-	O grafo resultante como representado no programa, sob listas de adjacências (à direita) e graficamente (à esquerda) é: \\
+	O grafo resultante como representado no programa, sob listas de adjacências
+	(à direita) e graficamente (à esquerda) é: \\
 	\begin{minipage}{\linewidth}
 		\centering
 		\begin{minipage}{0.45\linewidth}
@@ -386,9 +453,20 @@ $O(V*log(V) + O(E*log(E))$
 		\end{minipage}
 	\end{minipage} \\
 	\par
-	Construído o grafo, salta-se para a função \texttt{solve\tu pal()}. O ficheiro de problemas é lido outra vez. Como \texttt{w\tu diff("tragar", "travam", 1) = 2 > 1}, a solução não é trivial. Deste modo, encontramos o vértice de origem, correspondente a \texttt{"tragar"} e o de destino \texttt{"travam"}, (re)aloca-se a árvore de caminhos \texttt{path} e corre-se \texttt{shortest\tu path()}.
+	Construído o grafo, salta-se para a função \texttt{solve\tu pal()}.  O
+	ficheiro de problemas é lido outra vez. Como \texttt{w\tu diff("tragar",
+	"travam", 1) = 2 > 1}, a solução não é trivial. Deste modo, encontramos o
+	vértice de origem, correspondente a \texttt{"tragar"} e o de destino
+	\texttt{"travam"}, (re)aloca-se a árvore de caminhos \texttt{path} e
+	corre-se \texttt{shortest\tu path()}.
 	\par
-	Esta função primeiramente inicializa um acervo, (re)aloca a tabela de distâcias à origem \texttt{wt} e inicializa-a com o valor \texttt{MAX\tu WT} representando uma distância infinita e inicializa a árvore de caminhos \texttt{st} com \texttt{-1} sinalizando que nenhum vértice foi visitado. O vértice de origem é também inserido no acervo inicialmente e a sua distância à origem é colocada a \texttt{0}. Apresenta-se o estado final das sucessivas iterações do ciclo \texttt{while} exterior do algoritmo de Dijkstra:
+	Esta função primeiramente inicializa um acervo, (re)aloca a tabela de
+	distâcias à origem \texttt{wt} e inicializa-a com o valor \texttt{MAX\tu WT}
+	representando uma distância infinita e inicializa a árvore de caminhos
+	\texttt{st} com \texttt{-1} sinalizando que nenhum vértice foi visitado. O
+	vértice de origem é também inserido no acervo inicialmente e a sua distância
+	à origem é colocada a \texttt{0}. Apresenta-se o estado final das sucessivas
+	iterações do ciclo \texttt{while} exterior do algoritmo de Dijkstra:
 	\begin{center}
 		\begin{minipage}{0.45\linewidth}
 		\texttt{\\
@@ -400,7 +478,12 @@ $O(V*log(V) + O(E*log(E))$
 		\end{minipage}
 	\end{center}
 	\par
-	Na primeira iteração, o vértice \texttt{0} saiu da fila e foram colocados os seus adjacentes \texttt{1} e \texttt{2}, tendo sido marcados como visitados por \texttt{0} em \texttt{st} e com distâncias, respetivamente, \texttt{1} e \texttt{4} em \texttt{wt}. O acervo ficou com o vértice \texttt{1} na posição 0 mais prioritária então por este ter menor distância e assim maior prioridade. Assim, o vértice 1 sairá do acervo na próxima iteração:
+	Na primeira iteração, o vértice \texttt{0} saiu da fila e foram colocados os
+	seus adjacentes \texttt{1} e \texttt{2}, tendo sido marcados como visitados
+	por \texttt{0} em \texttt{st} e com distâncias, respetivamente, \texttt{1} e
+	\texttt{4} em \texttt{wt}. O acervo ficou com o vértice \texttt{1} na
+	posição 0 mais prioritária então por este ter menor distância e assim maior
+	prioridade. Assim, o vértice 1 sairá do acervo na próxima iteração:
 	\begin{center}
 		\begin{minipage}{0.45\linewidth}
 			\texttt{\\
@@ -413,7 +496,14 @@ $O(V*log(V) + O(E*log(E))$
 		\hspace{0.05\linewidth}
 	\end{center}
 	\par
-	Os vértices adjacentes de 1 são \texttt{0} e \texttt{2}, mas \texttt{0} não entrará no acevo pois a sua distância (\texttt{0}) já é menor do que vista pelo vértice \texttt{1} (\texttt{1}). O vértice \texttt{2} tem a sua prioridade incrementada, pois, a partir do vértice \texttt{1}, a sua distância à origem é \texttt{wt[1] + 1 = 1 + 1 = 2} que é menor que a previamente encontrada de \texttt{wt[2] = 4}. Assim, o vértice 2 passa a ocupar a posição mais prioritária no acervo e sairá deste na próxima iteração:
+	Os vértices adjacentes de 1 são \texttt{0} e \texttt{2}, mas \texttt{0} não
+	entrará no acevo pois a sua distância (\texttt{0}) já é menor do que vista
+	pelo vértice \texttt{1} (\texttt{1}). O vértice \texttt{2} tem a sua
+	prioridade incrementada, pois, a partir do vértice \texttt{1}, a sua
+	distância à origem é \texttt{wt[1] + 1 = 1 + 1 = 2} que é menor que a
+	previamente encontrada de \texttt{wt[2] = 4}. Assim, o vértice 2 passa a
+	ocupar a posição mais prioritária no acervo e sairá deste na próxima
+	iteração:
 	\begin{center}
 		\begin{minipage}{0.45\linewidth}
 		\texttt{\\
@@ -426,7 +516,9 @@ $O(V*log(V) + O(E*log(E))$
 		\hspace{0.05\linewidth}
 	\end{center}
 	\par
-	O vértice de destino saiu do acervo e parou-se a procura. A execução regressa a \texttt{solve\tu pal()} que escreverá o peso \texttt{wt[dst] = 2} e o caminho para este problema:
+	O vértice de destino saiu do acervo e parou-se a procura. A execução
+	regressa a \texttt{solve\tu pal()} que escreverá o peso \texttt{wt[dst] = 2}
+	e o caminho para este problema:
 	\begin{center}
 	\begin{minipage}{0.15\linewidth}
 		\texttt{tragar 2 \\
@@ -435,7 +527,9 @@ $O(V*log(V) + O(E*log(E))$
 	\end{minipage}
 	\end{center}
 	\par
-	Onde o caminho foi impresso na ordem correta pela função recursiva \texttt{fprint\tu path()} (seguindo o caminho para trás desde \texttt{st[dst]} até chegar ao ponto inicial onde \texttt{st[src] = -1}).
+	Onde o caminho foi impresso na ordem correta pela função recursiva
+	\texttt{fprint\tu path()} (seguindo o caminho para trás desde
+	\texttt{st[dst]} até chegar ao ponto inicial onde \texttt{st[src] = -1}).
 
 % TODO: Bibliografia (wikipedia, Sedgewick)
 
