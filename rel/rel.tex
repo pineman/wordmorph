@@ -184,7 +184,8 @@
 		\label{solve_pal}
 	\end{figure}
 	\par
-	A rotina \texttt{find\tu max \tu perm} é detalhada na secção \ref{sec:algoritmos}.
+	A função \texttt{find\tu max\tu perms()} é detalhada na secção
+	\ref{sec:alg}.
 	\par
 	As estruturas de dados, algoritmos e subsistemas utilizados no programa
 	serão descritos mais aprofundadamente nas próximas secções.
@@ -232,7 +233,7 @@
 
 
 \section{Algoritmos}
-\label{sec:algoritmos}
+\label{sec:alg}
 	\par
 	Devido às restrições de tempo e memoria impostas foi
 	necessário utilizar algoritmos que pudessem ser executados em tempo útil e
@@ -269,6 +270,23 @@
 	duas razões, decidiu-se não aumentar a complexidade do programa
 	implementando um algoritmo de ordenação eficiente e a procura binária.
 
+	\subsection{Acervo}
+	\par
+	A eficiência do algoritmo de Dijkstra depende muito da eficiência das
+	operações da estrutura de dados utilizada como fila prioritária.
+	\par
+	Devido à forma natural dos acervos, em arvore binária balançada de
+	prioridades, remover o elemento mais prioritário é uma operação trivial,
+	assim como as operações de inserção, fixup e fixdown.
+	% TODO: melhor explicação do fixup e fixdown?
+	\par
+	Por outro lado, a procura por um elemento no acervo permanece linear uma
+	vez que não existe nenhum critério óbvio de divisão do problema. Por esse
+	motivo foi implementada uma tabela de dispersão que permite o
+	mapeamento entre um elemento e a sua posição no acervo.  Esta alteração
+	permite saber atualizar a prioridade de um elemento da heap em tempo
+	logarítmico, eliminando um factor linear devido à procura.
+
 	\subsection{Algoritmo de Dijkstra}
 	\label{sec:alg_dijkstra}
 	\begin{figure}[H]
@@ -294,23 +312,6 @@
 	apenas o vértice de partida na fila, processá-lo e em seguida colocar os
 	seus adjacentes na fila.
 
-	\subsection{Acervos}
-	\par
-	A eficiência do algoritmo de Dijkstra depende muito da eficiência das
-	operações da estrutura de dados utilizada como fila prioritária.
-	\par
-	Devido à forma natural dos acervos, em arvore binária balançada de
-	prioridades, remover o elemento mais prioritário é uma operação trivial,
-	assim como as operações de inserção, fixup e fixdown.
-	% TODO: melhor explicação do fixup e fixdown?
-	\par
-	Por outro lado, a procura por um elemento no acervo permanece linear uma
-	vez que não existe nenhum critério óbvio de divisão do problema. Por esse
-	motivo foi implementada uma tabela de dispersão que permite o
-	mapeamento entre um elemento e a sua posição no acervo.  Esta alteração
-	permite saber atualizar a prioridade de um elemento da heap em tempo
-	logarítmico, eliminando um factor linear devido à procura.
-
 	\subsection{Impressão de caminho}
 	\par
 	O algoritmo de Dijkstra devolve uma árvore de caminhos mais curtos entre os
@@ -326,84 +327,350 @@
 	na invocação de funções.
 
 
+\section{Análise de complexidade}
+	\par
+	A complexidade das funções de leitura e escrita de ficheiros, do subsistema \texttt{file.c}, têm todas complexidade $O(n)$, devido à sua natureza de acesso ao disco.
+
+	\subsection{Grafo}
+	\par
+	A complexidade em termos de memória do programa é majorada na prática pela
+	memória ocupada pelos grafos. Esta é proporcional a $O(V + E)$ em que $V$ é
+	o número de vértices e $E$ o número de arestas.
+
+	\subsubsection{Criação de arestas}
+	\par
+	Os ciclos \texttt{for} da função \texttt{g\tu make\ edges()} têm
+	complexidade $O(\frac{1}{2}V^2) = O(V^2)$. Contando com a função de
+	comparação de caracteres das palavras, seria necessário multiplicar por um
+	outro fator que representa o tamanho das palavras.
+
+	\subsubsection{Procura}
+	\par
+	Como referido na secção \ref{sec:alg}, a procura no grafo é linear, de
+	complexidade $O(V)$.
+
+	\subsection{Acervo}
+	\par
+	A operação de inserção no acervo é de tempo constante $O(1)$ pois este é
+	implementado com uma tabela. Pela estrutura natural do acervo, as operações
+	\texttt{h\tu fixup()} e \texttt{h\tu fixdown()} são, no pior caso, de
+	complexidade $O(lg~n)$, em que $n$ é o número de elementos na heap.
+	\par
+	A procura no acervo tem complexidade $O(1)$, com recurso a uma tabela de
+	dispersão. Assim, a função \texttt{h\tu inc\tu pri()} tem complexidade
+	$O(1) + O(lg~n) = O(lg~n)$.
+
+	\subsection{Algoritmo de Dijkstra}
+	\par
+	O algoritmo de Dijkstra pode ser separado em duas partes lógicas,
+	inicializações e o loop principal. As inicializações têm complexidade $O(V)
+	+ O(1) = O(V)$.  Dentro do ciclo \texttt{while} principal, no pior caso o
+	caminho percorre todos os vértices da fila, e assim a função \texttt{del\tu
+	max\tu pri}, de complexidade $O(lg~V)$, é chamada $V$ vezes. Para cada
+	aresta, terá de incrementar a sua prioridade, com complexidade de $2E *
+	O(lg~V)$, em que $E$ é o número de arestas. Assim, a complexidade total é:
+	\cite{randompdf}
+	$$O(V) + VO(lg~V) + 2E~O(lg~V) = O((V + E)lg~V)$$
+
+	\subsection{Impressão de caminho}
+	\par
+	Esta função tem complexidade $O(n)$, proporcional ao número de vértices $n$
+	no caminho.
+
+
 \section{Subsistemas}
 	\subsection{file}
 	\begin{itemize}
-		\item \textbf{Objetivos}: \\
+		\item \textbf{Objetivos}
+		\par
 		Agrupa as funções que lidam com escrita e leitura de ficheiros.
 
-		\item \textbf{Módulos}: \\
+		\item \textbf{Módulos}
+		\par
 		\texttt{file.c} e \texttt{file.h}
 
-		\item \textbf{Funções}: \\
-		unsigned short *find\tu max\tu perms(FILE *fpal);
+		\item \textbf{Funções}
+		\par
+		\texttt{unsigned short *find\tu max\tu perms(FILE *fpal)}
+		\par
+		Devolve uma tabela com o número máximo de permutações, por tamanho de
+		palavras, vindo do ficheiro .pal.
 
-		Graph **read\tu dic(FILE *fdic, unsigned short *max\tu perms);
+		\par\null\par
+		\texttt{Graph **read\tu dic(FILE *fdic, unsigned short *max\tu perms)}
+		\par
+		Devolve uma tabela de grafos cujos índices são tamanhos de palavras e
+		os vértices palavras do dicionário.
 
-		void solve\tu pal(FILE *fpal, FILE *fpath, Graph **graphs);
+		\par\null\par
+		\texttt{void solve\tu pal(FILE *fpal, FILE *fpath, Graph **graphs)}
+		\par
+		Encontra e escreve no ficheiro de sáida .path as soluções aos
+		problemas.
 
-		void fprint\tu path(FILE *fpath, Graph *g, int *st, int *wt, int dst);
+		\par\null\par
+		\texttt{void fprint\tu path(FILE *fpath, Graph *g, int *st, int *wt,
+		int dst)}
+		\par
+		Escreve o caminho do vértice de origem até ao vértice de destino
+		\texttt{dst} pela ordem correta, a partir da árvore de caminhos
+		\texttt{st}.
 	\end{itemize}
 
 	\subsection{word}
 	\begin{itemize}
-		\item \textbf{Objetivos}: \\
+		\item \textbf{Objetivos}
+		\par
+		Implementa o tipo de dado principal do programa (\texttt{char *}),
+		utilizado como Item dos vértices.
 
-		\item \textbf{Módulos}: \\
-		\item \textbf{Funções}: \\
+		\item \textbf{Módulos}
+		\par
+		\texttt{word.c} e \texttt{word.h}
+
+		\item \textbf{Funções}
+		\par
+		\texttt{Item w\tu new(char *word)}
+		\par
+		Aloca e devolve uma nova palavra, a utilizar como tipo de dados
+		genérico \texttt{Item}.
+
+		\par\null\par
+		\texttt{void w\tu free(Item word)}
+		\par
+		Liberta uma palavra.
+
+		\par\null\par
+		\texttt{unsigned short w\tu diff(Item v1, Item v2, unsigned short
+		max\tu perm)}
+		\par
+		Devolve o número de caracteres diferentes, até a \texttt{max\tu perm},
+		entre duas palavras de tamanhos iguais.
+
+		\par\null\par
+		\texttt{int w\tu cmp(Item v1, Item v2)}
+		\par
+		Compara duas palavras utilizando \texttt{strcmp()} e devolve o mesmo
+		valor que esta função.
 	\end{itemize}
 
 	\subsection{graph}
 	\begin{itemize}
-		\item \textbf{Objetivos}: \\
-		\item \textbf{Módulos}: \\
-		\item \textbf{Funções}: \\
+		\item \textbf{Objetivos}
+		\par
+		Implementa as estruturas de dados Grafo, Vértice e Aresta.
+
+		\item \textbf{Módulos}
+		\par
+		\texttt{graph.c} e \texttt{graph.h}
+
+		\item \textbf{Funções}
+		\par
+		\texttt{Graph *g\tu init(unsigned short size, unsigned short max\tu
+		weight)}
+		\par
+		Aloca e devolve um grafo.
+
+		\par\null\par
+		\texttt{void g\tu free(Graph *g, void (free\tu item)(Item item))}
+		\par
+		Liberta um grafo.
+
+		\par\null\par
+		\texttt{void g\tu insert(Graph *g, Item i)}
+		\par
+		Insere o Item \texttt{i} na posição livre do grafo.
+
+		\par\null\par
+		\texttt{void g\tu make\tu edges(Graph *g, unsigned short (*calc\tu weight)(Item
+				i1, Item i2, unsigned short max))}
+		\par
+		Cria arestas entre os vértices se quaisquer dois diferirem no máximo de
+		\texttt{max} caracteres.
+
+		\par\null\par
+		\texttt{unsigned short g\tu get\tu size(Graph *g)}
+		\par
+		Função acessora do número máximo de vértices no grafo.
+
+		\par\null\par
+		\texttt{unsigned short g\tu get\tu free(Graph *g)}
+		\par
+		Função acessora da posição livre do grafo.
+
+		\par\null\par
+		\texttt{unsigned short g\tu get\tu max\tu weight(Graph *g)}
+		\par
+		Função acessora do peso máximo das arestas do graof.
+
+		\par\null\par
+		\texttt{Vertex *g\tu get\tu vertex(Graph *g, unsigned short i)}
+		\par
+		Função acessora de um vértice \texttt{i} do grafo.
+
+		\par\null\par
+		\texttt{int g\tu find\tu vertex(Graph *g, Item i1, int (*cmp\tu item)(Item c1,
+		Item c2))}
+		\par
+		Encontra um vértice \texttt{i1} no grafo.
+
+		\par\null\par
+		\texttt{Vertex *v\tu init(Item i)}
+		\par
+		Aloca e devolve um vértice.
+
+		\par\null\par
+		\texttt{Item v\tu get\tu item(Vertex *v)}
+		\par
+		Função acessora ao tipo de dados genérico de um vértice \texttt{v}.
+
+		\par\null\par
+		\texttt{Edge *v\tu get\tu adj(Vertex *v)}
+		\par
+		Função acessora ao ponteiro para a cabeça da lista de adjacências de um
+		vértice \texttt{v}.
+
+		\par\null\par
+		\texttt{void e\tu add(Graph *g, unsigned short i1, unsigned short i2, unsigned
+				short weight)}
+		\par
+		Adiciona duas arestas: do vértice \texttt{i1} ao vértice \texttt{i2} e
+		vice-versa com peso \texttt{weight}.
+
+		\par\null\par
+		\texttt{unsigned short e\tu get\tu weight(Edge *e)}
+		\par
+		Função acessora ao peso duma aresta \texttt{e}.
+
+		\par\null\par
+		\texttt{unsigned short e\tu get\tu index(Edge *e)}
+		\par
+		Função acessora ao índice do vértice ao qual a aresta \texttt{e} liga.
+
+		\par\null\par
+		\texttt{void free\tu adj(Edge *head)}
+		\par
+		Liberta a lista de adjacências de um vértice através do ponteiro para a
+		cabeça da lista.
+
+		\par\null\par
+		\texttt{void e\tu insert(Edge **adj, unsigned short index, unsigned short
+				weight)}
+		\par
+		Cria uma aresta até ao vértice de índice \texttt{index} com peso
+		\texttt{weight} na lista de adjacências \texttt{adj} de um vértice.
+
+		\par\null\par
+		\texttt{Edge *e\tu get\tu next(Edge *l)}
+		\par
+		Função acessora à aresta a seguir da aresta \texttt{l} na lista de
+		adjacências de um vértice.
 	\end{itemize}
 
 	\subsection{dijkstra}
 	\begin{itemize}
-		\item \textbf{Objetivos}: \\
-		\item \textbf{Módulos}: \\
-		\item \textbf{Funções}: \\
+		\item \textbf{Objetivos}
+		\par
+		Implementa a função \texttt{shortest\tu path()} para encontrar caminhos
+		mais curtos entre vértices do grafo.
+
+		\item \textbf{Módulos}
+		\par
+		\texttt{dijkstra.c} e \texttt{dijkstra.h}
+
+		\item \textbf{Funções}
+		\par
+		\texttt{int *shortest\tu path(Graph *g, int src, int dst, int *st,
+		unsigned short max\tu weight)}
+		Encontra o caminho mais curto entre os vértices \texttt{src} e
+		\texttt{dst} no grafo \texttt{g}. Escreve o caminho na árvore de
+		caminhos \texttt{st} e devolve a tabela de distâncias.
+
+		\par\null\par
+		\texttt{bool d\tu less\tu pri(Item s1, Item s2)}
+		\par
+		Função de comparação de prioridade utilizada pelo acervo. Devolve
+		\texttt{true} se \texttt{s1} tiver menos prioridade que \texttt{s2} ou
+		falso se tiver maior ou igual.
+
+		\par\null\par
+		\texttt{unsigned short d\tu hash(Item a)}
+		\par
+		Função de dispersão utilizada pelo acervo. Devolve o índice no grafo do
+		Item \texttt{a}.
 	\end{itemize}
 
 	\subsection{heap}
 	\begin{itemize}
-		\item \textbf{Objetivos}: \\
-		\item \textbf{Módulos}: \\
-		\item \textbf{Funções}: \\
-	\end{itemize}
+		\item \textbf{Objetivos}
+		\par
+		Implementação da estrutura de dados Acervo a utilizar como fila
+		prioritária na função \texttt{shortest\tu path()}.
 
+		\item \textbf{Módulos}
+		\par
+		\texttt{heap.c} e \texttt{heap.h}
 
-\section{Análise de complexidade}
-	\par
-	O algoritmo de Dijkstra pode ser separado em duas partes
-lógicas, inicializações e o loop principal.
-	\par
-	As inicializações têm complexidade $O(V) + O(1) = O(V)$.
-	\par
-	Por outro o loop principal corre $V$ vezes a rotina \texttt{delmax} que tem
-complexidade $O(log(V))$ e percorre a lista de adjacentes de cada vértice. Para
-cada adjacente executa instruções de complexidade de $O(log(V))$.
-	\par A complexidade total pode ser escrita da seguinte forma:
-$O(V*log(V) + O(E*log(E))$
-	\par
-	Tempo
-	\begin{itemize}
-		\item fors do file.c $\Theta(n)$
-		\item dijkstra $\Theta((E+V) lg V)$
-		\item g\tu make\tu edges $\Theta(\frac{1}{2}V^2) = \Theta(V^2)$
+		\item \textbf{Funções}
+		\par
+		\texttt{Heap *h\tu init(unsigned short size)}
+		\par
+		Aloca e devolve um novo acervo.
+
+		\par\null\par
+		\texttt{void h\tu free(Heap *h)}
+		\par
+		Liberta um acervo.
+
+		\par\null\par
+		\texttt{void h\tu fixup(Heap *h, int i, bool (*less\tu pri)(Item, Item), \\
+		unsigned short (*hash)(Item))}
+		\par
+		Move um elemento do acervo para cima até à sua nova posição, de forma a
+		manter a condição de acervo.
+
+		\par\null\par
+		\texttt{void h\tu fixdown(Heap *h, int i, bool (*less\tu pri)(Item, Item), \\
+		unsigned short (*hash)(Item))}
+		\par
+		Move um elemento do acervo para baixo até à sua nova posição, de forma a
+		manter a condição de acervo.
+
+		\par\null\par
+		\texttt{void h\tu insert(Heap *h, Item a, bool (*less\tu pri)(Item, Item), \\
+		unsigned short (*hash)(Item))}
+		\par
+		Insere o Item \texttt{a} no acervo.
+
+		\par\null\par
+		\texttt{Item h\tu del\tu max\tu pri(Heap *h, bool (*less\tu pri)(Item, Item), \\
+		unsigned short (*hash)(Item))}
+		\par
+		Devolve e remove o elemento de maior prioridade no acervo.
+
+		\par\null\par
+		\texttt{unsigned short h\tu find(Heap *h, Item a, unsigned short(*hash)(Item))}
+		\par
+		Devolve o índice de um Item \texttt{a} no acervo.
+
+		\par\null\par
+		\texttt{void h\tu inc\tu pri(Heap *h, Item a, bool (*less\tu pri)(Item, Item), \\
+		unsigned short (*hash)(Item))}
+		\par
+		Move um elemento do acervo, que teve a sua prioridade aumentada, para
+		cima até à sua nova posição, de forma a manter a condição de acervo.
+
+		\par\null\par
+		\texttt{void h\tu exch(Heap *h, unsigned short i1, unsigned short i2, \\
+		unsigned short (*hash)(Item))}
+		\par
+		Troca dois elementos no acervo.
+
+		\par\null\par
+		\texttt{bool h\tu empty(Heap *h)}
+		\par
+		Devolve \texttt{true} se o acervo estiver vazio, \texttt{false} se não.
 	\end{itemize}
-	\par
-	Memória
-	\begin{itemize}
-		\item memoria: $\Theta(V + E)$
-	\end{itemize}
-	\par
-	Uma análise, formal e/ou empírica, dos requisitos computacionais do programa
-	desenvolvido, tanto em termos da memória que utiliza como da complexidade
-	computacional, com particular ênfase no custo das operações de processamento
-	sobre os tipos de dados usados e/ou criados;
 
 
 \section{Análise crítica}
@@ -425,15 +692,15 @@ $O(V*log(V) + O(E*log(E))$
 	duma maneira muito percétivel, devido ao elevado número de arestas criadas
 	durante a execução do programa.
 	\par\null\par
-	Existirão porventura algumas otimizações não implementadas para lidar com
-	casos mais extremos, por exemplo, para lidar com números máximos de
-	permutações muito grandes vindos do ficheiro de problemas. No entanto, este
-	facto não se revelou um problema nos testes e, no caso geral, o programa
-	comporta-se assintoticamente bem.
+	Existirão porventura algumas otimizações não implementadas, como uma
+	procura mais eficiente no grafo, ou otimizações para lidar com casos mais
+	extremos dos ficheiros de entrada, por exemplo, para lidar com números
+	máximos de permutações muito grandes vindos do ficheiro de problemas. No
+	entanto, este facto não se revelou um problema nos testes e, no caso geral,
+	o programa comporta-se assintoticamente bem.
 
 
 \section{Exemplo de execução}
-	% TODO: Incluir a hashtable da heap no exemplo
 	\par
 	Por exemplo, para o ficheiro de problemas:
 	\begin{center}
@@ -524,12 +791,17 @@ $O(V*log(V) + O(E*log(E))$
 	corre-se \texttt{shortest\tu path()}.
 	\par
 	Esta função primeiramente inicializa um acervo, (re)aloca a tabela de
-	distâcias à origem \texttt{wt} e inicializa-a com o valor \texttt{MAX\tu WT}
-	representando uma distância infinita e inicializa a árvore de caminhos
+	distâcias à origem \texttt{wt} e inicializa-a com o valor \texttt{MAX\tu
+	WT} representando uma distância infinita e inicializa a árvore de caminhos
 	\texttt{st} com \texttt{-1} sinalizando que nenhum vértice foi visitado. O
-	vértice de origem é também inserido no acervo inicialmente e a sua distância
-	à origem é colocada a \texttt{0}. Apresenta-se o estado final das sucessivas
-	iterações do ciclo \texttt{while} exterior do algoritmo de Dijkstra:
+	vértice de origem é também inserido no acervo inicialmente e a sua
+	distância à origem é colocada a \texttt{0}. Apresenta-se o estado final das
+	sucessivas iterações do ciclo \texttt{while} exterior do algoritmo de
+	Dijkstra: \footnote{Os 'x' na tabela de dispersão do acervo representam
+	índices ainda não utilizados ou que já não pertencem ao acervo, mas, na
+	verdade, no programa, serão ou zero (inicializado com \texttt{calloc()}) ou
+	o valor que lá estava da última vez que foi utlizado, que pode ou não ainda
+	apontar para um elemento válido no acervo.}
 	\begin{center}
 		\begin{minipage}{0.45\linewidth}
 		\texttt{\\
@@ -537,7 +809,8 @@ $O(V*log(V) + O(E*log(E))$
 		v != dst (= 2) \\
 		wt = [0, 1, 4, MAX\tu WT] \\
 		st = [-1, 0, 0, -1] \\
-		heap = [1, 2] \\}
+		heap->vector = [1, 2] \\
+		heap->hash\tu table = [x, 0, 1, x] \\}
 		\end{minipage}
 	\end{center}
 	\par
@@ -554,7 +827,8 @@ $O(V*log(V) + O(E*log(E))$
 			v != dst (= 2) \\
 			wt = [0, 1, 2, MAX\tu WT] \\
 			st = [-1, 0, 1, -1] \\
-			heap = [2] \\}
+			heap->vector = [2] \\
+			heap->hash\tu table = [x, x, 0, x] \\}
 		\end{minipage}
 		\hspace{0.05\linewidth}
 	\end{center}
@@ -574,7 +848,8 @@ $O(V*log(V) + O(E*log(E))$
 			v == dst \\
 			wt = [0, 1, 2, MAX\tu WT] \\
 			st = [-1, 0, 1, -1] \\
-			heap = [2] \\}
+			heap->vector = [2] \\
+			heap->hash\tu table = [x, x, 0, x] \\}
 		\end{minipage}
 		\hspace{0.05\linewidth}
 	\end{center}
@@ -594,6 +869,20 @@ $O(V*log(V) + O(E*log(E))$
 	\texttt{fprint\tu path()} (seguindo o caminho para trás desde
 	\texttt{st[dst]} até chegar ao ponto inicial onde \texttt{st[src] = -1}).
 
-% TODO: Bibliografia (wikipedia, Sedgewick)
+\section{Bibliografia}
+	\begin{thebibliography}{9}
+		\bibitem{randompdf}
+		K. Mehlhorn e P. Sanders, ''Shortest Paths,'' in
+		\href{http://people.mpi-inf.mpg.de/~mehlhorn/ftp/Toolbox/ShortestPaths.pdf}{\emph{Algorithms
+		and Data Structures: The Basic Toolbox}}. Berlim, Alemanha: Springer,
+		2008, cap. 10, sec. 4, pp. 199.
 
+		\bibitem{livro1}
+		R. Sedgewick, \emph{Algorithms in C, Parts 1-4}, 3a edição. Boston:
+		Addison Wesley, 1997.
+
+		\bibitem{livro2}
+		R. Sedgewick, \emph{Algorithms in C, Part 5}, 3a edição. Boston:
+		Addison Wesley, 1997.
+	\end{thebibliography}
 \end{document}
