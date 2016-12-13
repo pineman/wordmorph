@@ -153,24 +153,11 @@
 	A outra estrutura de dados relevante é o acervo, utilizado como fila prioritária no cálculo dos caminhos mais curtos, devido às suas operações assimtoticamente eficientes. A implementação é sob a forma de tabela de tipo de dados genérico, que identifica um vértice.
 	\par
 	O acervo contém ainda uma tabela de dispersão simples, que efetua o mapeamento contrário à tabela de elementos do acervo (i.e., é indexada pelo item identificador de um vértice e guarda a posição deste na tabela de elementos do acervo), permitindo assim procura em tempo constante na estrutura. Assim, utiliza-se o índice inteiro do vértice no grafo e a função de dispersão torna-se trivial e assegura que não haverá colisões.
-
-	% TODO: pensei num diagramazinho
-	\begin{itemize}
-		\item tabela de graph
-		\begin{itemize}
-			\item tabela de vertex
-			\begin{itemize}
-				\item lista (implícita) de edge
-			\end{itemize}
-		\end{itemize}
-
-		\item heap
-		\begin{itemize}
-			\item tabela de elementos abstratos
-			\item tabela de dispersão
-		\end{itemize}
-
-	\end{itemize}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.4\linewidth]{data}
+		\caption{Diagrama das principais estruturas de dados utilizadas.}
+	\end{figure}
 
 
 \section{Algoritmos}
