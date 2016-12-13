@@ -6,4 +6,4 @@ make:
 	rm -rf rel.log
 
 clean:
-	rm -rf rel.pdf rel.aux capa/capa.pdf capa/capa.aux
+	rm -rf rel.pdf rel.aux rel.toc rel.out capa/capa.pdf capa/capa.aux

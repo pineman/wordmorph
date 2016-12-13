@@ -3,6 +3,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[portuguese]{babel}
 \usepackage[margin=3cm,includefoot,footskip=30pt]{geometry}
+\usepackage{lmodern}
 
 \usepackage{graphicx}
 \graphicspath{ {imagens/} {flowcharts/}}
@@ -171,7 +172,7 @@
 	\begin{itemize}
 		\item dijkstra
 		\item heap: fixup, fixdown, insert, incpri, delmaxpri
-		\item g\tu make\tu edges, g\tu insert, g\tu get\tu vertex
+		\item g\tu make\tu edges, g\tu insert, g\tu find\tu vertex
 		\item fprint\tu path
 	\end{itemize}
 	\par
@@ -179,13 +180,12 @@
 
 
 \section{Subsistemas}
-	\begin{itemize}
-		\item file.c
-		\item heap.c
-		\item graph.c
-		\item dijkstra.c
-		\item word.c
-	\end{itemize}
+	\subsection{file}
+	\subsection{word}
+	\subsection{graph}
+	\subsection{dijkstra}
+	\subsection{heap}
+
 	\par
 	Uma descrição dos subsistemas funcionais que existam e, para cada um:
 	– a descrição dos objectivos do subsistema (até 5 linhas);
@@ -339,5 +339,8 @@
 	\end{minipage}
 	\end{center}
 	\par
-	Onde o caminho foi impresso na ordem correta pela função recursiva \texttt{fprint\tu path()} (seguindo o caminho para trás desde \texttt{st[dst]} até chegar ao ponto inicial onde \texttt{st[src] = -1}):
+	Onde o caminho foi impresso na ordem correta pela função recursiva \texttt{fprint\tu path()} (seguindo o caminho para trás desde \texttt{st[dst]} até chegar ao ponto inicial onde \texttt{st[src] = -1}).
+
+% TODO: Bibliografia (wikipedia, Sedgewick)
+
 \end{document}
