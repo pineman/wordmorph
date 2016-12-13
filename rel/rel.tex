@@ -137,14 +137,14 @@
 	entre cada solução.
 
 
-\section{Abordagem ao problema}
+\section{Abordagem}
 	\par
 	Este problema é muito facilmente transposto num problema de grafos
-	ponderados, em que os vértices representam palavras e as arestas ligações de
-	$k$ permutações, sendo o peso da aresta igual a $k^2$. Calcular os caminhos
-	mais curtos entre palavras traduz-se então num problema de caminho mais
-	curto em grafos, onde se conhecem algoritmos de boa complexidade tanto
-	temporal como de memória.
+	ponderados, em que os vértices representam palavras e as arestas ligações
+	de $k$ permutações, sendo o peso da aresta igual a $k^2$.  Calcular os
+	caminhos mais curtos entre palavras traduz-se então num problema de caminho
+	mais curto fonte-destino em grafos, onde se conhecem algoritmos de boa
+	complexidade tanto temporal como de memória.
 
 
 \section{Arquitetura}
@@ -173,13 +173,14 @@
 
 
 \section{Estruturas de dados}
+	\subsection{Grafo}
 	\par
 	Como podem existir vários tamanhos de palavras no ficheiro de problemas,
 	pode ser necessário construir mais do que um grafo. Decidiu-se utilizar uma
 	tabela de grafos indexada por um inteiro representando o tamanho de palavras
 	que um grafo contém. Optou-se por representar o grafo por listas de
 	adjacências por estes se provarem ser relativamente esparsos, poupando assim
-	memória face à implementação através de matriz de adjacências.Os elementos
+	memória face à implementação através de matriz de adjacências. Os elementos
 	mais relevantes da estrutura \texttt{Graph} são a tabela de vértices, o
 	número de vértices e o peso máximo das arestas do grafo.
 	\par
@@ -191,6 +192,8 @@
 	Por sua vez, uma aresta contém o índice do vértice a que liga, o peso da
 	ligação e um ponteiro para a próxima aresta da lista dum vértice
 	particular.
+
+	\subsection{Acervo}
 	\par\null\par
 	A outra estrutura de dados relevante é o acervo, utilizado como fila
 	prioritária no cálculo dos caminhos mais curtos, devido às suas operações
@@ -203,6 +206,7 @@
 	elementos do acervo), permitindo assim procura em tempo constante na
 	estrutura. Assim, utiliza-se o índice inteiro do vértice no grafo e a função
 	de dispersão torna-se trivial e assegura que não haverá colisões.
+
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.4\linewidth]{data}
@@ -213,104 +217,141 @@
 \section{Algoritmos}
 	\par
 	Devido às restrições impostas para a resolução do problema proposto foi
-	necessário utilizar algoritmos que pudessem ser executados em tempo ùtil e
+	necessário utilizar algoritmos que pudessem ser executados em tempo útil e
 	que fizessem uma gestão eficiente da memória.
 
-
-\subsection{Criação de arestas}
+	\subsection{Grafo}
+	\subsubsection{Criação de arestas}
 	\par
-	Após a leitura das palavras e da inserção dos vertices no grafo é necessário
-	criar as ligações entre os vertices. O algoritmo responsavel pela execução
-	da tarefa é um dos mais simples e inefecientes neste projecto.
-	\par
-	Segue-se a descrição simples do algoritmo.\\
+	Após a leitura das palavras e da inserção dos vértices no grafo é necessário
+	criar as arestas entre os vértices. O algoritmo responsável pela execução
+	da tarefa é um dos mais simples e inefecientes neste projecto. Segue-se uma
+	descrição simples do algoritmo, implementado na função \texttt{g\tu make\tu
+	edges()}.
 
-
-	\texttt{Para cada vertice i do grafo}\\
-	\indent\indent\texttt{Para cada vertice j de 0 até i}\\
+	\par\null\par
+	\texttt{Para cada vértice i do grafo}\\
+	\indent\indent\texttt{Para cada vértice j de 0 até i}\\
 	\indent\indent\indent\texttt{Criar aresta i->j}\\
 	\indent\indent\indent\texttt{Criar aresta j->i}\\
 
 	\par
-	Como o grafo é não direcionado é possivel criar ao mesmo tempo a ligação
-	entre vertice i e o vertice j e a ligação entre o vertice j e o vertice i.
+	Como o grafo é não direcionado é possével criar ao mesmo tempo a aresta
+	entre vértice i e o vértice j e a ligação entre o vértice j e o vértice i.
+	\subsubsection{Procura}
+	\par
+	O algoritmo de procura utilizado é a simples procura linear, implementado
+	na funcao \texttt{g\tu find\tu vertex()}. Poderia ter sido implementado,
+	por exemplo, o algoritmo de procura binária, mas tal implicaria ordenar
+	alfabeticamente o grafo. Verificou-se também que a procura linear não
+	afetava substancialmente o tempo de execução do programa. Assim, por estas
+	duas razões, decidiu-se não aumentar a complexidade do programa
+	implementando um algoritmo de ordenação eficiente e a procura binária.
 
-
-\subsection{Algoritmo de Dijkstra}
-\label{sec:alg_dijkstra}
+	\subsection{Algoritmo de Dijkstra}
+	\label{sec:alg_dijkstra}
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.85\linewidth]{dijkstra}
-		\caption{Algoritmo de Dijkstra}
+		\caption{Fluxograma da implementação do algoritmo de Dijkstra.}
 		\label{fig:dijkstra}
 	\end{figure}
 	\par
 	Para o cálculo de caminhos mais curtos entre palavras foi implementado uma
-	versão modificada do algoritmo de Dijkstra, descrito no fluxograma da
-	figura \ref{fig:dijkstra}.
+	versão ligeiramente modificada do algoritmo de Dijkstra, descrita no
+	fluxograma da figura \ref{fig:dijkstra}.
 	\par
 	Na sua forma original o algoritmo de Dijkstra calcula caminhos estre um
-	vertice e todos os outros vertices do grafo. Como tal não é necessário,
-	nesta implementação paramos a execução do algoritmo assim que o vertice de
+	vértice e todos os outros vértices do grafo. Como tal não é necessário,
+	nesta implementação paramos a execução do algoritmo assim que o vértice de
 	destino sai da fila prioritária.
 	\par
-	Do mesmo modo, a operação de colocar todos os vertices do grafo na fila
-	prioritária pode ser extremamente ineficiente, devido principalmente ao
-	grande numero de vertices mas tambem, por ser necessário processar vertices
-	para os quais não existe caminho a partir do vertice de partida. Em
-	alternativa basta, inicialmente, colocar o vertice de partida na fila,
-	processá-lo e em seguida colocar os seus adjacentes na fila.
-	\par
-	Em pior caso não existirá caminho entre o vertice de partida e o
-	vertice de chegada e será necessário colocar na fila todos os vertices que
-	estejam ligados ao vertice de partida.a
+	Do mesmo modo, a operação de colocar todos os vértices do grafo na fila
+	prioritária é extremamente ineficiente devido ao elevado número de
+	vértices mas também por processar vértices para os quais nem existe caminho
+	a partir do vértice de partida. Em alternativa basta colocar inicialmente
+	apenas o vértice de partida na fila, processá-lo e em seguida colocar os
+	seus adjacentes na fila.
 
-\subsection{Acervos}
+	\subsection{Acervos}
 	\par
-	A eficiencia do algoritmo de Dijkstra depende muito da eficiencia dos
-	algortimos que interagem com a  estrutura de dados utilizada como fila de
-	priorades.
+	A eficiência do algoritmo de Dijkstra depende muito da eficiência das
+	operações da estrutura de dados utilizada como fila prioritária.
 	\par
 	Devido à forma natural dos acervos, em arvore binária balançada de
 	prioridades, remover o elemento mais prioritário é uma operação trivial,
 	assim como as operações de inserção, fixup e fixdown.
+	% TODO: melhor explicação do fixup e fixdown?
 	\par
-	Por outro lado, a procura por um elemento no acervo é linear uma vez
-	que não existe nenhum criterio obvio de divisão do problema. Por esse motivo
-	foi implementada uma tabela que permite o mapeamento entre um elemento e a
-	sua posição no acervo.  Esta alteração permite saber atualizar a prioridade
-	de um elemento da heap em tempo logaritmico, ou seja, a complexidade da
-	rotina \texttt{fixup}.
+	Por outro lado, a procura por um elemento no acervo permanece linear uma
+	vez que não existe nenhum critério óbvio de divisão do problema. Por esse
+	motivo foi implementada uma tabela de dispersão que permite o
+	mapeamento entre um elemento e a sua posição no acervo.  Esta alteração
+	permite saber atualizar a prioridade de um elemento da heap em tempo
+	logarítmico, eliminando um factor linear devido à procura.
 
-\subsection{Impressão do caminho}
+	\subsection{Impressão de caminho}
 	\par
-	O algoritmo de Dijkstra retorna uma arvore de caminhos mais curtos entre os
-vertices do grafo\footnote{Alguns caminhos estarão incompletos devido a
-optimizações descritas na secção \ref{sec:alg_dijkstra}. De qualquer forma o
-caminho entre os vertices de partida e de chegada estará completo.} e o vertice
-de partida. Para imprimir esse caminho é necessário percorre-lo em ordem
-inversa.
-	\par A resolução do problema torna-se simples utilizando uma função
-recursiva que percorre o caminho do fim para inicio e imprimi os vertices assim
-que a função retorna.
+	O algoritmo de Dijkstra devolve uma árvore de caminhos mais curtos entre os
+	vértices do grafo\footnote{Alguns caminhos estarão incompletos devido a
+	optimizações descritas na secção \ref{sec:alg_dijkstra}. De qualquer forma o
+	caminho entre os vértices de partida e de chegada estará completo.} e o vértice
+	de partida. Para imprimir esse caminho é necessário percorrê-lo em ordem
+	inversa.
+	\par
+	A resolução do problema torna-se simples utilizando uma função
+	recursiva que percorre o caminho do fim para o início e imprime os vértices
+	assim que a função retorna, utilizando assim a stack implicíta que é criada
+	na invocação de funções.
 
 
 \section{Subsistemas}
 	\subsection{file}
-	\subsection{word}
-	\subsection{graph}
-	\subsection{dijkstra}
-	\subsection{heap}
+	\begin{itemize}
+		\item \textbf{Objetivos}: \\
+		Agrupa as funções que lidam com escrita e leitura de ficheiros.
 
-	\par
-	Uma descrição dos subsistemas funcionais que existam e, para cada um:
-	– a descrição dos objectivos do subsistema (até 5 linhas);
-	– o nome do módulo onde estão definidos os tipos de dados abstractos
-	(ficheiros .h) a utilizar no subsistema;
-	– o nome do módulo C onde estão as funções do respectivo subsistema;
-	– listagem das funções implementadas no subsistema, indicando para cada uma
-	a respectiva assinatura e os objectivos da função (descrição sumária, sem
-	código);
+		\item \textbf{Módulos}: \\
+		\texttt{file.c} e \texttt{file.h}
+
+		\item \textbf{Funções}: \\
+		unsigned short *find\tu max\tu perms(FILE *fpal);
+
+		Graph **read\tu dic(FILE *fdic, unsigned short *max\tu perms);
+
+		void solve\tu pal(FILE *fpal, FILE *fpath, Graph **graphs);
+
+		void fprint\tu path(FILE *fpath, Graph *g, int *st, int *wt, int dst);
+	\end{itemize}
+
+	\subsection{word}
+	\begin{itemize}
+		\item \textbf{Objetivos}: \\
+
+		\item \textbf{Módulos}: \\
+		\item \textbf{Funções}: \\
+	\end{itemize}
+
+	\subsection{graph}
+	\begin{itemize}
+		\item \textbf{Objetivos}: \\
+		\item \textbf{Módulos}: \\
+		\item \textbf{Funções}: \\
+	\end{itemize}
+
+	\subsection{dijkstra}
+	\begin{itemize}
+		\item \textbf{Objetivos}: \\
+		\item \textbf{Módulos}: \\
+		\item \textbf{Funções}: \\
+	\end{itemize}
+
+	\subsection{heap}
+	\begin{itemize}
+		\item \textbf{Objetivos}: \\
+		\item \textbf{Módulos}: \\
+		\item \textbf{Funções}: \\
+	\end{itemize}
 
 
 \section{Análise de complexidade}
@@ -321,7 +362,7 @@ lógicas, inicializações e o loop principal.
 	As inicializações têm complexidade $O(V) + O(1) = O(V)$.
 	\par
 	Por outro o loop principal corre $V$ vezes a rotina \texttt{delmax} que tem
-complexidade $O(log(V))$ e percorre a lista de adjacentes de cada vertice. Para
+complexidade $O(log(V))$ e percorre a lista de adjacentes de cada vértice. Para
 cada adjacente executa instruções de complexidade de $O(log(V))$.
 	\par A complexidade total pode ser escrita da seguinte forma:
 $O(V*log(V) + O(E*log(E))$
@@ -371,6 +412,7 @@ $O(V*log(V) + O(E*log(E))$
 
 
 \section{Exemplo de execução}
+	% TODO: Incluir a hashtable da heap no exemplo
 	\par
 	Por exemplo, para o ficheiro de problemas:
 	\begin{center}
