@@ -149,28 +149,45 @@
 
 \section{Arquitetura}
 	\par
-	Os seguintes fluxogramas ilustram a arquitetura do programa no geral,
-	incluindo referências às principais funções utilizadas:
+	O programa pode ser dividido abstratamente em 3 componentes lógicos:
+	encontrar o numero maximo de permutações; construção do grafo; resolução dos
+	problemas. Esta divisão logica está expressa nas funções
+	\texttt{find\tu max\tu perm, read\tu dic, solve\tu pal} respectivamente.
+
+	\par
+	O fluxograma da figura \ref{geral} demonstra a organização do programa como
+	explicada anteriormente.
+
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.70\linewidth]{main}
 		\caption{Fluxograma principal do programa (função \texttt{main()}).}
+		\label{geral}
 	\end{figure}
+
+	\par
+	O fluxograma da figura \ref{make_graph} explicita a rotina \texttt{read\tu
+	pal()}.
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.70\linewidth]{read_dic}
 		\caption{Fluxograma da função \texttt{read\tu dic()} que constrói o grafo.}
+		\label{make_graph}
 	\end{figure}
+	\par
+	O fluxograma figura \ref{solve_pal} sintetisa a rotina \texttt{solve\tu pal}.
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.70\linewidth]{solve_pal}
 		\caption{Fluxograma da função \texttt{solve\tu pal()} que calcula e
 		escreve os caminhos.}
+		\label{solve_pal}
 	\end{figure}
+	\par
+	A rotina \texttt{find\tu max \tu perm} é detalhada na secção \ref{sec:algoritmos}.
 	\par
 	As estruturas de dados, algoritmos e subsistemas utilizados no programa
 	serão descritos mais aprofundadamente nas próximas secções.
-
 
 \section{Estruturas de dados}
 	\subsection{Grafo}
@@ -215,11 +232,15 @@
 
 
 \section{Algoritmos}
+\label{sec:algoritmos}
 	\par
-	Devido às restrições impostas para a resolução do problema proposto foi
+	Devido às restrições de tempo e memoria impostas foi
 	necessário utilizar algoritmos que pudessem ser executados em tempo útil e
 	que fizessem uma gestão eficiente da memória.
 
+	\subsection{Calcúlo do numero máximo de permutações}
+	\par
+	\texttt
 	\subsection{Grafo}
 	\subsubsection{Criação de arestas}
 	\par
