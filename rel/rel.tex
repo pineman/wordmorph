@@ -241,7 +241,27 @@
 
 	\subsection{Calcúlo do numero máximo de permutações}
 	\par
-	\texttt{}
+	Como a alocação dos grafos utilizados para representar as ligações entre
+	palavras tem um grande peso em termos de memoria utilizamos a rotina
+	\texttt{find\tu max\tu perm} para calcular o tamanho do maior grafo
+	necessário por tamanho de palavra.
+
+	Seguidamente faz-se a descrição do algoritmo.\\
+	\par
+
+	\texttt{Ler duas palavras e um inteiro do ficheiro enquanto não chegar ao
+	EOF} \\
+	\indent\indent\texttt{Se o inteiro for maior que o previamente guardado no array max\tu
+	perms e numero de caracteres diferentes entra as duas palavras for maior que
+	1}\\
+	\indent\indent\indent\texttt{Substituir o valor guardado}\\
+	\indent\indent\indent\texttt{Retornar o array max\tu perms}\\
+
+	\par
+	O algoritmo ignora diferenças de caracteres iguais ou inferior a um pois
+	para esses problemas a sua solução é trivial e não será necessário criar o
+	grafo para os resolver.
+
 	\subsection{Grafo}
 	\subsubsection{Criação de arestas}
 	\par
@@ -311,6 +331,13 @@
 	a partir do vértice de partida. Em alternativa basta colocar inicialmente
 	apenas o vértice de partida na fila, processá-lo e em seguida colocar os
 	seus adjacentes na fila.
+	\par
+	Como para cada problema os pesos das arestas não são necessariamente válidos
+	é necessário comparar o seu valor a um inteiro que corresponde ao valor
+	máximo dos pesos entre arestas para cada problema.
+	Deste modo o algoritmo de Dijkstra implementado pode ser utilizado para
+	qualquer problema mesmo que o grafo representado tenha arestas com pesos
+	superiores ao permitido.
 
 	\subsection{Impressão de caminho}
 	\par
