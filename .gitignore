@@ -41,3 +41,4 @@ doc
 *.aux
 *.pdf
 *.toc
+*.log

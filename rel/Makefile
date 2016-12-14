@@ -1,9 +1,8 @@
 TEX=pdflatex
 
 make:
-	cd ./capa && $(TEX) capa.tex && rm capa.log
+	cd ./capa && $(TEX) capa.tex
 	$(TEX) rel.tex
-	rm -rf rel.log
 
 clean:
-	rm -rf rel.pdf rel.aux rel.toc rel.out capa/capa.pdf capa/capa.aux
+	rm -rf rel.pdf rel.aux rel.toc rel.out rel.log capa/capa.pdf capa/capa.aux capa/capa.log
