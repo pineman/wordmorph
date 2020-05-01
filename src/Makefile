@@ -1,5 +1,5 @@
-CFLAGS=-O3 -Wall -ansi # Entrega
-#CFLAGS=-O3 -Wall -Wextra -pedantic -ansi
+#CFLAGS=-O3 -Wall -ansi # Entrega
+CFLAGS=-O3 -Wall -Wextra -pedantic -ansi -flto
 #CFLAGS=-Wall -Wextra -pedantic -ansi
 #CFLAGS=-g -pg -Wall -Wextra -pedantic -ansi
 #CFLAGS=-g -Wall -Wextra -pedantic -ansi
@@ -33,7 +33,7 @@ clean:
 doc: Doxyfile *.c *.h
 	doxygen
 
-tar: 
+tar:
 	tar czvf wordmorph.tgz *.c *.h Makefile
 
 # TODO: criar make test: automatizar memcheck, massif e gprof
